@@ -1,6 +1,6 @@
 [package]
 name = "rustcleanup"
-version = "1.0.0"
+version = "2.0.0"
 edition = "2024"
 description = "Windows 11 optimization and debloating utility written in Rust"
 license = "MIT"
@@ -12,17 +12,27 @@ name = "RustCleanup"
 path = "src/main.rs"
 
 [dependencies]
-eframe = "0.37.0"
+# glow (OpenGL) instead of the default wgpu renderer: v1 idled at ~320 MB
+# working set with wgpu; glow needs a fraction of that for a 2D UI.
+eframe = { version = "0.37.0", default-features = false, features = [
+    "accesskit",
+    "clipboard",
+    "default_fonts",
+    "glow",
+] }
 sysinfo = "0.40.1"
 winreg = "0.56.0"
 windows = { version = "0.62.2", features = [
     "Win32_Foundation",
     "Win32_Globalization",
+    "Win32_Graphics_Gdi",
     "Win32_Security",
     "Win32_Storage_FileSystem",
+    "Win32_System_LibraryLoader",
     "Win32_System_ProcessStatus",
     "Win32_System_SystemInformation",
     "Win32_System_Threading",
+    "Win32_UI_Shell",
     "Win32_UI_WindowsAndMessaging",
 ] }
 

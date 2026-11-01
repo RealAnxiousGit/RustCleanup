@@ -54,18 +54,29 @@ pub fn set_string(hive: Hive, path: &str, name: &str, value: &str) -> Result<(),
 
 /// Reads a REG_DWORD, returning `None` if the key or value is missing.
 pub fn get_dword(hive: Hive, path: &str, name: &str) -> Option<u32> {
-    hive.key().open_subkey_with_flags(path, KEY_READ).ok()?.get_value(name).ok()
+    hive.key()
+        .open_subkey_with_flags(path, KEY_READ)
+        .ok()?
+        .get_value(name)
+        .ok()
 }
 
 /// Reads a REG_SZ, returning `None` if the key or value is missing.
 pub fn get_string(hive: Hive, path: &str, name: &str) -> Option<String> {
-    hive.key().open_subkey_with_flags(path, KEY_READ).ok()?.get_value(name).ok()
+    hive.key()
+        .open_subkey_with_flags(path, KEY_READ)
+        .ok()?
+        .get_value(name)
+        .ok()
 }
 
 /// Deletes a value. A value or key that is already gone counts as success,
 /// so reverting a tweak is idempotent.
 pub fn delete_value(hive: Hive, path: &str, name: &str) -> Result<(), String> {
-    let key = match hive.key().open_subkey_with_flags(path, KEY_READ | KEY_WRITE) {
+    let key = match hive
+        .key()
+        .open_subkey_with_flags(path, KEY_READ | KEY_WRITE)
+    {
         Ok(k) => k,
         Err(e) if e.kind() == ErrorKind::NotFound => return Ok(()),
         Err(e) => return Err(format!("cannot open {}: {e}", describe(hive, path, ""))),

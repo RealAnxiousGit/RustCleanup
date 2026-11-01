@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
-  <assemblyIdentity version="1.0.0.0" processorArchitecture="amd64" name="RealAnxiousGit.RustCleanup" type="win32"/>
-  <description>RustCleanup - Windows 11 optimizer</description>
+  <assemblyIdentity version="2.0.0.0" processorArchitecture="amd64" name="RealAnxiousGit.RustCleanup" type="win32"/>
+  <description>RustCleanup: Windows 11 optimizer</description>
 
   <!-- Every tweak touches HKLM, services, power schemes or other processes,
        so the app always asks UAC for full Administrator rights. -->

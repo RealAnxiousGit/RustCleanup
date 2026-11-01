@@ -2,8 +2,8 @@
 //! the CPU and disables turbo boost to cut load and heat, with a one-click
 //! revert to whatever scheme was active before.
 
+use super::command::run_hidden;
 use super::registry::{self, Hive};
-use super::util::run_hidden;
 use crate::events::Logger;
 
 /// GUID of the scheme RustCleanup creates. Fixed so we can always find it.
@@ -60,7 +60,9 @@ fn scheme_exists(guid: &str) -> bool {
 
 /// True if our low-power scheme is the active one.
 pub fn low_power_active() -> bool {
-    active_scheme().map(|g| g == LOW_POWER_GUID).unwrap_or(false)
+    active_scheme()
+        .map(|g| g == LOW_POWER_GUID)
+        .unwrap_or(false)
 }
 
 fn powercfg(log: &Logger, args: &[&str]) -> Result<(), String> {
@@ -109,12 +111,32 @@ pub fn enable_low_power(log: &Logger) -> Result<(), String> {
 
     for (sub, setting, ac, dc) in SETTINGS {
         // Failures (e.g. a setting this CPU doesn't expose) are logged by powercfg().
-        let _ = powercfg(log, &["/setacvalueindex", LOW_POWER_GUID, sub, setting, &ac.to_string()]);
-        let _ = powercfg(log, &["/setdcvalueindex", LOW_POWER_GUID, sub, setting, &dc.to_string()]);
+        let _ = powercfg(
+            log,
+            &[
+                "/setacvalueindex",
+                LOW_POWER_GUID,
+                sub,
+                setting,
+                &ac.to_string(),
+            ],
+        );
+        let _ = powercfg(
+            log,
+            &[
+                "/setdcvalueindex",
+                LOW_POWER_GUID,
+                sub,
+                setting,
+                &dc.to_string(),
+            ],
+        );
     }
 
     powercfg(log, &["/setactive", LOW_POWER_GUID])?;
-    log.success("Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.");
+    log.success(
+        "Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.",
+    );
     Ok(())
 }
 
@@ -142,7 +164,10 @@ mod tests {
     #[test]
     fn parses_powercfg_output() {
         let line = "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)";
-        assert_eq!(parse_guid(line).as_deref(), Some("381b4222-f694-41f0-9685-ff5bb260df2e"));
+        assert_eq!(
+            parse_guid(line).as_deref(),
+            Some("381b4222-f694-41f0-9685-ff5bb260df2e")
+        );
         assert_eq!(parse_guid("no guid here"), None);
     }
 }
