@@ -1,0 +1,31 @@
+#include <winres.h>
+
+// 24 = RT_MANIFEST, 1 = CREATEPROCESS_MANIFEST_RESOURCE_ID
+1 24 "app.manifest"
+
+IDI_ICON1 ICON "assets/icon.ico"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904B0"
+    BEGIN
+      VALUE "CompanyName", "RealAnxiousGit"
+      VALUE "FileDescription", "RustCleanup - Windows 11 optimizer"
+      VALUE "FileVersion", "1.0.0"
+      VALUE "InternalName", "RustCleanup"
+      VALUE "OriginalFilename", "RustCleanup.exe"
+      VALUE "ProductName", "RustCleanup"
+      VALUE "ProductVersion", "1.0.0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1200
+  END
+END
