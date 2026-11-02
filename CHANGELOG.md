@@ -9,7 +9,7 @@ A rebuilt task list with Restart, a Changelog window, a font picker and a smooth
 
 ### Added
 - **Restart** in the task list closes a program and opens it again with the same command line and folder. A program made of many processes (like a browser) is restarted once, from its top process. Programs that ran as administrator start again as administrator; the rest start with normal rights.
-- **Changelog** button next to Credits. It shows this version's release notes from GitHub, with the promotional trailer. After an update, it opens by itself on the first start of the new version (and only then).
+- **Changelog** button next to Credits. It shows this version's release notes from GitHub. After an update, it opens by itself on the first start of the new version (and only then).
 - **Font** setting, under Theme: System (Segoe UI), Arial, Times New Roman, Light UI (Segoe UI Light), Comic Sans MS and more.
 - **System tools**: Windows Security, Device Manager and Settings, before Command Prompt.
 - **Credits**: a Promotional trailer section. Animation by Claude Opus 5.5, music "Promo" by BombinSound on Pixabay.
