@@ -1,17 +1,19 @@
 # RustCleanup
 
+![RustCleanup: the Windows 11 optimizer, built in Rust.](docs/banner.png)
+
 A native Windows 11 tool for freeing memory, checking disks and turning off the parts of Windows you don't want.
 It ships as one portable `RustCleanup.exe` with nothing to install, in 12 languages.
 
 **[Download the latest release](https://github.com/RealAnxiousGit/RustCleanup/releases/latest)**
-
-![RustCleanup 2.0.1 main window in dark mode, showing Physical and Virtual Memory, Scan Disk with storage figures and Manage Storage, the Windows settings switches and System tools](docs/screenshot.png)
 
 > RustCleanup changes system settings (registry policies, services, power plans).
 > Every switch can be turned off again to restore the Windows default, but it's still a
 > good idea to create a restore point first (`Win + R`, then `SystemPropertiesProtection`).
 
 ## Features
+
+![RustCleanup 2.0.1 main window in dark mode, showing Physical and Virtual Memory, Scan Disk with storage figures and Manage Storage, the Windows settings switches and System tools](docs/screenshot.png)
 
 | Feature | What it does | How to undo |
 |---|---|---|
