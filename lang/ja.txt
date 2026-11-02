@@ -1,0 +1,829 @@
+# 日本語 (Japanese) translation of RustCleanup.
+
+A check is running in its own window.
+チェックは別のウィンドウで実行中です。
+
+Activity
+アクティビティ
+
+Also pause updates for {0} days
+更新も {0} 日間一時停止する
+
+Also purge the standby list (file cache)
+スタンバイ リスト (ファイル キャッシュ) も消去する
+
+Anything unsaved in them will be lost.
+保存されていない内容は失われます。
+
+App
+アプリ
+
+Auto-Clean RAM
+RAM の自動クリーン
+
+Auto-Clean RAM amount
+RAM の自動クリーンのしきい値
+
+Automatically check for updates
+更新を自動的に確認する
+
+Background
+バックグラウンド
+
+Built with
+使用技術
+
+CD/DVD
+CD/DVD ドライブ
+
+Cancel
+キャンセル
+
+Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan.
+電源接続時は CPU を 60%、バッテリー駆動時は 50% に制限し、ターボ ブーストをオフにします。オフにすると以前の電源プランに戻ります。
+
+Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+変更には管理者権限が必要です。RustCleanup を閉じてもう一度開き、UAC のプロンプトで [はい] を選んでください。
+
+Check for updates now
+今すぐ更新を確認
+
+Checking for updates.
+更新を確認しています。
+
+Checksum verified.
+チェックサムを確認しました。
+
+Clean RAM
+RAM クリーン
+
+Clean RAM finished.
+RAM クリーンが完了しました。
+
+Clean RAM finished. {0} freed, {1} now available.
+RAM クリーンが完了しました。{0} を解放し、現在 {1} を利用できます。
+
+Clean when more than {0} of {1} is in use.
+{1} のうち {0} を超えて使用されたらクリーンします。
+
+Cleaning
+クリーン中
+
+Cleaning RAM.
+RAM をクリーンしています。
+
+Clear
+クリア
+
+Clear selection
+選択を解除
+
+Clear the filter
+フィルターをクリア
+
+Close
+閉じる
+
+Close and reopen the task list to try again.
+タスク一覧を閉じて開き直してから、もう一度お試しください。
+
+Close to the notification area
+閉じるときに通知領域に格納する
+
+Code graph used to plan and check the module layout
+モジュール構成の計画と確認に使用したコード グラフ
+
+Command Prompt
+コマンド プロンプト
+
+Command Prompt [Admin]
+コマンド プロンプト [管理者]
+
+Committed {0} of {1} (RAM plus page file)
+コミット済み {0}/{1} (RAM とページ ファイル)
+
+Copilot disabled.
+Copilot を無効にしました。
+
+Copilot policy TurnOffWindowsCopilot=1 written to HKCU and HKLM.
+Copilot ポリシー TurnOffWindowsCopilot=1 を HKCU と HKLM に書き込みました。
+
+Copilot policy removed; Windows defaults restored.
+Copilot ポリシーを削除し、Windows の既定値に戻しました。
+
+Copilot re-enabled.
+Copilot を再度有効にしました。
+
+Copy
+コピー
+
+Copy output
+出力をコピー
+
+Could not check for updates: {0}
+更新を確認できませんでした：{0}
+
+Could not check the disk, errors could not be fixed, or errors were not fixed because /f was not given.
+ディスクをチェックできなかったか、エラーを修正できなかったか、/f が指定されていないためエラーが修正されませんでした。
+
+Could not enable {0}: {1}
+{0} を有効にできませんでした：{1}
+
+Could not install the update: {0}
+更新プログラムをインストールできませんでした：{0}
+
+Could not reach GitHub ({0}): {1}
+GitHub に接続できませんでした ({0})：{1}
+
+Could not reach GitHub: {0}
+GitHub に接続できませんでした：{0}
+
+Could not read the process list: {0}
+プロセス一覧を読み取れませんでした：{0}
+
+Could not restart RustCleanup: {0}. Close it and open it again.
+RustCleanup を再起動できませんでした：{0}。閉じてからもう一度開いてください。
+
+Could not start a background thread: {0}
+バックグラウンド スレッドを開始できませんでした：{0}
+
+Could not start the process monitor: {0}
+プロセス モニターを開始できませんでした：{0}
+
+Could not stop chkdsk: {0}
+chkdsk を停止できませんでした：{0}
+
+Counters and data collectors
+カウンターとデータ コレクター
+
+Created the "RustCleanup Low Power" power scheme.
+電源プラン「RustCleanup Low Power」を作成しました。
+
+Credits
+クレジット
+
+Dark
+ダーク
+
+Dark Mode
+ダーク モード
+
+Design rules applied to the interface
+インターフェイスに適用したデザイン ルール
+
+Disable Copilot
+Copilot を無効にする
+
+Disable Telemetry
+テレメトリを無効にする
+
+Disk Cleanup
+ディスク クリーンアップ
+
+Disk Management
+ディスクの管理
+
+Disk check cancelled.
+ディスク チェックをキャンセルしました。
+
+Disk cleanup was performed (e.g. garbage collection) or not done because /f was not given.
+ディスクのクリーンアップ (ガベージ コレクションなど) が実行されたか、/f が指定されていないため実行されませんでした。
+
+Done
+完了
+
+Downloaded {0}%.
+{0}% ダウンロードしました。
+
+Downloading RustCleanup {0}.
+RustCleanup {0} をダウンロードしています。
+
+Downloading and installing.
+ダウンロードしてインストールしています。
+
+Draws the interface with Direct3D 12 instead of OpenGL. It can be smoother on older or integrated graphics, but uses about three times as much memory.
+OpenGL の代わりに Direct3D 12 でインターフェイスを描画します。古いグラフィックスや内蔵グラフィックスではより滑らかになる場合がありますが、メモリ使用量は約 3 倍になります。
+
+Elevated prompt
+管理者特権のプロンプト
+
+End task
+タスクの終了
+
+End these tasks?
+これらのタスクを終了しますか？
+
+Ended {0} of {1} processes.
+{1} 個中 {0} 個のプロセスを終了しました。
+
+Errors were found and fixed.
+エラーが見つかり、修正されました。
+
+Every setting goes back to its default. Open on startup is kept.
+すべての設定が既定値に戻ります。「スタートアップ時に開く」はそのまま残ります。
+
+Exit
+終了
+
+Explorer did not restart and could not be started: {0}
+エクスプローラーが再起動せず、起動もできませんでした：{0}
+
+Explorer restarted.
+エクスプローラーを再起動しました。
+
+Explorer was started manually. Sign out and back in if the taskbar misbehaves.
+エクスプローラーを手動で起動しました。タスク バーの動作がおかしい場合は、サインアウトしてもう一度サインインしてください。
+
+Failed
+失敗
+
+Filter
+フィルター
+
+Finished in {0} s. {1}
+{0} 秒で完了しました。{1}
+
+Flushing the modified page list failed: {0}
+変更済みページ リストのフラッシュに失敗しました：{0}
+
+Forced updates and automatic reboots are now blocked.
+強制的な更新と自動再起動をブロックしました。
+
+General
+全般
+
+GitHub answered with HTTP status {0}.
+GitHub から HTTP ステータス {0} が返されました。
+
+GitHub sent a reply RustCleanup could not read: {0}
+GitHub から RustCleanup が読み取れない応答が返されました：{0}
+
+Hardware-accelerated UI
+ハードウェア アクセラレータによる UI
+
+Info
+情報
+
+Interface size
+インターフェイスのサイズ
+
+Language
+言語
+
+Light
+ライト
+
+Light Mode
+ライト モード
+
+Live CPU, memory, disk and network
+CPU、メモリ、ディスク、ネットワークのリアルタイム表示
+
+Local Disk
+ローカル ディスク
+
+Look for drives again
+ドライブを再検索
+
+Low Power Mode
+低電力モード
+
+Low Power Mode off.
+低電力モードをオフにしました。
+
+Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.
+低電力モードをオンにしました：CPU を 60% (電源接続時) / 50% (バッテリー駆動時) に制限し、ターボ ブーストをオフにしました。
+
+MIT licensed.
+MIT ライセンスです。
+
+Makes text and controls larger or smaller in every window.
+すべてのウィンドウで文字とコントロールを大きく、または小さくします。
+
+Memory
+メモリ
+
+Memory use reached {0}% (limit {1}%), so RAM is being cleaned automatically.
+メモリ使用率が {0}% (上限 {1}%) に達したため、RAM を自動的にクリーンしています。
+
+Name
+名前
+
+Name or PID
+名前または PID
+
+Network
+ネットワーク
+
+Never Update
+更新しない
+
+No Forced Updates
+強制更新なし
+
+No drives
+ドライブなし
+
+No drives were found. Connect a drive, then press Refresh.
+ドライブが見つかりませんでした。ドライブを接続してから [最新の情報に更新] を押してください。
+
+No errors were found.
+エラーは見つかりませんでした。
+
+No page file is configured, so Windows is running on physical memory only. You can add one in System Properties, Advanced, Performance settings.
+ページ ファイルが構成されていないため、Windows は物理メモリのみで動作しています。ページ ファイルは [システムのプロパティ]、[詳細設定]、[パフォーマンス] の設定で追加できます。
+
+No process matches "{0}".
+「{0}」に一致するプロセスはありません。
+
+No tray icon ({0}). Closing the window will quit RustCleanup.
+トレイ アイコンがありません ({0})。ウィンドウを閉じると RustCleanup が終了します。
+
+Not running as Administrator
+管理者として実行されていません
+
+Nothing has run yet. Everything RustCleanup changes is listed here.
+まだ何も実行されていません。RustCleanup による変更はすべてここに表示されます。
+
+Notifications
+通知
+
+On: when RustCleanup starts, a new release on GitHub is downloaded, checked and installed by itself. Off: you are asked first, with the changelog.
+オン：RustCleanup の起動時に、GitHub の新しいリリースを自動的にダウンロード、検証、インストールします。オフ：変更履歴を表示して、先に確認します。
+
+Online scan (NTFS only)
+オンライン スキャン (NTFS のみ)
+
+Open
+開く
+
+Open App
+アプリを開く
+
+Open RustCleanup when you sign in to Windows, without a UAC prompt.
+Windows へのサインイン時に、UAC のプロンプトなしで RustCleanup を開きます。
+
+Open on startup
+スタートアップ時に開く
+
+Open task list
+タスク一覧を開く
+
+Open the release page
+リリース ページを開く
+
+Opened {0}.
+{0} を開きました。
+
+Opens the built-in Windows tool you pick.
+選択した Windows の組み込みツールを開きます。
+
+Optimize
+最適化
+
+Optimize Task
+タスクの最適化
+
+Optimized {0} of {1} processes.
+{1} 個中 {0} 個のプロセスを最適化しました。
+
+Partitions and volumes
+パーティションとボリューム
+
+Performance
+パフォーマンス
+
+Performance Monitor
+パフォーマンス モニター
+
+Physical Memory
+物理メモリ
+
+Power Config
+電源構成
+
+Power Options control panel
+電源オプション (コントロール パネル)
+
+Processes, performance, startup apps
+プロセス、パフォーマンス、スタートアップ アプリ
+
+Programming
+プログラミング
+
+Prompt Engineer
+プロンプト エンジニア
+
+Protected
+保護
+
+Protected system processes were left out.
+保護されたシステム プロセスは除外しました。
+
+Purging the standby list failed: {0}
+スタンバイ リストの消去に失敗しました：{0}
+
+RAM Disk
+RAM ディスク
+
+Read-only check
+読み取り専用チェック
+
+Reading the current settings from Windows.
+Windows から現在の設定を読み取っています。
+
+Reading the process list.
+プロセス一覧を読み取っています。
+
+Refresh
+再読み込み
+
+Release {0} has no {1} to download.
+リリース {0} にはダウンロードできる {1} がありません。
+
+Removable
+リムーバブル
+
+Remove temporary and system files
+一時ファイルとシステム ファイルを削除
+
+Removed the RustCleanup Low Power scheme.
+電源プラン「RustCleanup Low Power」を削除しました。
+
+Reset all settings
+すべての設定をリセット
+
+Resource Monitor
+リソース モニター
+
+Restart Explorer so it applies right away
+すぐに反映されるようエクスプローラーを再起動する
+
+Restart RustCleanup to apply this.
+反映するには RustCleanup を再起動してください。
+
+Restart now
+今すぐ再起動
+
+Restarting Explorer to apply the change.
+変更を反映するためにエクスプローラーを再起動しています。
+
+Restored power scheme {0}.
+電源プラン {0} に戻しました。
+
+Resume
+再開
+
+Resumed {0} of {1} processes.
+{1} 個中 {0} 個のプロセスを再開しました。
+
+Run check
+チェックを実行
+
+Running as Administrator
+管理者として実行中
+
+Running for {0} s
+{0} 秒経過
+
+Runs Clean RAM by itself when physical memory use reaches the amount below. It checks every 5 seconds and runs at most once every {0} minutes.
+物理メモリの使用量が下の値に達すると、RAM クリーンを自動的に実行します。5 秒ごとに確認し、実行は最大で {0} 分に 1 回です。
+
+Runs chkdsk on the drive you pick and shows its output live.
+選択したドライブで chkdsk を実行し、その出力をリアルタイムで表示します。
+
+RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt.
+RustCleanup が管理者として実行されていないため、ほとんどの変更は失敗します。再起動して、UAC のプロンプトで [はい] を選んでください。
+
+RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit.
+RustCleanup は通知領域で実行中です。アイコンを右クリックするとオプションが表示されます。終了するには [終了] を選んでください。
+
+RustCleanup is up to date.
+RustCleanup は最新です。
+
+RustCleanup will no longer open when you sign in.
+サインイン時に RustCleanup は開かなくなります。
+
+RustCleanup will not ask about new versions again. Turn "Tell me about new versions" back on in Settings to change this.
+RustCleanup は今後、新しいバージョンについて確認しません。変更するには、[設定] で「新しいバージョンを通知する」をオンに戻してください。
+
+RustCleanup will open when you sign in to Windows.
+Windows へのサインイン時に RustCleanup が開きます。
+
+RustCleanup {0} is available
+RustCleanup {0} を利用できます
+
+RustCleanup {0} is available and will be installed now.
+RustCleanup {0} を利用できます。今すぐインストールします。
+
+RustCleanup {0} is available.
+RustCleanup {0} を利用できます。
+
+RustCleanup {0} is installed. Restarting.
+RustCleanup {0} をインストールしました。再起動しています。
+
+Same as Windows
+Windows と同じ
+
+Scan Disk
+ディスクのスキャン
+
+Scan Disk: {0} {1}
+ディスクのスキャン：{0} {1}
+
+Scheduled tasks not changed: {0}
+スケジュールされたタスクは変更されませんでした：{0}
+
+See what is using CPU and memory, then trim, slow down, pause or end it.
+CPU とメモリを使用しているものを確認し、トリム、低速化、一時停止、終了を行います。
+
+Select {0}
+{0} を選択
+
+Service {0} {1}: {2}
+サービス {0} {1}：{2}
+
+Service {0}: startup set to {1}.
+サービス {0}：スタートアップの種類を {1} に設定しました。
+
+Service {0}: {1}
+サービス {0}：{1}
+
+Service {0}: {1} requested.
+サービス {0}：{1} を要求しました。
+
+Sets AllowTelemetry to 0, stops DiagTrack and dmwappushservice, and turns off the data collection tasks.
+AllowTelemetry を 0 に設定し、DiagTrack と dmwappushservice を停止して、データ収集タスクをオフにします。
+
+Settings
+設定
+
+Settings were reset to their defaults.
+設定を既定値にリセットしました。
+
+Show background processes
+バックグラウンド プロセスを表示
+
+Shows the new release and its changelog when RustCleanup starts. "Never Update" turns this off.
+RustCleanup の起動時に、新しいリリースとその変更履歴を表示します。[更新しない] でこれをオフにします。
+
+Sort by CPU
+CPU で並べ替え
+
+Sort by memory
+メモリで並べ替え
+
+Sort by name
+名前で並べ替え
+
+Source code
+ソース コード
+
+Standard (non-admin) prompt
+標準 (非管理者) のプロンプト
+
+Standby list not purged: {0}
+スタンバイ リストは消去されませんでした：{0}
+
+Standby list purged.
+スタンバイ リストを消去しました。
+
+Start in the notification area instead of opening the window.
+ウィンドウを開かずに通知領域で起動します。
+
+Start minimized
+最小化して起動
+
+Started chkdsk on {0} ({1}).
+{0} ({1}) で chkdsk を開始しました。
+
+Startup task not changed: {0}
+スタートアップ タスクは変更されませんでした：{0}
+
+Status
+状態
+
+Stop asking about new versions. You can turn this back on in Settings.
+新しいバージョンについて確認しないようにします。[設定] でオンに戻せます。
+
+Stop check
+チェックを停止
+
+Suspend
+中断
+
+Suspended
+中断
+
+Suspended {0} of {1} processes.
+{1} 個中 {0} 個のプロセスを中断しました。
+
+Switch any of these off again to restore the Windows default.
+いずれかをオフに戻すと、Windows の既定値に戻ります。
+
+System process: can only be trimmed
+システム プロセス：トリムのみ可能
+
+System tools
+システム ツール
+
+Task Manager
+タスク マネージャー
+
+Task list
+タスク一覧
+
+Task {0}: {1}
+タスク {0}：{1}
+
+Telemetry disabled.
+テレメトリを無効にしました。
+
+Telemetry policies removed.
+テレメトリ ポリシーを削除しました。
+
+Telemetry policy AllowTelemetry=0 written.
+テレメトリ ポリシー AllowTelemetry=0 を書き込みました。
+
+Telemetry restored to Windows defaults.
+テレメトリを Windows の既定値に戻しました。
+
+Tell me about new versions
+新しいバージョンを通知する
+
+The close button hides the window and RustCleanup keeps running. Off: it quits.
+閉じるボタンでウィンドウを非表示にし、RustCleanup は実行を続けます。オフ：終了します。
+
+The download is not a valid RustCleanup.exe, so nothing was changed.
+ダウンロードしたファイルは有効な RustCleanup.exe ではないため、何も変更されませんでした。
+
+The download's checksum does not match the release, so nothing was changed.
+ダウンロードしたファイルのチェックサムがリリースと一致しないため、何も変更されませんでした。
+
+The last action is still running. Try again in a moment.
+前の操作がまだ実行中です。しばらくしてからもう一度お試しください。
+
+Theme
+テーマ
+
+This release has no checksum file, so the download could not be verified.
+このリリースにはチェックサム ファイルがないため、ダウンロードを検証できませんでした。
+
+Toolkits
+ツールキット
+
+Trim memory and set Below Normal priority
+メモリをトリムし、優先度を [通常以下] に設定
+
+Trimmed {0} processes. {1} protected processes were skipped.
+{0} 個のプロセスをトリムしました。保護された {1} 個のプロセスはスキップしました。
+
+Turns on the TurnOffWindowsCopilot policy and hides the taskbar button.
+TurnOffWindowsCopilot ポリシーをオンにし、タスク バーのボタンを非表示にします。
+
+Type
+種類
+
+Update Now
+今すぐ更新
+
+Update available
+更新プログラムがあります
+
+Updates
+更新
+
+Updates are paused until {0}.
+更新は {0} まで一時停止されています。
+
+Updates paused until {0} (the maximum Windows allows).
+更新を {0} まで一時停止しました (Windows で設定できる最大期間)。
+
+Version {0}
+バージョン {0}
+
+Virtual Memory
+仮想メモリ
+
+Waiting for chkdsk to start.
+chkdsk の開始を待っています。
+
+Warning
+警告
+
+What's new
+新機能
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a Windows notification.
+RustCleanup が最小化されているか通知領域にある間は、ログに記録される内容がすべて Windows の通知としても表示されます。
+
+Windows Update asks before installing and never restarts on its own while you are signed in.
+Windows Update はインストール前に確認し、サインイン中に自動で再起動することはありません。
+
+Windows Update policies and pause removed.
+Windows Update のポリシーと一時停止を解除しました。
+
+Windows Update restored to default behaviour.
+Windows Update を既定の動作に戻しました。
+
+Windows Update set to notify only, with no automatic reboots.
+Windows Update を通知のみ、自動再起動なしに設定しました。
+
+Windows did not report physical memory figures. They will appear here once it does.
+Windows から物理メモリの値が報告されませんでした。報告されるとここに表示されます。
+
+Windows did not report virtual memory figures.
+Windows から仮想メモリの値が報告されませんでした。
+
+Windows settings
+Windows の設定
+
+You have version {0}.
+現在のバージョンは {0} です。
+
+and {0} more
+ほか {0} 件
+
+chkdsk can't check {0} drives.
+chkdsk は {0} ドライブをチェックできません。
+
+chkdsk could not run: {0}
+chkdsk を実行できませんでした：{0}
+
+chkdsk ended with an unexpected exit code.
+chkdsk が予期しない終了コードで終了しました。
+
+could not create the tray window: {0}
+トレイ ウィンドウを作成できませんでした：{0}
+
+could not start the tray thread: {0}
+トレイ スレッドを開始できませんでした：{0}
+
+in use of {0}
+使用中 (合計 {0})
+
+internal error (the operation panicked)
+内部エラー (操作がパニックしました)
+
+of {0} page file in use
+使用中 (ページ ファイル合計 {0})
+
+the tray thread stopped unexpectedly
+トレイ スレッドが予期せず停止しました
+
+{0} (PID {1})
+{0} (PID {1})
+
+{0} (peak {1})
+{0} (ピーク {1})
+
+{0} available, {1} cached
+利用可能 {0}、キャッシュ済み {1}
+
+{0} available, {1} cached, {2} installed
+利用可能 {0}、キャッシュ済み {1}、搭載 {2}
+
+{0} failed: {1}
+{0} に失敗しました：{1}
+
+{0} finished: {1}
+{0} が完了しました：{1}
+
+{0} is a protected system process and was left alone.
+{0} は保護されたシステム プロセスのため、変更しませんでした。
+
+{0} of {1} shown
+{1} 件中 {0} 件を表示
+
+{0} selected
+{0} 件選択
+
+{0} suspended by RustCleanup
+RustCleanup により {0} を中断
+
+{0} telemetry scheduled tasks disabled ({1} not present on this Windows build).
+テレメトリのスケジュールされたタスクを {0} 個無効にしました (この Windows ビルドには {1} 個がありません)。
+
+{0} telemetry scheduled tasks enabled ({1} not present on this Windows build).
+テレメトリのスケジュールされたタスクを {0} 個有効にしました (この Windows ビルドには {1} 個がありません)。
+
+{0} uses {1}, so only the read-only check is available.
+{0} は {1} を使用しているため、読み取り専用チェックのみ使用できます。
+
+Manage Storage
+ストレージの管理
+
+Open Storage in Windows Settings for this drive
+このドライブの Windows 設定の「ストレージ」を開きます
+
+Opened Windows storage settings for {0}.
+{0} の Windows ストレージ設定を開きました。
+
+Windows did not report how much space {0} has.
+Windows から {0} の容量が報告されませんでした。
+
+used of {0}
+使用中 (合計 {0})
+
+{0} used, {1} available, {2} in total
+使用中 {0}、空き {1}、合計 {2}

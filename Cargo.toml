@@ -1,6 +1,6 @@
 [package]
 name = "rustcleanup"
-version = "2.0.0"
+version = "2.0.1"
 edition = "2024"
 description = "Windows 11 optimization and debloating utility written in Rust"
 license = "MIT"
@@ -12,23 +12,30 @@ name = "RustCleanup"
 path = "src/main.rs"
 
 [dependencies]
-# glow (OpenGL) instead of the default wgpu renderer: v1 idled at ~320 MB
-# working set with wgpu; glow needs a fraction of that for a 2D UI.
+# glow (OpenGL) is the default renderer: v1 idled at ~320 MB working set
+# with wgpu, glow needs a fraction of that for a 2D UI. wgpu (Direct3D 12
+# only) is kept for the optional "Hardware-accelerated UI" setting.
 eframe = { version = "0.37.0", default-features = false, features = [
     "accesskit",
     "clipboard",
     "default_fonts",
     "glow",
+    "wgpu_no_default_features",
 ] }
+wgpu = { version = "30.0.1", default-features = false, features = ["dx12"] }
+serde_json = "1.0"
+sha2 = "0.10"
 sysinfo = "0.40.1"
 winreg = "0.56.0"
 windows = { version = "0.62.2", features = [
     "Win32_Foundation",
     "Win32_Globalization",
     "Win32_Graphics_Gdi",
+    "Win32_Networking_WinHttp",
     "Win32_Security",
     "Win32_Storage_FileSystem",
     "Win32_System_LibraryLoader",
+    "Win32_System_Memory",
     "Win32_System_ProcessStatus",
     "Win32_System_SystemInformation",
     "Win32_System_Threading",

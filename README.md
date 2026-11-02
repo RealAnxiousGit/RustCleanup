@@ -1,7 +1,7 @@
 # RustCleanup
 
 A native Windows 11 tool for freeing memory, checking disks and turning off the parts of Windows you don't want.
-It ships as one portable `RustCleanup.exe` with nothing to install.
+It ships as one portable `RustCleanup.exe` with nothing to install, in 12 languages.
 
 **[Download the latest release](https://github.com/RealAnxiousGit/RustCleanup/releases/latest)**
 
@@ -18,7 +18,7 @@ It ships as one portable `RustCleanup.exe` with nothing to install.
 | **Clean RAM** | Trims the working set of every process (`EmptyWorkingSet`), flushes the modified page list and, optionally, purges the standby list (file cache) via `NtSetSystemInformation`. Reports how much memory was freed. | Nothing to undo: Windows pages memory back in on demand. |
 | **Physical Memory** | Live RAM in use, out of usable and installed RAM, plus available and cached memory, refreshed every second. | n/a |
 | **Virtual Memory** | Page file size, usage and peak for each page file, plus the commit charge (RAM plus page file). | n/a |
-| **Scan Disk** | Pick any mounted drive and run `chkdsk`. Output streams live into its own window. Modes: **Read-only check** (`chkdsk X:`) on any drive, or **Online scan** (`chkdsk X: /scan`) on NTFS drives. | Read-only: never modifies the disk. |
+| **Scan Disk** | Shows how much of the selected drive is used, how much is available and its total size. **Manage Storage** opens Windows Settings at Storage (system drive) or Disks & volumes (other drives). Run `chkdsk` on any mounted drive: Output streams live into its own window. Modes: **Read-only check** (`chkdsk X:`) on any drive, or **Online scan** (`chkdsk X: /scan`) on NTFS drives. | Read-only: never modifies the disk. |
 | **Disable Copilot** | Sets `TurnOffWindowsCopilot = 1` under `HKCU` and `HKLM\Software\Policies\Microsoft\Windows\WindowsCopilot`, hides the taskbar button, and can restart Explorer so it applies right away. | Switch off: the values are deleted. |
 | **Disable Telemetry** | Sets `AllowTelemetry = 0` (policy and system keys), disables and stops `DiagTrack` and `dmwappushservice`, and disables the telemetry scheduled tasks with a silent PowerShell run. Tasks missing on your Windows build are skipped. | Switch off: policies removed, services set back to Automatic/Manual, tasks re-enabled. |
 | **No Forced Updates** | Under `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU`: `NoAutoRebootWithLoggedOnUsers = 1`, `AUOptions = 2` (ask before download and install). Can also pause updates for 35 days, the most Windows allows. | Switch off: all policy and pause values removed. |
@@ -27,12 +27,31 @@ It ships as one portable `RustCleanup.exe` with nothing to install.
 | **System Tools** | Opens Power Config, Disk Cleanup, Disk Management, Performance Monitor, Task Manager, Resource Monitor, Command Prompt or Command Prompt [Admin]. | n/a |
 
 ### Tray icon and notifications
-- **Closing the window hides RustCleanup** to the notification area, so it keeps running. Click the tray icon to open it again.
-- **Right-click the tray icon** for **Open App**, **Clean RAM**, **Open task list**, **Credits** and **Exit**. Only **Exit** quits.
+- **The tray icon stays** in the notification area while RustCleanup runs. Click it to open the window.
+- **Closing the window hides RustCleanup** to the notification area, so it keeps running (you can turn this off in Settings).
+- **Right-click the tray icon** for **Open App**, **Clean RAM**, **Open task list**, **Settings**, **Credits** and **Exit**. The task list, Settings and Credits open on their own, without the main window. Only **Exit** quits.
 - While the window is minimized or in the tray, finished jobs, warnings and errors from the Activity log also appear as Windows notifications.
+- **Only one copy runs.** Opening RustCleanup again brings up the copy that is already running.
+
+### Settings
+![The Settings window: language, start minimized, open on startup, close to the notification area, theme, interface size, notifications and updates](docs/settings.png)
+
+The **Settings** button sits between **Credits** and the theme button. Settings are saved in `HKCU\Software\RustCleanup`.
+
+| Setting | What it does |
+|---|---|
+| **Language** | English, Español, Português, Français, Deutsch, Italiano, Nederlands, Polski, Türkçe, Русский, 日本語, 中文. Follows your Windows display language on first launch. |
+| **Start minimized** | Starts in the notification area instead of opening the window. |
+| **Open on startup** | Adds a Task Scheduler logon task with highest privileges, so RustCleanup starts at sign-in without a UAC prompt. (The usual Run key can't be used: Windows skips programs that need admin rights there.) |
+| **Close to the notification area** | On: the close button hides the window. Off: it quits. |
+| **Theme** and **Interface size** | Same as Windows, Light or Dark; 90% to 175%. |
+| **Notifications** | Turns the Windows notifications off or on. |
+| **Automatically check for updates** | On: a new release is downloaded, checked against its published SHA-256, installed and restarted by itself. Off: RustCleanup shows the new version's changelog with **Update Now** and **Never Update** (or close it to decide later). |
+| **Auto-Clean RAM** | Cleans RAM by itself when memory use goes above the amount on the slider (50% to 95%), at most once every 2 minutes. |
+| **Hardware-accelerated UI** | Draws the interface with Direct3D 12 instead of OpenGL. Smoother on some GPUs, but about 335 MB of memory instead of about 100 MB. Needs a restart. |
 
 ### Light and dark mode
-The button next to **Credits** switches themes: a sun means "switch to Light Mode", a crescent moon means "switch to Dark Mode". The change fades over about a quarter of a second, or happens instantly if Windows animation effects are turned off. On first launch RustCleanup follows your Windows app theme, then remembers your choice.
+The button to the right of **Settings** switches themes: a sun means "switch to Light Mode", a crescent moon means "switch to Dark Mode". The change fades over about a quarter of a second, or happens instantly if Windows animation effects are turned off. On first launch RustCleanup follows your Windows app theme, then remembers your choice.
 
 ### Safety built in
 - **Protected processes.** csrss, wininit, winlogon, services, lsass, svchost, dwm, explorer, Defender and others can't be suspended or ended, and neither can RustCleanup itself. They can only be trimmed.
@@ -91,27 +110,40 @@ The test binary carries the same manifest. To run the tests without elevating, t
 ```powershell
 $env:__COMPAT_LAYER = "RunAsInvoker"; cargo test
 ```
+`every_string_is_translated` fails if any of the 11 language files is missing a string. The tests that change system settings are ignored by default; each puts the setting back afterwards. Run them from an **Administrator** terminal:
+```powershell
+cargo test -- --ignored --test-threads=1
+```
+
+### Adding a language
+Copy `lang/de.txt` to `lang/<code>.txt`, replace each second line with the translation, then add the language to `Lang` in `src/i18n.rs` (including its `include_str!` line) and a flag in `src/ui/flags.rs`.
 
 ## Project layout
 The layout follows the code graph in [`docs/graphify/GRAPH_REPORT.md`](docs/graphify/GRAPH_REPORT.md): one module per feature, with shared plumbing kept separate. Open [`docs/graphify/graph.html`](docs/graphify/graph.html) in a browser to explore the graph. After changing code, regenerate it with `graphify update src`.
 
 ```
 src/
-├── main.rs             window setup (eframe/egui)
+├── main.rs             window setup (eframe/egui), single instance, launch flags
 ├── app.rs              wires sections, windows, tray and theme together
 ├── events.rs           worker-to-UI messages, Logger, Jobs (panic-safe job runner)
+├── settings.rs         preferences in HKCU\Software\RustCleanup
+├── i18n.rs             translations (English text is the key, lang/*.txt)
+├── background.rs       launch-time update and startup checks, Auto-Clean RAM
 ├── ui/                 the interface, one file per section or window
 │   ├── memory.rs       Clean RAM: Physical and Virtual Memory
 │   ├── disk.rs         Scan Disk and the chkdsk output window
 │   ├── tasks.rs        Optimize Task and the task list window
 │   ├── tweaks.rs       Windows settings switches and System tools
 │   ├── credits.rs      Credits window
+│   ├── settings.rs     Settings window
+│   ├── update.rs       new-version window with the changelog
+│   ├── flags.rs        flags for the language picker
 │   ├── activity.rs     Activity log
 │   ├── theme.rs        palettes, fonts, theme fade
 │   └── widgets.rs      switch, meter, buttons, theme button, links
 └── sys/                everything that talks to Windows (no UI code)
     ├── memory.rs       memory figures, EmptyWorkingSet, standby purge
-    ├── disk.rs         drive enumeration
+    ├── disk.rs         drive enumeration and free space
     ├── chkdsk.rs       streaming chkdsk runner
     ├── copilot.rs      Copilot policy
     ├── telemetry.rs    telemetry policies, services, tasks
@@ -121,11 +153,15 @@ src/
     ├── process_actions.rs  optimize, suspend, resume, end
     ├── tray.rs         tray icon, menu, notifications (Shell_NotifyIconW)
     ├── tools.rs        System Tools launchers
+    ├── updater.rs      GitHub release check, download, SHA-256 check, exe swap
+    ├── startup.rs      Open on startup (Task Scheduler logon task)
+    ├── single_instance.rs  one running copy; a second launch shows the first
     ├── shell.rs        Explorer restart, unelevated links, window helpers
     ├── command.rs      hidden console tools and output decoding
     ├── privilege.rs    elevation check, token privileges
     ├── registry.rs     winreg helpers
     └── format.rs       sizes and dates
+lang/                   one file per language: English line, then its translation
 DESIGN.md               design direction and the reason for each choice
 app.manifest            UAC requireAdministrator manifest
 resources.rc            embeds manifest, icon and version info

@@ -4,28 +4,35 @@
 //! The icon lives on its own thread with a hidden window and message loop,
 //! so the menu keeps working while the main window is hidden. Menu picks are
 //! delivered through the `on_command` callback.
+//!
+//! The same window receives `SHOW_MESSAGE` from a second copy of the exe
+//! (see `single_instance`), which asks this copy to show itself.
 
 use std::sync::OnceLock;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc;
 use std::thread::JoinHandle;
 
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::Shell::{
-    NIF_ICON, NIF_INFO, NIF_MESSAGE, NIF_SHOWTIP, NIF_TIP, NIIF_ERROR, NIIF_INFO, NIIF_WARNING,
-    NIM_ADD, NIM_DELETE, NIM_MODIFY, NIM_SETVERSION, NOTIFY_ICON_INFOTIP_FLAGS,
+    NIF_ICON, NIF_INFO, NIF_MESSAGE, NIF_SHOWTIP, NIF_TIP, NIIF_ERROR, NIIF_INFO,
+    NIIF_RESPECT_QUIET_TIME, NIIF_WARNING, NIM_ADD, NIM_DELETE, NIM_MODIFY, NIM_SETVERSION,
     NOTIFYICON_VERSION_4, NOTIFYICONDATAW, Shell_NotifyIconW,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
-    AppendMenuW, CreatePopupMenu, CreateWindowExW, DefWindowProcW, DestroyMenu, DestroyWindow,
-    DispatchMessageW, GetCursorPos, GetMessageW, GetSystemMetrics, HICON, IMAGE_ICON,
-    LR_DEFAULTCOLOR, LoadImageW, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage,
-    RegisterClassW, RegisterWindowMessageW, SM_CXSMICON, SM_CYSMICON, SetForegroundWindow,
-    SetMenuDefaultItem, TPM_BOTTOMALIGN, TPM_RETURNCMD, TPM_RIGHTBUTTON, TrackPopupMenu,
-    TranslateMessage, WINDOW_EX_STYLE, WM_APP, WM_CLOSE, WM_CONTEXTMENU, WM_DESTROY,
-    WM_LBUTTONDBLCLK, WM_NULL, WM_USER, WNDCLASSW, WS_OVERLAPPED,
+    AppendMenuW, ChangeWindowMessageFilterEx, CreatePopupMenu, CreateWindowExW, DefWindowProcW,
+    DestroyMenu, DestroyWindow, DispatchMessageW, GetCursorPos, GetMessageW, GetSystemMetrics,
+    HICON, IMAGE_ICON, KillTimer, LR_DEFAULTCOLOR, LoadImageW, MF_SEPARATOR, MF_STRING, MSG,
+    MSGFLT_ALLOW, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
+    SM_CXSMICON, SM_CYSMICON, SetForegroundWindow, SetMenuDefaultItem, SetTimer, TPM_BOTTOMALIGN,
+    TPM_RETURNCMD, TPM_RIGHTBUTTON, TrackPopupMenu, TranslateMessage, WINDOW_EX_STYLE, WM_APP,
+    WM_CLOSE, WM_CONTEXTMENU, WM_DESTROY, WM_LBUTTONDBLCLK, WM_NULL, WM_TIMER, WM_USER, WNDCLASSW,
+    WS_OVERLAPPED,
 };
-use windows::core::{PCWSTR, w};
+use windows::core::{HSTRING, PCWSTR, w};
+
+use crate::i18n::{n_, tr, trf};
 
 /// What the user picked in the tray menu (or by clicking the icon).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -33,12 +40,13 @@ pub enum TrayCommand {
     OpenApp,
     CleanRam,
     OpenTaskList,
+    Settings,
     Credits,
     Exit,
 }
 
 /// Severity of a balloon notification.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum NotifyKind {
     Info,
     Warning,
@@ -46,18 +54,24 @@ pub enum NotifyKind {
 }
 
 const CALLBACK_MSG: u32 = WM_APP + 1;
+/// Sent by a second copy of RustCleanup: "show your window".
+pub const SHOW_MESSAGE: u32 = WM_APP + 2;
+pub const WINDOW_CLASS: PCWSTR = w!("RustCleanupTray");
 const ICON_ID: u32 = 1;
+/// Retries adding the icon while the taskbar isn't up yet (e.g. right after sign-in).
+const RETRY_TIMER: usize = 1;
 // NOTIFYICON_VERSION_4 events, delivered in LOWORD(lParam).
 const NIN_SELECT: u32 = WM_USER;
 const NIN_KEYSELECT: u32 = WM_USER + 1;
 const NIN_BALLOONUSERCLICK: u32 = WM_USER + 5;
 
-const MENU: [(usize, PCWSTR, TrayCommand); 5] = [
-    (1, w!("Open App"), TrayCommand::OpenApp),
-    (2, w!("Clean RAM"), TrayCommand::CleanRam),
-    (3, w!("Open task list"), TrayCommand::OpenTaskList),
-    (4, w!("Credits"), TrayCommand::Credits),
-    (5, w!("Exit"), TrayCommand::Exit),
+const MENU: [(usize, &str, TrayCommand); 6] = [
+    (1, n_("Open App"), TrayCommand::OpenApp),
+    (2, n_("Clean RAM"), TrayCommand::CleanRam),
+    (3, n_("Open task list"), TrayCommand::OpenTaskList),
+    (4, n_("Settings"), TrayCommand::Settings),
+    (5, n_("Credits"), TrayCommand::Credits),
+    (6, n_("Exit"), TrayCommand::Exit),
 ];
 
 /// State the window procedure needs. There is only ever one tray icon.
@@ -68,6 +82,8 @@ struct Shared {
 }
 
 static SHARED: OnceLock<Shared> = OnceLock::new();
+/// True while the icon is actually in the notification area.
+static ICON_ADDED: AtomicBool = AtomicBool::new(false);
 
 /// A live tray icon. Dropping it removes the icon and stops its thread.
 pub struct Tray {
@@ -76,8 +92,9 @@ pub struct Tray {
 }
 
 impl Tray {
-    /// Creates the tray icon. Fails if the shell has no notification area
-    /// (for example when Explorer is not running).
+    /// Creates the tray icon. If the notification area isn't there yet (for
+    /// example at sign-in, before Explorer is ready), the icon is added as
+    /// soon as it appears. Fails only if the tray window can't be created.
     pub fn start(on_command: impl Fn(TrayCommand) + Send + Sync + 'static) -> Result<Self, String> {
         let (ready_tx, ready_rx) = mpsc::channel::<Result<isize, String>>();
         let mut on_command = Some(on_command);
@@ -100,17 +117,24 @@ impl Tray {
                         taskbar_created,
                     });
                 }
-                if !add_icon(hwnd) {
-                    let _ = ready_tx.send(Err("the notification area is not available".into()));
-                    unsafe {
-                        let _ = DestroyWindow(hwnd);
+                // SAFETY: our own window. RustCleanup runs elevated, and Windows
+                // blocks messages from programs without admin rights unless
+                // allowed: a second copy's "show", and Explorer's TaskbarCreated.
+                unsafe {
+                    let _ = ChangeWindowMessageFilterEx(hwnd, SHOW_MESSAGE, MSGFLT_ALLOW, None);
+                    if taskbar_created != 0 {
+                        let _ =
+                            ChangeWindowMessageFilterEx(hwnd, taskbar_created, MSGFLT_ALLOW, None);
                     }
-                    return;
+                }
+                if !add_icon(hwnd) {
+                    // SAFETY: a timer on our own window, killed once the icon is added.
+                    unsafe { SetTimer(Some(hwnd), RETRY_TIMER, 2000, None) };
                 }
                 let _ = ready_tx.send(Ok(hwnd.0 as isize));
                 message_loop();
             })
-            .map_err(|e| format!("could not start the tray thread: {e}"))?;
+            .map_err(|e| trf("could not start the tray thread: {0}", &[&e]))?;
 
         match ready_rx.recv() {
             Ok(Ok(hwnd)) => Ok(Self {
@@ -118,7 +142,7 @@ impl Tray {
                 thread: Some(thread),
             }),
             Ok(Err(e)) => Err(e),
-            Err(_) => Err("the tray thread stopped unexpectedly".into()),
+            Err(_) => Err(tr("the tray thread stopped unexpectedly").into()),
         }
     }
 
@@ -128,6 +152,9 @@ impl Tray {
 
     /// Shows a Windows notification from the tray icon.
     pub fn notify(&self, kind: NotifyKind, title: &str, body: &str) {
+        if !ICON_ADDED.load(Ordering::Relaxed) {
+            return;
+        }
         let mut data = base_data(self.hwnd());
         data.uFlags = NIF_INFO;
         copy_wide(&mut data.szInfoTitle, title);
@@ -136,7 +163,7 @@ impl Tray {
             NotifyKind::Info => NIIF_INFO,
             NotifyKind::Warning => NIIF_WARNING,
             NotifyKind::Error => NIIF_ERROR,
-        } | NOTIFY_ICON_INFOTIP_FLAGS(0);
+        } | NIIF_RESPECT_QUIET_TIME;
         // SAFETY: `data` is fully initialised and refers to our own icon.
         unsafe {
             let _ = Shell_NotifyIconW(NIM_MODIFY, &data);
@@ -150,6 +177,7 @@ impl Tray {
             let _ = Shell_NotifyIconW(NIM_DELETE, &base_data(self.hwnd()));
             let _ = PostMessageW(Some(self.hwnd()), WM_CLOSE, WPARAM(0), LPARAM(0));
         }
+        ICON_ADDED.store(false, Ordering::Relaxed);
         if let Some(t) = self.thread.take() {
             let _ = t.join();
         }
@@ -188,15 +216,16 @@ fn create_window() -> Result<HWND, String> {
         let class = WNDCLASSW {
             lpfnWndProc: Some(window_proc),
             hInstance: instance.into(),
-            lpszClassName: w!("RustCleanupTray"),
+            lpszClassName: WINDOW_CLASS,
             ..Default::default()
         };
         RegisterClassW(&class);
-        // A real (never shown) top-level window rather than a message-only one,
-        // because only top-level windows receive the TaskbarCreated broadcast.
+        // A real (never shown) top-level window rather than a message-only one:
+        // only top-level windows receive the TaskbarCreated broadcast, and a
+        // second copy finds this one with FindWindow.
         CreateWindowExW(
             WINDOW_EX_STYLE(0),
-            w!("RustCleanupTray"),
+            WINDOW_CLASS,
             w!("RustCleanup tray"),
             WS_OVERLAPPED,
             0,
@@ -208,7 +237,7 @@ fn create_window() -> Result<HWND, String> {
             Some(instance.into()),
             None,
         )
-        .map_err(|e| format!("could not create the tray window: {}", e.message()))
+        .map_err(|e| trf("could not create the tray window: {0}", &[&e.message()]))
     }
 }
 
@@ -246,7 +275,53 @@ fn add_icon(hwnd: HWND) -> bool {
         data.Anonymous.uVersion = NOTIFYICON_VERSION_4;
         let _ = Shell_NotifyIconW(NIM_SETVERSION, &data);
     }
+    ICON_ADDED.store(true, Ordering::Relaxed);
+    std::thread::spawn(keep_icon_visible);
     true
+}
+
+/// Windows 11 puts new tray icons in the hidden overflow menu. Explorer
+/// records each icon under `HKCU\Control Panel\NotifyIconSettings`, and
+/// `IsPromoted = 1` shows it on the taskbar. It is set once, and only while
+/// the user hasn't made a choice for this icon, so their own choice always wins.
+fn keep_icon_visible() {
+    use winreg::RegKey;
+    use winreg::enums::{HKEY_CURRENT_USER, KEY_READ, KEY_WRITE};
+
+    let Ok(exe) = std::env::current_exe() else {
+        return;
+    };
+    let exe = exe.to_string_lossy().to_lowercase();
+    // Explorer writes the entry shortly after the icon is added.
+    for _ in 0..10 {
+        std::thread::sleep(std::time::Duration::from_millis(700));
+        let Ok(root) = RegKey::predef(HKEY_CURRENT_USER)
+            .open_subkey_with_flags(r"Control Panel\NotifyIconSettings", KEY_READ)
+        else {
+            return;
+        };
+        for name in root.enum_keys().flatten() {
+            let Ok(key) = root.open_subkey_with_flags(&name, KEY_READ | KEY_WRITE) else {
+                continue;
+            };
+            let Ok(path) = key.get_value::<String, _>("ExecutablePath") else {
+                continue;
+            };
+            let path = path.to_lowercase();
+            // Paths under known folders are stored as "{folder-guid}\rest".
+            let matches = path == exe
+                || path
+                    .strip_prefix('{')
+                    .and_then(|p| p.split_once('}'))
+                    .is_some_and(|(_, rest)| !rest.is_empty() && exe.ends_with(rest));
+            if matches {
+                if key.get_raw_value("IsPromoted").is_err() {
+                    let _ = key.set_value("IsPromoted", &1u32);
+                }
+                return;
+            }
+        }
+    }
 }
 
 fn message_loop() {
@@ -275,7 +350,9 @@ fn show_menu(hwnd: HWND) -> Option<TrayCommand> {
             if cmd == TrayCommand::Exit {
                 let _ = AppendMenuW(menu, MF_SEPARATOR, 0, None);
             }
-            let _ = AppendMenuW(menu, MF_STRING, id, label);
+            // Built on every open, so it is always in the current language.
+            let label = HSTRING::from(tr(label));
+            let _ = AppendMenuW(menu, MF_STRING, id, &label);
         }
         let _ = SetMenuDefaultItem(menu, 1, 0);
         let mut pt = POINT::default();
@@ -320,6 +397,19 @@ unsafe extern "system" fn window_proc(
             }
             LRESULT(0)
         }
+        SHOW_MESSAGE => {
+            send(TrayCommand::OpenApp);
+            LRESULT(0)
+        }
+        WM_TIMER if wparam.0 == RETRY_TIMER => {
+            if add_icon(hwnd) {
+                // SAFETY: our own timer.
+                unsafe {
+                    let _ = KillTimer(Some(hwnd), RETRY_TIMER);
+                }
+            }
+            LRESULT(0)
+        }
         WM_CLOSE => {
             // SAFETY: destroying our own window on its thread.
             unsafe {
@@ -337,7 +427,11 @@ unsafe extern "system" fn window_proc(
             .get()
             .is_some_and(|s| s.taskbar_created != 0 && s.taskbar_created == m) =>
         {
-            add_icon(hwnd);
+            ICON_ADDED.store(false, Ordering::Relaxed);
+            if !add_icon(hwnd) {
+                // SAFETY: as above, retried until the new taskbar accepts it.
+                unsafe { SetTimer(Some(hwnd), RETRY_TIMER, 2000, None) };
+            }
             LRESULT(0)
         }
         // SAFETY: default handling for everything else.

@@ -7,6 +7,7 @@ use std::thread;
 
 use super::command::{decode_console, hidden_command, looks_like_utf16};
 use super::disk::Drive;
+use crate::i18n::tr;
 
 /// Which chkdsk pass to run.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -23,8 +24,8 @@ impl ScanMode {
 
     pub fn label(self) -> &'static str {
         match self {
-            ScanMode::ReadOnly => "Read-only check",
-            ScanMode::OnlineScan => "Online scan (NTFS only)",
+            ScanMode::ReadOnly => tr("Read-only check"),
+            ScanMode::OnlineScan => tr("Online scan (NTFS only)"),
         }
     }
 
@@ -182,15 +183,15 @@ fn spawn_reader(
 /// Human explanation of chkdsk's exit codes.
 pub fn describe_exit(code: i32) -> &'static str {
     match code {
-        0 => "No errors were found.",
-        1 => "Errors were found and fixed.",
-        2 => {
-            "Disk cleanup was performed (e.g. garbage collection) or not done because /f was not given."
-        }
-        3 => {
-            "Could not check the disk, errors could not be fixed, or errors were not fixed because /f was not given."
-        }
-        _ => "chkdsk ended with an unexpected exit code.",
+        0 => tr("No errors were found."),
+        1 => tr("Errors were found and fixed."),
+        2 => tr(
+            "Disk cleanup was performed (e.g. garbage collection) or not done because /f was not given.",
+        ),
+        3 => tr(
+            "Could not check the disk, errors could not be fixed, or errors were not fixed because /f was not given.",
+        ),
+        _ => tr("chkdsk ended with an unexpected exit code."),
     }
 }
 

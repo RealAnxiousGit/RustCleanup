@@ -14,6 +14,7 @@ use windows::core::BOOL;
 use super::command::{run_hidden, windows_dir};
 use super::registry::{self, Hive};
 use crate::events::Logger;
+use crate::i18n::{tr, trf};
 
 /// Restarts explorer.exe so shell policies apply without signing out.
 ///
@@ -21,7 +22,7 @@ use crate::events::Logger;
 /// Starting it ourselves would make the shell inherit our elevated token,
 /// so that is only a fallback if Winlogon does not bring it back.
 pub fn restart_explorer(log: &Logger) -> Result<(), String> {
-    log.info("Restarting Explorer to apply the change.");
+    log.info(tr("Restarting Explorer to apply the change."));
     let out = run_hidden("taskkill.exe", &["/F", "/IM", "explorer.exe"])?;
     if !out.success {
         log.warn(format!("taskkill explorer.exe: {}", out.summary()));
@@ -29,14 +30,21 @@ pub fn restart_explorer(log: &Logger) -> Result<(), String> {
     for _ in 0..20 {
         std::thread::sleep(Duration::from_millis(250));
         if super::process_monitor::is_running("explorer.exe") {
-            log.info("Explorer restarted.");
+            log.info(tr("Explorer restarted."));
             return Ok(());
         }
     }
     std::process::Command::new(windows_dir().join("explorer.exe"))
         .spawn()
-        .map_err(|e| format!("Explorer did not restart and could not be started: {e}"))?;
-    log.warn("Explorer was started manually. Sign out and back in if the taskbar misbehaves.");
+        .map_err(|e| {
+            trf(
+                "Explorer did not restart and could not be started: {0}",
+                &[&e],
+            )
+        })?;
+    log.warn(tr(
+        "Explorer was started manually. Sign out and back in if the taskbar misbehaves.",
+    ));
     Ok(())
 }
 

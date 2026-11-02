@@ -5,6 +5,7 @@ use eframe::egui::{self, RichText, Ui};
 use super::theme::{Palette, semibold};
 use super::widgets;
 use crate::events::{AppEvent, Job, Jobs, TweakState};
+use crate::i18n::{tr, trf};
 use crate::sys::format::friendly_date;
 use crate::sys::tools::TOOLS;
 use crate::sys::{copilot, power, telemetry, updates};
@@ -39,7 +40,7 @@ impl TweaksPanel {
     }
 
     /// Re-reads every switch's real state from the system, in the background.
-    pub fn detect(jobs: &mut Jobs) {
+    pub fn detect(jobs: &Jobs) {
         jobs.start(Job::DetectState, |log| {
             log.send(AppEvent::State(TweakState {
                 copilot_disabled: copilot::copilot_disabled(),
@@ -82,18 +83,18 @@ impl TweaksPanel {
         result
     }
 
-    pub fn settings_ui(&mut self, ui: &mut Ui, pal: &Palette, jobs: &mut Jobs) {
-        widgets::heading(ui, "Windows settings");
+    pub fn settings_ui(&mut self, ui: &mut Ui, pal: &Palette, jobs: &Jobs) {
+        widgets::heading(ui, tr("Windows settings"));
         if !self.loaded {
             ui.horizontal(|ui| {
                 ui.add(egui::Spinner::new().size(14.0).color(pal.muted));
-                widgets::note(ui, pal, "Reading the current settings from Windows.");
+                widgets::note(ui, pal, tr("Reading the current settings from Windows."));
             });
         } else {
             widgets::note(
                 ui,
                 pal,
-                "Switch any of these off again to restore the Windows default.",
+                tr("Switch any of these off again to restore the Windows default."),
             );
         }
         ui.add_space(8.0);
@@ -104,8 +105,10 @@ impl TweaksPanel {
             jobs,
             Row {
                 job: Job::Copilot,
-                title: "Disable Copilot",
-                detail: "Turns on the TurnOffWindowsCopilot policy and hides the taskbar button.",
+                title: tr("Disable Copilot"),
+                detail: tr(
+                    "Turns on the TurnOffWindowsCopilot policy and hides the taskbar button.",
+                ),
                 on: self.state.copilot_disabled,
             },
         ) {
@@ -117,7 +120,7 @@ impl TweaksPanel {
         }
         ui.checkbox(
             &mut self.restart_explorer,
-            "Restart Explorer so it applies right away",
+            tr("Restart Explorer so it applies right away"),
         );
         ui.separator();
 
@@ -125,7 +128,7 @@ impl TweaksPanel {
             ui,
             pal,
             jobs,
-            Row { job: Job::Telemetry, title: "Disable Telemetry", detail: "Sets AllowTelemetry to 0, stops DiagTrack and dmwappushservice, and turns off the data collection tasks.", on: self.state.telemetry_disabled },
+            Row { job: Job::Telemetry, title: tr("Disable Telemetry"), detail: tr("Sets AllowTelemetry to 0, stops DiagTrack and dmwappushservice, and turns off the data collection tasks."), on: self.state.telemetry_disabled },
         ) {
             self.state.telemetry_disabled = disable;
             jobs.start(Job::Telemetry, move |log| telemetry::set_telemetry_disabled(log, disable));
@@ -136,22 +139,22 @@ impl TweaksPanel {
             ui,
             pal,
             jobs,
-            Row { job: Job::Updates, title: "No Forced Updates", detail: "Windows Update asks before installing and never restarts on its own while you are signed in.", on: self.state.updates_blocked },
+            Row { job: Job::Updates, title: tr("No Forced Updates"), detail: tr("Windows Update asks before installing and never restarts on its own while you are signed in."), on: self.state.updates_blocked },
         ) {
             let pause = self.pause_updates;
             self.state.updates_blocked = block;
             jobs.start(Job::Updates, move |log| updates::set_forced_updates_blocked(log, block, pause));
         }
-        let pause_label = format!("Also pause updates for {} days", updates::PAUSE_DAYS);
+        let pause_label = trf("Also pause updates for {0} days", &[&updates::PAUSE_DAYS]);
         ui.add_enabled(
             !self.state.updates_blocked,
             egui::Checkbox::new(&mut self.pause_updates, pause_label),
         );
         if let Some(until) = &self.state.paused_until {
             ui.label(
-                RichText::new(format!(
-                    "Updates are paused until {}.",
-                    friendly_date(until)
+                RichText::new(trf(
+                    "Updates are paused until {0}.",
+                    &[&friendly_date(until)],
                 ))
                 .color(pal.warn),
             );
@@ -162,7 +165,7 @@ impl TweaksPanel {
             ui,
             pal,
             jobs,
-            Row { job: Job::LowPower, title: "Low Power Mode", detail: "Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan.", on: self.state.low_power },
+            Row { job: Job::LowPower, title: tr("Low Power Mode"), detail: tr("Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan."), on: self.state.low_power },
         ) {
             self.state.low_power = enable;
             jobs.start(Job::LowPower, move |log| {
@@ -171,28 +174,28 @@ impl TweaksPanel {
         }
     }
 
-    pub fn tools_ui(&mut self, ui: &mut Ui, pal: &Palette, jobs: &mut Jobs) {
-        widgets::heading(ui, "System tools");
-        widgets::note(ui, pal, "Opens the built-in Windows tool you pick.");
+    pub fn tools_ui(&mut self, ui: &mut Ui, pal: &Palette, jobs: &Jobs) {
+        widgets::heading(ui, tr("System tools"));
+        widgets::note(ui, pal, tr("Opens the built-in Windows tool you pick."));
         ui.add_space(4.0);
         ui.horizontal(|ui| {
             egui::ComboBox::from_id_salt("tools")
                 .width((ui.available_width() - 80.0).max(140.0))
-                .selected_text(TOOLS[self.tool_idx].label)
+                .selected_text(tr(TOOLS[self.tool_idx].label))
                 .show_ui(ui, |ui| {
                     for (i, tool) in TOOLS.iter().enumerate() {
-                        ui.selectable_value(&mut self.tool_idx, i, tool.label)
-                            .on_hover_text(tool.description);
+                        ui.selectable_value(&mut self.tool_idx, i, tr(tool.label))
+                            .on_hover_text(tr(tool.description));
                     }
                 });
-            if widgets::button(ui, "Open", true).clicked() {
+            if widgets::button(ui, tr("Open"), true).clicked() {
                 let tool = &TOOLS[self.tool_idx];
                 match tool.launch() {
-                    Ok(()) => jobs.log.info(format!("Opened {}.", tool.label)),
+                    Ok(()) => jobs.log.info(trf("Opened {0}.", &[&tr(tool.label)])),
                     Err(e) => jobs.log.error(e),
                 }
             }
         });
-        widgets::note(ui, pal, TOOLS[self.tool_idx].description);
+        widgets::note(ui, pal, tr(TOOLS[self.tool_idx].description));
     }
 }

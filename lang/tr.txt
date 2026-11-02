@@ -1,0 +1,829 @@
+# Türkçe (Turkish) translation of RustCleanup.
+
+A check is running in its own window.
+Denetim kendi penceresinde çalışıyor.
+
+Activity
+Etkinlik
+
+Also pause updates for {0} days
+Güncelleştirmeleri ayrıca {0} gün duraklat
+
+Also purge the standby list (file cache)
+Bekleme listesini de temizle (dosya önbelleği)
+
+Anything unsaved in them will be lost.
+Bunlardaki kaydedilmemiş her şey kaybolacak.
+
+App
+Uygulama
+
+Auto-Clean RAM
+RAM'i otomatik temizle
+
+Auto-Clean RAM amount
+Otomatik RAM temizleme eşiği
+
+Automatically check for updates
+Güncelleştirmeleri otomatik denetle
+
+Background
+Arka plan
+
+Built with
+Kullanılan araçlar
+
+CD/DVD
+CD/DVD
+
+Cancel
+İptal
+
+Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan.
+CPU'yu prize takılıyken %60, pildeyken %50 ile sınırlar ve turbo boost'u kapatır. Kapalı: önceki güç planınızı geri yükler.
+
+Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+Değişiklikler yönetici hakları gerektirir. RustCleanup'ı kapatın, yeniden açın ve UAC isteminde Evet'i seçin.
+
+Check for updates now
+Güncelleştirmeleri şimdi denetle
+
+Checking for updates.
+Güncelleştirmeler denetleniyor.
+
+Checksum verified.
+Sağlama toplamı doğrulandı.
+
+Clean RAM
+RAM'i Temizle
+
+Clean RAM finished.
+RAM temizleme tamamlandı.
+
+Clean RAM finished. {0} freed, {1} now available.
+RAM temizleme tamamlandı. Boşaltılan: {0}, şu an kullanılabilir: {1}.
+
+Clean when more than {0} of {1} is in use.
+Kullanım {1} içinde {0} değerini aştığında temizle.
+
+Cleaning
+Temizleniyor
+
+Cleaning RAM.
+RAM temizleniyor.
+
+Clear
+Temizle
+
+Clear selection
+Seçimi temizle
+
+Clear the filter
+Filtreyi temizle
+
+Close
+Kapat
+
+Close and reopen the task list to try again.
+Yeniden denemek için görev listesini kapatıp yeniden açın.
+
+Close to the notification area
+Bildirim alanına kapat
+
+Code graph used to plan and check the module layout
+Modül yapısını planlamak ve denetlemek için kullanılan kod grafiği
+
+Command Prompt
+Komut İstemi
+
+Command Prompt [Admin]
+Komut İstemi [Yönetici]
+
+Committed {0} of {1} (RAM plus page file)
+Kaydedilen: {0} / {1} (RAM ve disk belleği dosyası)
+
+Copilot disabled.
+Copilot devre dışı bırakıldı.
+
+Copilot policy TurnOffWindowsCopilot=1 written to HKCU and HKLM.
+Copilot ilkesi TurnOffWindowsCopilot=1, HKCU ve HKLM'ye yazıldı.
+
+Copilot policy removed; Windows defaults restored.
+Copilot ilkesi kaldırıldı, Windows varsayılanları geri yüklendi.
+
+Copilot re-enabled.
+Copilot yeniden etkinleştirildi.
+
+Copy
+Kopyala
+
+Copy output
+Çıktıyı kopyala
+
+Could not check for updates: {0}
+Güncelleştirmeler denetlenemedi: {0}
+
+Could not check the disk, errors could not be fixed, or errors were not fixed because /f was not given.
+Disk denetlenemedi, hatalar düzeltilemedi ya da /f verilmediği için hatalar düzeltilmedi.
+
+Could not enable {0}: {1}
+Etkinleştirilemedi ({0}): {1}
+
+Could not install the update: {0}
+Güncelleştirme yüklenemedi: {0}
+
+Could not reach GitHub ({0}): {1}
+GitHub'a ulaşılamadı ({0}): {1}
+
+Could not reach GitHub: {0}
+GitHub'a ulaşılamadı: {0}
+
+Could not read the process list: {0}
+İşlem listesi okunamadı: {0}
+
+Could not restart RustCleanup: {0}. Close it and open it again.
+RustCleanup yeniden başlatılamadı: {0}. Kapatıp yeniden açın.
+
+Could not start a background thread: {0}
+Arka plan iş parçacığı başlatılamadı: {0}
+
+Could not start the process monitor: {0}
+İşlem izleyicisi başlatılamadı: {0}
+
+Could not stop chkdsk: {0}
+chkdsk durdurulamadı: {0}
+
+Counters and data collectors
+Sayaçlar ve veri toplayıcıları
+
+Created the "RustCleanup Low Power" power scheme.
+"RustCleanup Low Power" güç düzeni oluşturuldu.
+
+Credits
+Emeği Geçenler
+
+Dark
+Koyu
+
+Dark Mode
+Koyu Mod
+
+Design rules applied to the interface
+Arayüze uygulanan tasarım kuralları
+
+Disable Copilot
+Copilot'u devre dışı bırak
+
+Disable Telemetry
+Telemetriyi devre dışı bırak
+
+Disk Cleanup
+Disk Temizleme
+
+Disk Management
+Disk Yönetimi
+
+Disk check cancelled.
+Disk denetimi iptal edildi.
+
+Disk cleanup was performed (e.g. garbage collection) or not done because /f was not given.
+Disk temizliği yapıldı (örneğin çöp toplama) ya da /f verilmediği için yapılmadı.
+
+Done
+Tamam
+
+Downloaded {0}%.
+İndirilen: %{0}.
+
+Downloading RustCleanup {0}.
+RustCleanup {0} indiriliyor.
+
+Downloading and installing.
+İndiriliyor ve yükleniyor.
+
+Draws the interface with Direct3D 12 instead of OpenGL. It can be smoother on older or integrated graphics, but uses about three times as much memory.
+Arayüzü OpenGL yerine Direct3D 12 ile çizer. Eski veya tümleşik grafik birimlerinde daha akıcı olabilir, ancak yaklaşık üç kat daha fazla bellek kullanır.
+
+Elevated prompt
+Yükseltilmiş istem
+
+End task
+Görevi sonlandır
+
+End these tasks?
+Bu görevler sonlandırılsın mı?
+
+Ended {0} of {1} processes.
+Sonlandırılan işlemler: {0} / {1}.
+
+Errors were found and fixed.
+Hatalar bulundu ve düzeltildi.
+
+Every setting goes back to its default. Open on startup is kept.
+Tüm ayarlar varsayılan değerlerine döner. Başlangıçta aç ayarı korunur.
+
+Exit
+Çıkış
+
+Explorer did not restart and could not be started: {0}
+Gezgin yeniden başlamadı ve başlatılamadı: {0}
+
+Explorer restarted.
+Gezgin yeniden başlatıldı.
+
+Explorer was started manually. Sign out and back in if the taskbar misbehaves.
+Gezgin elle başlatıldı. Görev çubuğu düzgün çalışmazsa oturumu kapatıp yeniden açın.
+
+Failed
+Başarısız
+
+Filter
+Filtre
+
+Finished in {0} s. {1}
+{0} sn'de tamamlandı. {1}
+
+Flushing the modified page list failed: {0}
+Değiştirilmiş sayfa listesi boşaltılamadı: {0}
+
+Forced updates and automatic reboots are now blocked.
+Zorunlu güncelleştirmeler ve otomatik yeniden başlatmalar artık engellendi.
+
+General
+Genel
+
+GitHub answered with HTTP status {0}.
+GitHub, HTTP durum kodu {0} ile yanıt verdi.
+
+GitHub sent a reply RustCleanup could not read: {0}
+GitHub, RustCleanup'ın okuyamadığı bir yanıt gönderdi: {0}
+
+Hardware-accelerated UI
+Donanım hızlandırmalı arayüz
+
+Info
+Bilgi
+
+Interface size
+Arayüz boyutu
+
+Language
+Dil
+
+Light
+Açık
+
+Light Mode
+Açık Mod
+
+Live CPU, memory, disk and network
+Canlı CPU, bellek, disk ve ağ
+
+Local Disk
+Yerel Disk
+
+Look for drives again
+Sürücüleri yeniden ara
+
+Low Power Mode
+Düşük Güç Modu
+
+Low Power Mode off.
+Düşük Güç Modu kapalı.
+
+Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.
+Düşük Güç Modu açık: CPU %60 (prize takılı) / %50 (pil) ile sınırlı, turbo boost kapalı.
+
+MIT licensed.
+MIT lisanslıdır.
+
+Makes text and controls larger or smaller in every window.
+Tüm pencerelerdeki metni ve denetimleri büyütür veya küçültür.
+
+Memory
+Bellek
+
+Memory use reached {0}% (limit {1}%), so RAM is being cleaned automatically.
+Bellek kullanımı %{0} düzeyine ulaştı (sınır %{1}), bu yüzden RAM otomatik olarak temizleniyor.
+
+Name
+Ad
+
+Name or PID
+Ad veya PID
+
+Network
+Ağ
+
+Never Update
+Asla Güncelleme
+
+No Forced Updates
+Zorunlu Güncelleştirme Yok
+
+No drives
+Sürücü yok
+
+No drives were found. Connect a drive, then press Refresh.
+Sürücü bulunamadı. Bir sürücü bağlayın, sonra Yenile'ye basın.
+
+No errors were found.
+Hata bulunamadı.
+
+No page file is configured, so Windows is running on physical memory only. You can add one in System Properties, Advanced, Performance settings.
+Disk belleği dosyası yapılandırılmamış, bu yüzden Windows yalnızca fiziksel bellekle çalışıyor. Sistem Özellikleri, Gelişmiş, Performans ayarları bölümünden ekleyebilirsiniz.
+
+No process matches "{0}".
+"{0}" ile eşleşen işlem yok.
+
+No tray icon ({0}). Closing the window will quit RustCleanup.
+Bildirim alanı simgesi yok ({0}). Pencereyi kapatmak RustCleanup'tan çıkar.
+
+Not running as Administrator
+Yönetici olarak çalışmıyor
+
+Nothing has run yet. Everything RustCleanup changes is listed here.
+Henüz hiçbir şey çalışmadı. RustCleanup'ın yaptığı tüm değişiklikler burada listelenir.
+
+Notifications
+Bildirimler
+
+On: when RustCleanup starts, a new release on GitHub is downloaded, checked and installed by itself. Off: you are asked first, with the changelog.
+Açık: RustCleanup başladığında GitHub'daki yeni sürüm kendiliğinden indirilir, denetlenir ve yüklenir. Kapalı: önce değişiklik günlüğüyle birlikte size sorulur.
+
+Online scan (NTFS only)
+Çevrimiçi tarama (yalnızca NTFS)
+
+Open
+Aç
+
+Open App
+Uygulamayı Aç
+
+Open RustCleanup when you sign in to Windows, without a UAC prompt.
+Windows'ta oturum açtığınızda RustCleanup'ı UAC istemi olmadan aç.
+
+Open on startup
+Başlangıçta aç
+
+Open task list
+Görev listesini aç
+
+Open the release page
+Sürüm sayfasını aç
+
+Opened {0}.
+Açıldı: {0}.
+
+Opens the built-in Windows tool you pick.
+Seçtiğiniz yerleşik Windows aracını açar.
+
+Optimize
+İyileştir
+
+Optimize Task
+Görevi İyileştir
+
+Optimized {0} of {1} processes.
+İyileştirilen işlemler: {0} / {1}.
+
+Partitions and volumes
+Bölümler ve birimler
+
+Performance
+Performans
+
+Performance Monitor
+Performans İzleyicisi
+
+Physical Memory
+Fiziksel Bellek
+
+Power Config
+Güç Yapılandırması
+
+Power Options control panel
+Denetim Masası'nda Güç Seçenekleri
+
+Processes, performance, startup apps
+İşlemler, performans, başlangıç uygulamaları
+
+Programming
+Programlama
+
+Prompt Engineer
+İstem Mühendisi
+
+Protected
+Korumalı
+
+Protected system processes were left out.
+Korumalı sistem işlemleri dışarıda bırakıldı.
+
+Purging the standby list failed: {0}
+Bekleme listesi temizlenemedi: {0}
+
+RAM Disk
+RAM Diski
+
+Read-only check
+Salt okunur denetim
+
+Reading the current settings from Windows.
+Geçerli ayarlar Windows'tan okunuyor.
+
+Reading the process list.
+İşlem listesi okunuyor.
+
+Refresh
+Yenile
+
+Release {0} has no {1} to download.
+{0} sürümünde indirilecek {1} yok.
+
+Removable
+Çıkarılabilir
+
+Remove temporary and system files
+Geçici dosyaları ve sistem dosyalarını kaldır
+
+Removed the RustCleanup Low Power scheme.
+RustCleanup Low Power düzeni kaldırıldı.
+
+Reset all settings
+Tüm ayarları sıfırla
+
+Resource Monitor
+Kaynak İzleyicisi
+
+Restart Explorer so it applies right away
+Hemen uygulanması için Gezgin'i yeniden başlat
+
+Restart RustCleanup to apply this.
+Bunu uygulamak için RustCleanup'ı yeniden başlatın.
+
+Restart now
+Şimdi yeniden başlat
+
+Restarting Explorer to apply the change.
+Değişikliği uygulamak için Gezgin yeniden başlatılıyor.
+
+Restored power scheme {0}.
+Güç düzeni geri yüklendi: {0}.
+
+Resume
+Sürdür
+
+Resumed {0} of {1} processes.
+Sürdürülen işlemler: {0} / {1}.
+
+Run check
+Denetimi çalıştır
+
+Running as Administrator
+Yönetici olarak çalışıyor
+
+Running for {0} s
+{0} sn'dir çalışıyor
+
+Runs Clean RAM by itself when physical memory use reaches the amount below. It checks every 5 seconds and runs at most once every {0} minutes.
+Fiziksel bellek kullanımı aşağıdaki miktara ulaştığında RAM'i Temizle'yi kendiliğinden çalıştırır. Her 5 saniyede bir denetler ve en fazla {0} dakikada bir çalışır.
+
+Runs chkdsk on the drive you pick and shows its output live.
+Seçtiğiniz sürücüde chkdsk çalıştırır ve çıktısını canlı gösterir.
+
+RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt.
+RustCleanup yönetici olarak çalışmıyor, bu yüzden çoğu değişiklik başarısız olacak. Yeniden başlatın ve UAC isteminde Evet'i seçin.
+
+RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit.
+RustCleanup bildirim alanında çalışmaya devam ediyor. Seçenekler için simgesine sağ tıklayın veya çıkmak için Çıkış'ı seçin.
+
+RustCleanup is up to date.
+RustCleanup güncel.
+
+RustCleanup will no longer open when you sign in.
+RustCleanup artık oturum açtığınızda açılmayacak.
+
+RustCleanup will not ask about new versions again. Turn "Tell me about new versions" back on in Settings to change this.
+RustCleanup yeni sürümleri bir daha sormayacak. Bunu değiştirmek için Ayarlar'da "Yeni sürümleri bana bildir" seçeneğini yeniden açın.
+
+RustCleanup will open when you sign in to Windows.
+RustCleanup, Windows'ta oturum açtığınızda açılacak.
+
+RustCleanup {0} is available
+RustCleanup {0} kullanılabilir
+
+RustCleanup {0} is available and will be installed now.
+RustCleanup {0} kullanılabilir ve şimdi yüklenecek.
+
+RustCleanup {0} is available.
+RustCleanup {0} kullanılabilir.
+
+RustCleanup {0} is installed. Restarting.
+RustCleanup {0} yüklendi. Yeniden başlatılıyor.
+
+Same as Windows
+Windows ile aynı
+
+Scan Disk
+Diski Tara
+
+Scan Disk: {0} {1}
+Diski Tara: {0} {1}
+
+Scheduled tasks not changed: {0}
+Zamanlanmış görevler değiştirilmedi: {0}
+
+See what is using CPU and memory, then trim, slow down, pause or end it.
+CPU ve belleği neyin kullandığını görün, sonra kırpın, yavaşlatın, duraklatın veya sonlandırın.
+
+Select {0}
+Seç: {0}
+
+Service {0} {1}: {2}
+Hizmet {0} {1}: {2}
+
+Service {0}: startup set to {1}.
+Hizmet {0}: başlangıç türü {1} olarak ayarlandı.
+
+Service {0}: {1}
+Hizmet {0}: {1}
+
+Service {0}: {1} requested.
+Hizmet {0}: {1} istendi.
+
+Sets AllowTelemetry to 0, stops DiagTrack and dmwappushservice, and turns off the data collection tasks.
+AllowTelemetry değerini 0 yapar, DiagTrack ve dmwappushservice hizmetlerini durdurur ve veri toplama görevlerini kapatır.
+
+Settings
+Ayarlar
+
+Settings were reset to their defaults.
+Ayarlar varsayılan değerlerine sıfırlandı.
+
+Show background processes
+Arka plan işlemlerini göster
+
+Shows the new release and its changelog when RustCleanup starts. "Never Update" turns this off.
+RustCleanup başladığında yeni sürümü ve değişiklik günlüğünü gösterir. "Asla Güncelleme" bunu kapatır.
+
+Sort by CPU
+CPU'ya göre sırala
+
+Sort by memory
+Belleğe göre sırala
+
+Sort by name
+Ada göre sırala
+
+Source code
+Kaynak kodu
+
+Standard (non-admin) prompt
+Standart (yönetici olmayan) istem
+
+Standby list not purged: {0}
+Bekleme listesi temizlenmedi: {0}
+
+Standby list purged.
+Bekleme listesi temizlendi.
+
+Start in the notification area instead of opening the window.
+Pencereyi açmak yerine bildirim alanında başlat.
+
+Start minimized
+Simge durumunda başlat
+
+Started chkdsk on {0} ({1}).
+chkdsk başlatıldı: {0} ({1}).
+
+Startup task not changed: {0}
+Başlangıç görevi değiştirilmedi: {0}
+
+Status
+Durum
+
+Stop asking about new versions. You can turn this back on in Settings.
+Yeni sürümleri sormayı bırak. Bunu Ayarlar'dan yeniden açabilirsiniz.
+
+Stop check
+Denetimi durdur
+
+Suspend
+Askıya al
+
+Suspended
+Askıda
+
+Suspended {0} of {1} processes.
+Askıya alınan işlemler: {0} / {1}.
+
+Switch any of these off again to restore the Windows default.
+Windows varsayılanını geri yüklemek için bunlardan herhangi birini yeniden kapatın.
+
+System process: can only be trimmed
+Sistem işlemi: yalnızca kırpılabilir
+
+System tools
+Sistem araçları
+
+Task Manager
+Görev Yöneticisi
+
+Task list
+Görev listesi
+
+Task {0}: {1}
+Görev {0}: {1}
+
+Telemetry disabled.
+Telemetri devre dışı bırakıldı.
+
+Telemetry policies removed.
+Telemetri ilkeleri kaldırıldı.
+
+Telemetry policy AllowTelemetry=0 written.
+Telemetri ilkesi AllowTelemetry=0 yazıldı.
+
+Telemetry restored to Windows defaults.
+Telemetri Windows varsayılanlarına geri yüklendi.
+
+Tell me about new versions
+Yeni sürümleri bana bildir
+
+The close button hides the window and RustCleanup keeps running. Off: it quits.
+Kapat düğmesi pencereyi gizler ve RustCleanup çalışmaya devam eder. Kapalı: uygulamadan çıkılır.
+
+The download is not a valid RustCleanup.exe, so nothing was changed.
+İndirilen dosya geçerli bir RustCleanup.exe değil, bu yüzden hiçbir şey değiştirilmedi.
+
+The download's checksum does not match the release, so nothing was changed.
+İndirilen dosyanın sağlama toplamı sürümle eşleşmiyor, bu yüzden hiçbir şey değiştirilmedi.
+
+The last action is still running. Try again in a moment.
+Son işlem hâlâ çalışıyor. Biraz sonra yeniden deneyin.
+
+Theme
+Tema
+
+This release has no checksum file, so the download could not be verified.
+Bu sürümde sağlama toplamı dosyası yok, bu yüzden indirilen dosya doğrulanamadı.
+
+Toolkits
+Araç setleri
+
+Trim memory and set Below Normal priority
+Belleği kırp ve önceliği Normalin Altında yap
+
+Trimmed {0} processes. {1} protected processes were skipped.
+Kırpılan işlemler: {0}. Atlanan korumalı işlemler: {1}.
+
+Turns on the TurnOffWindowsCopilot policy and hides the taskbar button.
+TurnOffWindowsCopilot ilkesini açar ve görev çubuğu düğmesini gizler.
+
+Type
+Tür
+
+Update Now
+Şimdi Güncelle
+
+Update available
+Güncelleştirme var
+
+Updates
+Güncelleştirmeler
+
+Updates are paused until {0}.
+Güncelleştirmeler şu tarihe kadar duraklatıldı: {0}.
+
+Updates paused until {0} (the maximum Windows allows).
+Güncelleştirmeler şu tarihe kadar duraklatıldı: {0} (Windows'un izin verdiği en uzun süre).
+
+Version {0}
+Sürüm {0}
+
+Virtual Memory
+Sanal Bellek
+
+Waiting for chkdsk to start.
+chkdsk'in başlaması bekleniyor.
+
+Warning
+Uyarı
+
+What's new
+Yenilikler
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a Windows notification.
+RustCleanup simge durumundayken veya bildirim alanındayken, günlüğe yazdığı her şey Windows bildirimi olarak da görünür.
+
+Windows Update asks before installing and never restarts on its own while you are signed in.
+Windows Update yüklemeden önce sorar ve siz oturum açmışken asla kendiliğinden yeniden başlatmaz.
+
+Windows Update policies and pause removed.
+Windows Update ilkeleri ve duraklatma kaldırıldı.
+
+Windows Update restored to default behaviour.
+Windows Update varsayılan davranışına geri döndürüldü.
+
+Windows Update set to notify only, with no automatic reboots.
+Windows Update yalnızca bildirim yapacak şekilde ayarlandı, otomatik yeniden başlatma yok.
+
+Windows did not report physical memory figures. They will appear here once it does.
+Windows fiziksel bellek değerlerini bildirmedi. Bildirdiğinde burada görünecekler.
+
+Windows did not report virtual memory figures.
+Windows sanal bellek değerlerini bildirmedi.
+
+Windows settings
+Windows ayarları
+
+You have version {0}.
+Sizdeki sürüm: {0}.
+
+and {0} more
+ve {0} tane daha
+
+chkdsk can't check {0} drives.
+chkdsk şu tür sürücüleri denetleyemez: {0}.
+
+chkdsk could not run: {0}
+chkdsk çalıştırılamadı: {0}
+
+chkdsk ended with an unexpected exit code.
+chkdsk beklenmeyen bir çıkış koduyla sona erdi.
+
+could not create the tray window: {0}
+bildirim alanı penceresi oluşturulamadı: {0}
+
+could not start the tray thread: {0}
+bildirim alanı iş parçacığı başlatılamadı: {0}
+
+in use of {0}
+kullanımda, toplam {0}
+
+internal error (the operation panicked)
+iç hata (işlem çöktü)
+
+of {0} page file in use
+kullanımda, disk belleği dosyası toplamı {0}
+
+the tray thread stopped unexpectedly
+bildirim alanı iş parçacığı beklenmedik şekilde durdu
+
+{0} (PID {1})
+{0} (PID {1})
+
+{0} (peak {1})
+{0} (en yüksek {1})
+
+{0} available, {1} cached
+kullanılabilir: {0}, önbellekte: {1}
+
+{0} available, {1} cached, {2} installed
+kullanılabilir: {0}, önbellekte: {1}, yüklü: {2}
+
+{0} failed: {1}
+{0} başarısız oldu: {1}
+
+{0} finished: {1}
+{0} tamamlandı: {1}
+
+{0} is a protected system process and was left alone.
+{0} korumalı bir sistem işlemi olduğu için dokunulmadı.
+
+{0} of {1} shown
+Gösterilen: {0} / {1}
+
+{0} selected
+Seçilen: {0}
+
+{0} suspended by RustCleanup
+{0}, RustCleanup tarafından askıya alındı
+
+{0} telemetry scheduled tasks disabled ({1} not present on this Windows build).
+Devre dışı bırakılan telemetri zamanlanmış görevleri: {0} (bu Windows derlemesinde bulunmayan: {1}).
+
+{0} telemetry scheduled tasks enabled ({1} not present on this Windows build).
+Etkinleştirilen telemetri zamanlanmış görevleri: {0} (bu Windows derlemesinde bulunmayan: {1}).
+
+{0} uses {1}, so only the read-only check is available.
+{0} {1} kullanıyor, bu yüzden yalnızca salt okunur denetim kullanılabilir.
+
+Manage Storage
+Depolamayı Yönet
+
+Open Storage in Windows Settings for this drive
+Bu sürücü için Windows Ayarları içinde Depolama sayfasını açar
+
+Opened Windows storage settings for {0}.
+{0} için Windows depolama ayarları açıldı.
+
+Windows did not report how much space {0} has.
+Windows, {0} sürücüsündeki alanı bildirmedi.
+
+used of {0}
+kullanılan, toplam {0}
+
+{0} used, {1} available, {2} in total
+Kullanılan: {0}, boş: {1}, toplam: {2}

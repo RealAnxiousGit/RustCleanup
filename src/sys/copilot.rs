@@ -2,6 +2,7 @@
 
 use super::registry::{self, Hive};
 use crate::events::Logger;
+use crate::i18n::tr;
 
 const COPILOT_POLICY: &str = r"Software\Policies\Microsoft\Windows\WindowsCopilot";
 const EXPLORER_ADVANCED: &str = r"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
@@ -36,20 +37,22 @@ pub fn set_copilot_disabled(
         )?;
         // Hide the taskbar button on builds that still have one.
         registry::set_dword(Hive::CurrentUser, EXPLORER_ADVANCED, "ShowCopilotButton", 0)?;
-        log.info("Copilot policy TurnOffWindowsCopilot=1 written to HKCU and HKLM.");
+        log.info(tr(
+            "Copilot policy TurnOffWindowsCopilot=1 written to HKCU and HKLM.",
+        ));
     } else {
         registry::delete_value(Hive::CurrentUser, COPILOT_POLICY, "TurnOffWindowsCopilot")?;
         registry::delete_value(Hive::LocalMachine, COPILOT_POLICY, "TurnOffWindowsCopilot")?;
         registry::delete_value(Hive::CurrentUser, EXPLORER_ADVANCED, "ShowCopilotButton")?;
-        log.info("Copilot policy removed; Windows defaults restored.");
+        log.info(tr("Copilot policy removed; Windows defaults restored."));
     }
     if restart_shell {
         super::shell::restart_explorer(log)?;
     }
     log.success(if disable {
-        "Copilot disabled."
+        tr("Copilot disabled.")
     } else {
-        "Copilot re-enabled."
+        tr("Copilot re-enabled.")
     });
     Ok(())
 }

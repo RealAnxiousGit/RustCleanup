@@ -23,7 +23,8 @@ style, dial **ENERGY 1 / RHYTHM 2 / MOTION 1**.
 | Other sections are headings with hairline-separated rows | Lists read faster than boxed cards for settings, and they make the hierarchy visible. |
 | Radius 4 px on controls, 6 px on the Memory panel, pills only on switches | Switches are conventionally pill-shaped; nothing else needs to be. |
 | No icons except the theme button (sun and moon) | Text labels describe each action better than generic glyphs. The theme button is icon-only because the owner asked for it, and it has a tooltip and an accessible name. |
-| App icon: a memory module on an oxide tile | It shows the main feature (memory) in the brand colour. It replaces v1's lightning bolt, which is a generic AI icon (R-04). |
+| App icon (2.0.1): a white outline of a small brush on pure black, drawn by `assets/make_icon.py` | The owner asked for it. A brush says "cleanup" without text. Black and white stays readable on any taskbar or tray colour. Each size is drawn on its own, so the outline stays at least about 1.3 px wide at 16 px instead of blurring away. It replaces 2.0.0's memory module on an oxide tile. |
+| Language picker: flag plus the language's own name | People look for their language under its own name ("Deutsch", not "German"). The flag helps scanning, but the name is what identifies it, since a flag stands for a country, not a language. |
 | Themes: follows the Windows app theme on first launch, then remembers your choice | Neither theme is forced (R-21). Both are checked for contrast (R-25, R-34). |
 
 ## Copy

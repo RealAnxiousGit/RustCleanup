@@ -5,6 +5,7 @@ use eframe::egui::{self, Align, Layout, RichText, Ui};
 use super::theme::{Palette, semibold};
 use super::widgets;
 use crate::events::{Level, LogEntry};
+use crate::i18n::tr;
 
 const MAX_ENTRIES: usize = 500;
 
@@ -28,13 +29,13 @@ impl ActivityLog {
 
     pub fn ui(&mut self, ui: &mut Ui, pal: &Palette) {
         ui.horizontal(|ui| {
-            ui.label(RichText::new("Activity").family(semibold()));
+            ui.label(RichText::new(tr("Activity")).family(semibold()));
             ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                 let any = !self.entries.is_empty();
-                if widgets::button(ui, "Clear", any).clicked() {
+                if widgets::button(ui, tr("Clear"), any).clicked() {
                     self.entries.clear();
                 }
-                if widgets::button(ui, "Copy", any).clicked() {
+                if widgets::button(ui, tr("Copy"), any).clicked() {
                     let text: String = self
                         .entries
                         .iter()
@@ -52,15 +53,15 @@ impl ActivityLog {
                     widgets::note(
                         ui,
                         pal,
-                        "Nothing has run yet. Everything RustCleanup changes is listed here.",
+                        tr("Nothing has run yet. Everything RustCleanup changes is listed here."),
                     );
                 }
                 for entry in &self.entries {
                     let (tag, color) = match entry.level {
-                        Level::Info => ("Info", pal.muted),
-                        Level::Success => ("Done", pal.ok),
-                        Level::Warn => ("Warning", pal.warn),
-                        Level::Error => ("Failed", pal.error),
+                        Level::Info => (tr("Info"), pal.muted),
+                        Level::Success => (tr("Done"), pal.ok),
+                        Level::Warn => (tr("Warning"), pal.warn),
+                        Level::Error => (tr("Failed"), pal.error),
                     };
                     ui.horizontal_wrapped(|ui| {
                         ui.label(RichText::new(&entry.time).monospace().color(pal.muted));

@@ -1,0 +1,829 @@
+# Русский (Russian) translation of RustCleanup.
+
+A check is running in its own window.
+Проверка выполняется в отдельном окне.
+
+Activity
+Журнал
+
+Also pause updates for {0} days
+Также приостановить обновления (дней: {0})
+
+Also purge the standby list (file cache)
+Также очистить список ожидания (кэш файлов)
+
+Anything unsaved in them will be lost.
+Все несохранённые в них данные будут потеряны.
+
+App
+Приложение
+
+Auto-Clean RAM
+Автоочистка RAM
+
+Auto-Clean RAM amount
+Порог автоочистки RAM
+
+Automatically check for updates
+Автоматически проверять обновления
+
+Background
+Фоновые
+
+Built with
+Создано с помощью
+
+CD/DVD
+CD/DVD
+
+Cancel
+Отмена
+
+Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan.
+Ограничивает CPU до 60% от сети и до 50% от батареи и отключает turbo boost. При выключении восстанавливается прежняя схема управления питанием.
+
+Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+Для изменений нужны права администратора. Закройте RustCleanup, откройте снова и выберите Да в запросе UAC.
+
+Check for updates now
+Проверить обновления сейчас
+
+Checking for updates.
+Проверка обновлений.
+
+Checksum verified.
+Контрольная сумма проверена.
+
+Clean RAM
+Очистить RAM
+
+Clean RAM finished.
+Очистка RAM завершена.
+
+Clean RAM finished. {0} freed, {1} now available.
+Очистка RAM завершена. Освобождено: {0}, теперь доступно: {1}.
+
+Clean when more than {0} of {1} is in use.
+Очищать, когда занято больше {0} из {1}.
+
+Cleaning
+Очистка
+
+Cleaning RAM.
+Очистка RAM.
+
+Clear
+Очистить
+
+Clear selection
+Снять выделение
+
+Clear the filter
+Сбросить фильтр
+
+Close
+Закрыть
+
+Close and reopen the task list to try again.
+Закройте и снова откройте список задач, чтобы повторить попытку.
+
+Close to the notification area
+Сворачивать в область уведомлений при закрытии
+
+Code graph used to plan and check the module layout
+Граф кода для планирования и проверки структуры модулей
+
+Command Prompt
+Командная строка
+
+Command Prompt [Admin]
+Командная строка [Администратор]
+
+Committed {0} of {1} (RAM plus page file)
+Выделено {0} из {1} (RAM и файл подкачки)
+
+Copilot disabled.
+Copilot отключён.
+
+Copilot policy TurnOffWindowsCopilot=1 written to HKCU and HKLM.
+Политика Copilot TurnOffWindowsCopilot=1 записана в HKCU и HKLM.
+
+Copilot policy removed; Windows defaults restored.
+Политика Copilot удалена, восстановлены параметры Windows по умолчанию.
+
+Copilot re-enabled.
+Copilot снова включён.
+
+Copy
+Копировать
+
+Copy output
+Копировать вывод
+
+Could not check for updates: {0}
+Не удалось проверить обновления: {0}
+
+Could not check the disk, errors could not be fixed, or errors were not fixed because /f was not given.
+Не удалось проверить диск, не удалось исправить ошибки, либо ошибки не исправлены, так как не указан /f.
+
+Could not enable {0}: {1}
+Не удалось включить {0}: {1}
+
+Could not install the update: {0}
+Не удалось установить обновление: {0}
+
+Could not reach GitHub ({0}): {1}
+Не удалось подключиться к GitHub ({0}): {1}
+
+Could not reach GitHub: {0}
+Не удалось подключиться к GitHub: {0}
+
+Could not read the process list: {0}
+Не удалось прочитать список процессов: {0}
+
+Could not restart RustCleanup: {0}. Close it and open it again.
+Не удалось перезапустить RustCleanup: {0}. Закройте программу и откройте её снова.
+
+Could not start a background thread: {0}
+Не удалось запустить фоновый поток: {0}
+
+Could not start the process monitor: {0}
+Не удалось запустить монитор процессов: {0}
+
+Could not stop chkdsk: {0}
+Не удалось остановить chkdsk: {0}
+
+Counters and data collectors
+Счётчики и сборщики данных
+
+Created the "RustCleanup Low Power" power scheme.
+Создана схема электропитания «RustCleanup Low Power».
+
+Credits
+Авторы
+
+Dark
+Тёмная
+
+Dark Mode
+Тёмная тема
+
+Design rules applied to the interface
+Правила оформления, применённые к интерфейсу
+
+Disable Copilot
+Отключить Copilot
+
+Disable Telemetry
+Отключить телеметрию
+
+Disk Cleanup
+Очистка диска
+
+Disk Management
+Управление дисками
+
+Disk check cancelled.
+Проверка диска отменена.
+
+Disk cleanup was performed (e.g. garbage collection) or not done because /f was not given.
+Выполнена очистка диска (например, сборка мусора) либо она не выполнена, так как не указан /f.
+
+Done
+Готово
+
+Downloaded {0}%.
+Загружено {0}%.
+
+Downloading RustCleanup {0}.
+Загрузка RustCleanup {0}.
+
+Downloading and installing.
+Загрузка и установка.
+
+Draws the interface with Direct3D 12 instead of OpenGL. It can be smoother on older or integrated graphics, but uses about three times as much memory.
+Отрисовывает интерфейс через Direct3D 12 вместо OpenGL. На старой или встроенной графике может работать плавнее, но использует примерно втрое больше памяти.
+
+Elevated prompt
+С повышенными правами
+
+End task
+Снять задачу
+
+End these tasks?
+Снять эти задачи?
+
+Ended {0} of {1} processes.
+Завершено процессов: {0} из {1}.
+
+Errors were found and fixed.
+Ошибки найдены и исправлены.
+
+Every setting goes back to its default. Open on startup is kept.
+Все параметры вернутся к значениям по умолчанию. Параметр «Открывать при входе» сохранится.
+
+Exit
+Выход
+
+Explorer did not restart and could not be started: {0}
+Проводник не перезапустился, и его не удалось запустить: {0}
+
+Explorer restarted.
+Проводник перезапущен.
+
+Explorer was started manually. Sign out and back in if the taskbar misbehaves.
+Проводник запущен вручную. Если панель задач работает неправильно, выйдите из системы и войдите снова.
+
+Failed
+Ошибка
+
+Filter
+Фильтр
+
+Finished in {0} s. {1}
+Завершено за {0} с. {1}
+
+Flushing the modified page list failed: {0}
+Не удалось сбросить список изменённых страниц: {0}
+
+Forced updates and automatic reboots are now blocked.
+Принудительные обновления и автоматические перезагрузки теперь заблокированы.
+
+General
+Общие
+
+GitHub answered with HTTP status {0}.
+GitHub ответил с кодом состояния HTTP {0}.
+
+GitHub sent a reply RustCleanup could not read: {0}
+GitHub прислал ответ, который RustCleanup не смог прочитать: {0}
+
+Hardware-accelerated UI
+Аппаратное ускорение интерфейса
+
+Info
+Инфо
+
+Interface size
+Размер интерфейса
+
+Language
+Язык
+
+Light
+Светлая
+
+Light Mode
+Светлая тема
+
+Live CPU, memory, disk and network
+CPU, память, диск и сеть в реальном времени
+
+Local Disk
+Локальный диск
+
+Look for drives again
+Искать диски снова
+
+Low Power Mode
+Режим низкого энергопотребления
+
+Low Power Mode off.
+Режим низкого энергопотребления выключен.
+
+Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.
+Режим низкого энергопотребления включён: CPU ограничен до 60% (от сети) / 50% (от батареи), turbo boost выключен.
+
+MIT licensed.
+Лицензия MIT.
+
+Makes text and controls larger or smaller in every window.
+Увеличивает или уменьшает текст и элементы управления во всех окнах.
+
+Memory
+Память
+
+Memory use reached {0}% (limit {1}%), so RAM is being cleaned automatically.
+Использование памяти достигло {0}% (предел {1}%), поэтому RAM очищается автоматически.
+
+Name
+Имя
+
+Name or PID
+Имя или PID
+
+Network
+Сеть
+
+Never Update
+Не обновлять
+
+No Forced Updates
+Без принудительных обновлений
+
+No drives
+Нет дисков
+
+No drives were found. Connect a drive, then press Refresh.
+Диски не найдены. Подключите диск и нажмите «Обновить».
+
+No errors were found.
+Ошибок не обнаружено.
+
+No page file is configured, so Windows is running on physical memory only. You can add one in System Properties, Advanced, Performance settings.
+Файл подкачки не настроен, поэтому Windows использует только физическую память. Его можно добавить в окне «Свойства системы», «Дополнительно», «Параметры быстродействия».
+
+No process matches "{0}".
+Нет процессов, соответствующих «{0}».
+
+No tray icon ({0}). Closing the window will quit RustCleanup.
+Нет значка в области уведомлений ({0}). Закрытие окна завершит RustCleanup.
+
+Not running as Administrator
+Запущено не от имени администратора
+
+Nothing has run yet. Everything RustCleanup changes is listed here.
+Пока ничего не выполнялось. Здесь отображаются все изменения, которые вносит RustCleanup.
+
+Notifications
+Уведомления
+
+On: when RustCleanup starts, a new release on GitHub is downloaded, checked and installed by itself. Off: you are asked first, with the changelog.
+Вкл.: при запуске RustCleanup новый выпуск с GitHub загружается, проверяется и устанавливается автоматически. Выкл.: сначала появляется запрос со списком изменений.
+
+Online scan (NTFS only)
+Сканирование в сети (только NTFS)
+
+Open
+Открыть
+
+Open App
+Открыть
+
+Open RustCleanup when you sign in to Windows, without a UAC prompt.
+Открывать RustCleanup при входе в Windows без запроса UAC.
+
+Open on startup
+Открывать при входе
+
+Open task list
+Открыть список задач
+
+Open the release page
+Открыть страницу выпуска
+
+Opened {0}.
+Открыто: {0}.
+
+Opens the built-in Windows tool you pick.
+Открывает выбранное встроенное средство Windows.
+
+Optimize
+Оптимизировать
+
+Optimize Task
+Оптимизировать
+
+Optimized {0} of {1} processes.
+Оптимизировано процессов: {0} из {1}.
+
+Partitions and volumes
+Разделы и тома
+
+Performance
+Производительность
+
+Performance Monitor
+Системный монитор
+
+Physical Memory
+Физическая память
+
+Power Config
+Электропитание
+
+Power Options control panel
+Электропитание в панели управления
+
+Processes, performance, startup apps
+Процессы, производительность, автозагрузка
+
+Programming
+Программирование
+
+Prompt Engineer
+Промпт-инженер
+
+Protected
+Защищён
+
+Protected system processes were left out.
+Защищённые системные процессы пропущены.
+
+Purging the standby list failed: {0}
+Не удалось очистить список ожидания: {0}
+
+RAM Disk
+RAM-диск
+
+Read-only check
+Проверка только для чтения
+
+Reading the current settings from Windows.
+Чтение текущих параметров Windows.
+
+Reading the process list.
+Чтение списка процессов.
+
+Refresh
+Обновить
+
+Release {0} has no {1} to download.
+В выпуске {0} нет файла {1} для загрузки.
+
+Removable
+Съёмный
+
+Remove temporary and system files
+Удаление временных и системных файлов
+
+Removed the RustCleanup Low Power scheme.
+Схема RustCleanup Low Power удалена.
+
+Reset all settings
+Сбросить все настройки
+
+Resource Monitor
+Монитор ресурсов
+
+Restart Explorer so it applies right away
+Перезапустить Проводник, чтобы применить сразу
+
+Restart RustCleanup to apply this.
+Перезапустите RustCleanup, чтобы применить изменение.
+
+Restart now
+Перезапустить
+
+Restarting Explorer to apply the change.
+Перезапуск Проводника для применения изменения.
+
+Restored power scheme {0}.
+Восстановлена схема электропитания {0}.
+
+Resume
+Возобновить
+
+Resumed {0} of {1} processes.
+Возобновлено процессов: {0} из {1}.
+
+Run check
+Запустить проверку
+
+Running as Administrator
+Запущено от имени администратора
+
+Running for {0} s
+Выполняется {0} с
+
+Runs Clean RAM by itself when physical memory use reaches the amount below. It checks every 5 seconds and runs at most once every {0} minutes.
+Автоматически запускает очистку RAM, когда использование физической памяти достигает указанного ниже значения. Проверка каждые 5 секунд, запуск не чаще одного раза за {0} мин.
+
+Runs chkdsk on the drive you pick and shows its output live.
+Запускает chkdsk на выбранном диске и показывает вывод в реальном времени.
+
+RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt.
+RustCleanup запущен не от имени администратора, поэтому большинство изменений не удастся. Перезапустите его и выберите Да в запросе UAC.
+
+RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit.
+RustCleanup продолжает работать в области уведомлений. Щёлкните значок правой кнопкой мыши, чтобы открыть параметры, или выберите «Выход».
+
+RustCleanup is up to date.
+Установлена последняя версия RustCleanup.
+
+RustCleanup will no longer open when you sign in.
+RustCleanup больше не будет открываться при входе.
+
+RustCleanup will not ask about new versions again. Turn "Tell me about new versions" back on in Settings to change this.
+RustCleanup больше не будет спрашивать о новых версиях. Чтобы изменить это, снова включите «Сообщать о новых версиях» в настройках.
+
+RustCleanup will open when you sign in to Windows.
+RustCleanup будет открываться при входе в Windows.
+
+RustCleanup {0} is available
+Доступна версия RustCleanup {0}
+
+RustCleanup {0} is available and will be installed now.
+Доступна версия RustCleanup {0}, сейчас она будет установлена.
+
+RustCleanup {0} is available.
+Доступна версия RustCleanup {0}.
+
+RustCleanup {0} is installed. Restarting.
+RustCleanup {0} установлен. Перезапуск.
+
+Same as Windows
+Как в Windows
+
+Scan Disk
+Проверка диска
+
+Scan Disk: {0} {1}
+Проверка диска: {0} {1}
+
+Scheduled tasks not changed: {0}
+Задания планировщика не изменены: {0}
+
+See what is using CPU and memory, then trim, slow down, pause or end it.
+Посмотрите, что использует CPU и память, затем сократите, замедлите, приостановите или завершите.
+
+Select {0}
+Выбрать {0}
+
+Service {0} {1}: {2}
+Служба {0} {1}: {2}
+
+Service {0}: startup set to {1}.
+Служба {0}: тип запуска изменён на {1}.
+
+Service {0}: {1}
+Служба {0}: {1}
+
+Service {0}: {1} requested.
+Служба {0}: запрошено действие {1}.
+
+Sets AllowTelemetry to 0, stops DiagTrack and dmwappushservice, and turns off the data collection tasks.
+Устанавливает AllowTelemetry в 0, останавливает DiagTrack и dmwappushservice и отключает задания сбора данных.
+
+Settings
+Настройки
+
+Settings were reset to their defaults.
+Настройки сброшены до значений по умолчанию.
+
+Show background processes
+Показывать фоновые процессы
+
+Shows the new release and its changelog when RustCleanup starts. "Never Update" turns this off.
+Показывает новый выпуск и список изменений при запуске RustCleanup. «Не обновлять» отключает это.
+
+Sort by CPU
+Сортировать по CPU
+
+Sort by memory
+Сортировать по памяти
+
+Sort by name
+Сортировать по имени
+
+Source code
+Исходный код
+
+Standard (non-admin) prompt
+Обычная (без прав администратора)
+
+Standby list not purged: {0}
+Список ожидания не очищен: {0}
+
+Standby list purged.
+Список ожидания очищен.
+
+Start in the notification area instead of opening the window.
+Запускать в области уведомлений, не открывая окно.
+
+Start minimized
+Запускать свёрнутым
+
+Started chkdsk on {0} ({1}).
+Запущен chkdsk на {0} ({1}).
+
+Startup task not changed: {0}
+Задание автозапуска не изменено: {0}
+
+Status
+Состояние
+
+Stop asking about new versions. You can turn this back on in Settings.
+Больше не спрашивать о новых версиях. Это можно снова включить в настройках.
+
+Stop check
+Остановить проверку
+
+Suspend
+Приостановить
+
+Suspended
+Приостановлен
+
+Suspended {0} of {1} processes.
+Приостановлено процессов: {0} из {1}.
+
+Switch any of these off again to restore the Windows default.
+Выключите любой из этих параметров, чтобы восстановить значение Windows по умолчанию.
+
+System process: can only be trimmed
+Системный процесс: можно только сократить память
+
+System tools
+Системные средства
+
+Task Manager
+Диспетчер задач
+
+Task list
+Список задач
+
+Task {0}: {1}
+Задание {0}: {1}
+
+Telemetry disabled.
+Телеметрия отключена.
+
+Telemetry policies removed.
+Политики телеметрии удалены.
+
+Telemetry policy AllowTelemetry=0 written.
+Записана политика телеметрии AllowTelemetry=0.
+
+Telemetry restored to Windows defaults.
+Для телеметрии восстановлены параметры Windows по умолчанию.
+
+Tell me about new versions
+Сообщать о новых версиях
+
+The close button hides the window and RustCleanup keeps running. Off: it quits.
+Кнопка закрытия скрывает окно, а RustCleanup продолжает работать. Выкл.: программа завершается.
+
+The download is not a valid RustCleanup.exe, so nothing was changed.
+Загруженный файл не является допустимым RustCleanup.exe, поэтому ничего не изменено.
+
+The download's checksum does not match the release, so nothing was changed.
+Контрольная сумма загруженного файла не совпадает с выпуском, поэтому ничего не изменено.
+
+The last action is still running. Try again in a moment.
+Предыдущее действие ещё выполняется. Повторите попытку чуть позже.
+
+Theme
+Тема
+
+This release has no checksum file, so the download could not be verified.
+В этом выпуске нет файла контрольной суммы, поэтому загрузку не удалось проверить.
+
+Toolkits
+Наборы инструментов
+
+Trim memory and set Below Normal priority
+Сократить память и задать приоритет «Ниже среднего»
+
+Trimmed {0} processes. {1} protected processes were skipped.
+Сокращена память процессов: {0}. Пропущено защищённых процессов: {1}.
+
+Turns on the TurnOffWindowsCopilot policy and hides the taskbar button.
+Включает политику TurnOffWindowsCopilot и скрывает кнопку на панели задач.
+
+Type
+Тип
+
+Update Now
+Обновить сейчас
+
+Update available
+Доступно обновление
+
+Updates
+Обновления
+
+Updates are paused until {0}.
+Обновления приостановлены до {0}.
+
+Updates paused until {0} (the maximum Windows allows).
+Обновления приостановлены до {0} (максимум, допустимый Windows).
+
+Version {0}
+Версия {0}
+
+Virtual Memory
+Виртуальная память
+
+Waiting for chkdsk to start.
+Ожидание запуска chkdsk.
+
+Warning
+Внимание
+
+What's new
+Что нового
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a Windows notification.
+Пока RustCleanup свёрнут или находится в области уведомлений, все его записи журнала также показываются как уведомления Windows.
+
+Windows Update asks before installing and never restarts on its own while you are signed in.
+Центр обновления Windows спрашивает перед установкой и никогда не перезагружает компьютер сам, пока вы в системе.
+
+Windows Update policies and pause removed.
+Политики и приостановка Центра обновления Windows удалены.
+
+Windows Update restored to default behaviour.
+Для Центра обновления Windows восстановлено поведение по умолчанию.
+
+Windows Update set to notify only, with no automatic reboots.
+Центр обновления Windows настроен только на уведомления, без автоматических перезагрузок.
+
+Windows did not report physical memory figures. They will appear here once it does.
+Windows не сообщила данные о физической памяти. Они появятся здесь, как только станут доступны.
+
+Windows did not report virtual memory figures.
+Windows не сообщила данные о виртуальной памяти.
+
+Windows settings
+Параметры Windows
+
+You have version {0}.
+У вас версия {0}.
+
+and {0} more
+и ещё {0}
+
+chkdsk can't check {0} drives.
+chkdsk не может проверять диски типа {0}.
+
+chkdsk could not run: {0}
+Не удалось запустить chkdsk: {0}
+
+chkdsk ended with an unexpected exit code.
+chkdsk завершился с неожиданным кодом выхода.
+
+could not create the tray window: {0}
+не удалось создать окно в области уведомлений: {0}
+
+could not start the tray thread: {0}
+не удалось запустить поток области уведомлений: {0}
+
+in use of {0}
+используется из {0}
+
+internal error (the operation panicked)
+внутренняя ошибка (сбой операции)
+
+of {0} page file in use
+из {0} файла подкачки используется
+
+the tray thread stopped unexpectedly
+поток области уведомлений неожиданно остановился
+
+{0} (PID {1})
+{0} (PID {1})
+
+{0} (peak {1})
+{0} (пик {1})
+
+{0} available, {1} cached
+доступно: {0}, кэшировано: {1}
+
+{0} available, {1} cached, {2} installed
+доступно: {0}, кэшировано: {1}, установлено: {2}
+
+{0} failed: {1}
+{0}: ошибка: {1}
+
+{0} finished: {1}
+{0}: завершено: {1}
+
+{0} is a protected system process and was left alone.
+{0} является защищённым системным процессом и не был затронут.
+
+{0} of {1} shown
+Показано {0} из {1}
+
+{0} selected
+Выбрано: {0}
+
+{0} suspended by RustCleanup
+{0}: приостановлен RustCleanup
+
+{0} telemetry scheduled tasks disabled ({1} not present on this Windows build).
+Отключено заданий телеметрии в планировщике: {0} (отсутствует в этой сборке Windows: {1}).
+
+{0} telemetry scheduled tasks enabled ({1} not present on this Windows build).
+Включено заданий телеметрии в планировщике: {0} (отсутствует в этой сборке Windows: {1}).
+
+{0} uses {1}, so only the read-only check is available.
+{0} использует {1}, поэтому доступна только проверка только для чтения.
+
+Manage Storage
+Управление хранилищем
+
+Open Storage in Windows Settings for this drive
+Открывает раздел «Память» в параметрах Windows для этого диска
+
+Opened Windows storage settings for {0}.
+Открыты параметры памяти Windows для {0}.
+
+Windows did not report how much space {0} has.
+Windows не сообщила, сколько места на {0}.
+
+used of {0}
+занято из {0}
+
+{0} used, {1} available, {2} in total
+Занято: {0}, доступно: {1}, всего: {2}

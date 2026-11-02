@@ -1,13 +1,14 @@
 //! Colours, fonts and the light/dark switch with its fade.
 //! The reasoning behind each choice is in DESIGN.md.
 
-use std::sync::Arc;
+use std::sync::{Arc, OnceLock, RwLock};
 
 use eframe::egui::{
     self, Color32, CornerRadius, FontData, FontDefinitions, FontFamily, Shadow, Stroke, Visuals,
 };
 
-use crate::sys::registry::{self, Hive};
+use crate::i18n::Lang;
+use crate::settings::{self, ThemeMode};
 use crate::sys::shell;
 
 /// Every colour the UI uses. Panels read status colours from here so both
@@ -176,7 +177,13 @@ impl Palette {
     }
 }
 
-const THEME_KEY: &str = r"Software\RustCleanup";
+/// The palette every window draws with. Detached windows paint on their own
+/// schedule, so they read it from here rather than from the main window.
+static CURRENT: RwLock<Palette> = RwLock::new(DARK);
+
+pub fn palette() -> Palette {
+    *CURRENT.read().unwrap_or_else(|e| e.into_inner())
+}
 
 /// The current theme, the fade between themes, and what has been applied.
 pub struct Theme {
@@ -187,42 +194,57 @@ pub struct Theme {
 }
 
 impl Theme {
-    /// Uses the saved choice, or follows Windows' app theme on first launch.
     pub fn load() -> Self {
-        let light = match registry::get_string(Hive::CurrentUser, THEME_KEY, "Theme").as_deref() {
-            Some("light") => true,
-            Some("dark") => false,
-            _ => shell::system_prefers_light(),
+        let light = match settings::get().theme {
+            ThemeMode::Light => true,
+            ThemeMode::Dark => false,
+            ThemeMode::System => shell::system_prefers_light(),
         };
+        let palette = if light { LIGHT } else { DARK };
+        *CURRENT.write().unwrap_or_else(|e| e.into_inner()) = palette;
         Self {
             light,
             animate: shell::animations_enabled(),
             applied: None,
-            palette: if light { LIGHT } else { DARK },
+            palette,
         }
     }
 
+    /// The theme button: switches to the other theme and remembers it.
     pub fn toggle(&mut self) {
-        self.light = !self.light;
-        self.animate = shell::animations_enabled();
-        let _ = registry::set_string(
-            Hive::CurrentUser,
-            THEME_KEY,
-            "Theme",
-            if self.light { "light" } else { "dark" },
-        );
+        let mode = if self.light {
+            ThemeMode::Dark
+        } else {
+            ThemeMode::Light
+        };
+        settings::update(|s| s.theme = mode);
     }
 
-    /// Advances the fade and re-applies visuals only when the colours changed.
-    pub fn update(&mut self, ctx: &egui::Context) {
+    /// Follows the setting (and Windows, in "Same as Windows" mode), advances
+    /// the fade, and re-applies visuals only when the colours changed.
+    /// Returns true while the colours are changing.
+    pub fn update(&mut self, ctx: &egui::Context) -> bool {
+        let light = match settings::get().theme {
+            ThemeMode::Light => true,
+            ThemeMode::Dark => false,
+            ThemeMode::System => match ctx.system_theme() {
+                Some(t) => t == egui::Theme::Light,
+                None => self.light,
+            },
+        };
+        if light != self.light {
+            self.light = light;
+            self.animate = shell::animations_enabled();
+        }
         let target = if self.light { 1.0 } else { 0.0 };
         let duration = if self.animate { 0.28 } else { 0.0 };
         let t = ctx.animate_value_with_time(egui::Id::unique("theme_fade"), target, duration);
         if self.applied == Some(t) {
-            return;
+            return false;
         }
         self.applied = Some(t);
         self.palette = Palette::lerp(&DARK, &LIGHT, t);
+        *CURRENT.write().unwrap_or_else(|e| e.into_inner()) = self.palette;
         let visuals = self.palette.visuals(t < 0.5);
         // egui also gives every native window's title bar the matching theme.
         ctx.set_theme(if self.light {
@@ -232,6 +254,7 @@ impl Theme {
         });
         ctx.set_visuals_of(egui::Theme::Dark, visuals.clone());
         ctx.set_visuals_of(egui::Theme::Light, visuals);
+        true
     }
 }
 
@@ -240,9 +263,76 @@ pub fn semibold() -> FontFamily {
     FontFamily::Name("semibold".into())
 }
 
-/// Loads Windows' own UI and console fonts, keeping egui's bundled fonts as
-/// fallbacks so missing glyphs (or a missing file) still render.
-pub fn install_fonts(ctx: &egui::Context) {
+/// Maps a font file into memory for the rest of the process. The CJK fonts
+/// are 13 to 19 MB each; mapped, only the pages for glyphs actually drawn
+/// are read, and they are shared with every other program using the font.
+fn map_font(path: &std::path::Path) -> Option<&'static [u8]> {
+    use windows::Win32::Foundation::{CloseHandle, GENERIC_READ};
+    use windows::Win32::Storage::FileSystem::{
+        CreateFileW, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, GetFileSizeEx, OPEN_EXISTING,
+    };
+    use windows::Win32::System::Memory::{
+        CreateFileMappingW, FILE_MAP_READ, MapViewOfFile, PAGE_READONLY,
+    };
+    use windows::core::HSTRING;
+    // SAFETY: a read-only mapping of a system font file. The view is never
+    // unmapped, which is what makes the 'static lifetime sound.
+    unsafe {
+        let file = CreateFileW(
+            &HSTRING::from(path.as_os_str()),
+            GENERIC_READ.0,
+            FILE_SHARE_READ,
+            None,
+            OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL,
+            None,
+        )
+        .ok()?;
+        let mut size = 0i64;
+        let sized = GetFileSizeEx(file, &mut size).is_ok();
+        let mapping = CreateFileMappingW(file, None, PAGE_READONLY, 0, 0, None);
+        let _ = CloseHandle(file);
+        let mapping = mapping.ok()?;
+        let view = MapViewOfFile(mapping, FILE_MAP_READ, 0, 0, 0);
+        let _ = CloseHandle(mapping);
+        if view.Value.is_null() || !sized || size <= 0 {
+            return None;
+        }
+        Some(std::slice::from_raw_parts(
+            view.Value as *const u8,
+            size as usize,
+        ))
+    }
+}
+
+/// How far CJK glyphs are moved down, as a fraction of the font size.
+const CJK_Y_OFFSET: f32 = 0.22;
+
+/// Japanese and Chinese fonts, mapped once. Each is (name, bytes, face index).
+fn cjk_fonts() -> &'static [(&'static str, &'static [u8], u32)] {
+    static FONTS: OnceLock<Vec<(&'static str, &'static [u8], u32)>> = OnceLock::new();
+    FONTS.get_or_init(|| {
+        let dir = crate::sys::command::windows_dir().join("Fonts");
+        [
+            ("cjk_ja", ["YuGothM.ttc", "meiryo.ttc", "msgothic.ttc"]),
+            ("cjk_zh", ["msyh.ttc", "simsun.ttc", "msyh.ttf"]),
+        ]
+        .into_iter()
+        .filter_map(|(name, files)| {
+            files
+                .iter()
+                .find_map(|f| map_font(&dir.join(f)))
+                .map(|bytes| (name, bytes, 0))
+        })
+        .collect()
+    })
+}
+
+/// Loads the Windows UI and console fonts, keeping egui's bundled fonts as
+/// fallbacks so missing glyphs (or a missing file) still render. Japanese or
+/// Chinese comes first among the CJK fallbacks depending on `lang`, because
+/// the two draw many shared characters differently.
+pub fn install_fonts(ctx: &egui::Context, lang: Lang) {
     let fonts_dir = crate::sys::command::windows_dir().join("Fonts");
     let read = |file: &str| {
         std::fs::read(fonts_dir.join(file))
@@ -276,6 +366,24 @@ pub fn install_fonts(ctx: &egui::Context) {
         defs.font_data.insert("consolas".into(), data);
         if let Some(list) = defs.families.get_mut(&FontFamily::Monospace) {
             list.insert(0, "consolas".into());
+        }
+    }
+
+    let mut cjk: Vec<_> = cjk_fonts().to_vec();
+    if lang == Lang::Zh {
+        cjk.reverse();
+    }
+    for (name, bytes, index) in cjk {
+        let mut data = FontData::from_static(bytes);
+        data.index = index;
+        // Yu Gothic and Microsoft YaHei draw higher than Segoe UI on the same
+        // line; without this, mixed lines like "Windows の設定" look jumbled.
+        data.tweak.y_offset_factor = CJK_Y_OFFSET;
+        defs.font_data.insert(name.into(), Arc::new(data));
+        for family in [FontFamily::Proportional, FontFamily::Monospace, semibold()] {
+            if let Some(list) = defs.families.get_mut(&family) {
+                list.push(name.into());
+            }
         }
     }
     ctx.set_fonts(defs);

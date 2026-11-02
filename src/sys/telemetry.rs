@@ -3,6 +3,7 @@
 use super::command::{run_hidden, run_powershell};
 use super::registry::{self, Hive};
 use crate::events::Logger;
+use crate::i18n::{tr, trf};
 
 const DATA_COLLECTION_POLICY: &str = r"SOFTWARE\Policies\Microsoft\Windows\DataCollection";
 const DATA_COLLECTION_SYSTEM: &str =
@@ -60,7 +61,7 @@ pub fn set_telemetry_disabled(log: &Logger, disable: bool) -> Result<(), String>
             "DoNotShowFeedbackNotifications",
             1,
         )?;
-        log.info("Telemetry policy AllowTelemetry=0 written.");
+        log.info(tr("Telemetry policy AllowTelemetry=0 written."));
     } else {
         registry::delete_value(Hive::LocalMachine, DATA_COLLECTION_POLICY, "AllowTelemetry")?;
         registry::delete_value(Hive::LocalMachine, DATA_COLLECTION_SYSTEM, "AllowTelemetry")?;
@@ -69,25 +70,32 @@ pub fn set_telemetry_disabled(log: &Logger, disable: bool) -> Result<(), String>
             DATA_COLLECTION_POLICY,
             "DoNotShowFeedbackNotifications",
         )?;
-        log.info("Telemetry policies removed.");
+        log.info(tr("Telemetry policies removed."));
     }
 
     // 2. Services.
     for (service, default_start) in TELEMETRY_SERVICES {
         let start = if disable { "disabled" } else { default_start };
         match run_hidden("sc.exe", &["config", service, "start=", start]) {
-            Ok(o) if o.success => log.info(format!("Service {service}: startup set to {start}.")),
-            Ok(o) => log.warn(format!("Service {service}: {}", o.summary())),
-            Err(e) => log.warn(format!("Service {service}: {e}")),
+            Ok(o) if o.success => {
+                log.info(trf("Service {0}: startup set to {1}.", &[&service, &start]))
+            }
+            Ok(o) => log.warn(trf("Service {0}: {1}", &[&service, &o.summary()])),
+            Err(e) => log.warn(trf("Service {0}: {1}", &[&service, &e])),
         }
         let action = if disable { "stop" } else { "start" };
         if disable || service == "DiagTrack" {
             match run_hidden("sc.exe", &[action, service]) {
-                Ok(o) if o.success => log.info(format!("Service {service}: {action} requested.")),
+                Ok(o) if o.success => {
+                    log.info(trf("Service {0}: {1} requested.", &[&service, &action]))
+                }
                 // 1062 = not started, 1056 = already running: both fine.
                 Ok(o) if matches!(o.code, Some(1062) | Some(1056)) => {}
-                Ok(o) => log.warn(format!("Service {service} {action}: {}", o.summary())),
-                Err(e) => log.warn(format!("Service {service} {action}: {e}")),
+                Ok(o) => log.warn(trf(
+                    "Service {0} {1}: {2}",
+                    &[&service, &action, &o.summary()],
+                )),
+                Err(e) => log.warn(trf("Service {0} {1}: {2}", &[&service, &action, &e])),
             }
         }
     }
@@ -122,22 +130,29 @@ pub fn set_telemetry_disabled(log: &Logger, disable: bool) -> Result<(), String>
                 match parts.as_slice() {
                     ["OK", _] => ok += 1,
                     ["MISSING", _] => missing += 1,
-                    ["FAIL", task, msg] => log.warn(format!("Task {task}: {}", msg.trim())),
+                    ["FAIL", task, msg] => log.warn(trf("Task {0}: {1}", &[task, &msg.trim()])),
                     _ => {}
                 }
             }
-            log.info(format!(
-                "{ok} telemetry scheduled tasks {} ({missing} not present on this Windows build).",
-                if disable { "disabled" } else { "enabled" }
-            ));
+            log.info(if disable {
+                trf(
+                    "{0} telemetry scheduled tasks disabled ({1} not present on this Windows build).",
+                    &[&ok, &missing],
+                )
+            } else {
+                trf(
+                    "{0} telemetry scheduled tasks enabled ({1} not present on this Windows build).",
+                    &[&ok, &missing],
+                )
+            });
         }
-        Err(e) => log.warn(format!("Scheduled tasks not changed: {e}")),
+        Err(e) => log.warn(trf("Scheduled tasks not changed: {0}", &[&e])),
     }
 
     log.success(if disable {
-        "Telemetry disabled."
+        tr("Telemetry disabled.")
     } else {
-        "Telemetry restored to Windows defaults."
+        tr("Telemetry restored to Windows defaults.")
     });
     Ok(())
 }

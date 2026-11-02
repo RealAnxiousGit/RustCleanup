@@ -4,6 +4,7 @@ use std::os::windows::process::CommandExt;
 use std::process::Command;
 
 use super::command::{CREATE_NO_WINDOW, system32};
+use crate::i18n::n_;
 
 /// A launchable Windows tool.
 pub struct Tool {
@@ -17,43 +18,43 @@ pub struct Tool {
 
 pub const TOOLS: [Tool; 8] = [
     Tool {
-        label: "Power Config",
-        description: "Power Options control panel",
+        label: n_("Power Config"),
+        description: n_("Power Options control panel"),
         exe: "control.exe",
         args: &["powercfg.cpl"],
         hidden: false,
     },
     Tool {
-        label: "Disk Cleanup",
-        description: "Remove temporary and system files",
+        label: n_("Disk Cleanup"),
+        description: n_("Remove temporary and system files"),
         exe: "cleanmgr.exe",
         args: &[],
         hidden: false,
     },
     Tool {
-        label: "Disk Management",
-        description: "Partitions and volumes",
+        label: n_("Disk Management"),
+        description: n_("Partitions and volumes"),
         exe: "mmc.exe",
         args: &["diskmgmt.msc"],
         hidden: false,
     },
     Tool {
-        label: "Performance Monitor",
-        description: "Counters and data collectors",
+        label: n_("Performance Monitor"),
+        description: n_("Counters and data collectors"),
         exe: "perfmon.exe",
         args: &[],
         hidden: false,
     },
     Tool {
-        label: "Task Manager",
-        description: "Processes, performance, startup apps",
+        label: n_("Task Manager"),
+        description: n_("Processes, performance, startup apps"),
         exe: "taskmgr.exe",
         args: &[],
         hidden: false,
     },
     Tool {
-        label: "Resource Monitor",
-        description: "Live CPU, memory, disk and network",
+        label: n_("Resource Monitor"),
+        description: n_("Live CPU, memory, disk and network"),
         exe: "resmon.exe",
         args: &[],
         hidden: false,
@@ -61,15 +62,15 @@ pub const TOOLS: [Tool; 8] = [
     // Launched through Explorer so the prompt runs as the normal user, not
     // with RustCleanup's elevated token.
     Tool {
-        label: "Command Prompt",
-        description: "Standard (non-admin) prompt",
+        label: n_("Command Prompt"),
+        description: n_("Standard (non-admin) prompt"),
         exe: r"..\explorer.exe",
         args: &["cmd.exe"],
         hidden: false,
     },
     Tool {
-        label: "Command Prompt [Admin]",
-        description: "Elevated prompt",
+        label: n_("Command Prompt [Admin]"),
+        description: n_("Elevated prompt"),
         exe: r"WindowsPowerShell\v1.0\powershell.exe",
         args: &[
             "-NoProfile",

@@ -4,6 +4,7 @@
 use super::format::utc_iso_in_days;
 use super::registry::{self, Hive};
 use crate::events::Logger;
+use crate::i18n::{tr, trf};
 
 const WU_POLICY: &str = r"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
 const WU_AU_POLICY: &str = r"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU";
@@ -65,7 +66,9 @@ pub fn set_forced_updates_blocked(log: &Logger, block: bool, pause: bool) -> Res
             "SetAutoRestartNotificationDisable",
             1,
         )?;
-        log.info("Windows Update set to notify only, with no automatic reboots.");
+        log.info(tr(
+            "Windows Update set to notify only, with no automatic reboots.",
+        ));
 
         if pause {
             let start = utc_iso_in_days(0);
@@ -74,8 +77,9 @@ pub fn set_forced_updates_blocked(log: &Logger, block: bool, pause: bool) -> Res
                 let value = if name.contains("Start") { &start } else { &end };
                 registry::set_string(Hive::LocalMachine, WU_UX_SETTINGS, name, value)?;
             }
-            log.info(format!(
-                "Updates paused until {end} (the maximum Windows allows)."
+            log.info(trf(
+                "Updates paused until {0} (the maximum Windows allows).",
+                &[&end],
             ));
         }
     } else {
@@ -95,12 +99,12 @@ pub fn set_forced_updates_blocked(log: &Logger, block: bool, pause: bool) -> Res
         for name in PAUSE_VALUES {
             registry::delete_value(Hive::LocalMachine, WU_UX_SETTINGS, name)?;
         }
-        log.info("Windows Update policies and pause removed.");
+        log.info(tr("Windows Update policies and pause removed."));
     }
     log.success(if block {
-        "Forced updates and automatic reboots are now blocked."
+        tr("Forced updates and automatic reboots are now blocked.")
     } else {
-        "Windows Update restored to default behaviour."
+        tr("Windows Update restored to default behaviour.")
     });
     Ok(())
 }

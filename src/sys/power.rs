@@ -5,6 +5,7 @@
 use super::command::run_hidden;
 use super::registry::{self, Hive};
 use crate::events::Logger;
+use crate::i18n::{tr, trf};
 
 /// GUID of the scheme RustCleanup creates. Fixed so we can always find it.
 pub const LOW_POWER_GUID: &str = "6c1e0d6a-5b2f-4c3e-9a51-7a2d5e0c11aa";
@@ -106,7 +107,7 @@ pub fn enable_low_power(log: &Logger) -> Result<(), String> {
                 "Created by RustCleanup: capped CPU, no turbo boost, passive cooling.",
             ],
         );
-        log.info("Created the \"RustCleanup Low Power\" power scheme.");
+        log.info(tr("Created the \"RustCleanup Low Power\" power scheme."));
     }
 
     for (sub, setting, ac, dc) in SETTINGS {
@@ -134,9 +135,9 @@ pub fn enable_low_power(log: &Logger) -> Result<(), String> {
     }
 
     powercfg(log, &["/setactive", LOW_POWER_GUID])?;
-    log.success(
+    log.success(tr(
         "Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.",
-    );
+    ));
     Ok(())
 }
 
@@ -147,13 +148,13 @@ pub fn disable_low_power(log: &Logger) -> Result<(), String> {
         .unwrap_or_else(|| BALANCED_GUID.to_string());
 
     powercfg(log, &["/setactive", &previous])?;
-    log.info(format!("Restored power scheme {previous}."));
+    log.info(trf("Restored power scheme {0}.", &[&previous]));
 
     if scheme_exists(LOW_POWER_GUID) && powercfg(log, &["/delete", LOW_POWER_GUID]).is_ok() {
-        log.info("Removed the RustCleanup Low Power scheme.");
+        log.info(tr("Removed the RustCleanup Low Power scheme."));
     }
     let _ = registry::delete_value(Hive::CurrentUser, STATE_KEY, PREVIOUS_VALUE);
-    log.success("Low Power Mode off.");
+    log.success(tr("Low Power Mode off."));
     Ok(())
 }
 

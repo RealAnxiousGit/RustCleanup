@@ -14,6 +14,8 @@ use windows::Win32::UI::WindowsAndMessaging::{
 };
 use windows::core::BOOL;
 
+use crate::i18n::trf;
+
 /// Processes that keep Windows alive. Suspending or killing any of these can
 /// freeze or crash the machine, so the task list refuses to.
 const CRITICAL: [&str; 19] = [
@@ -131,7 +133,7 @@ impl ProcessMonitor {
                     Ok(s) => s,
                     Err(e) => {
                         if let Ok(mut g) = shared.lock() {
-                            g.error = Some(format!("Could not read the process list: {e}"));
+                            g.error = Some(trf("Could not read the process list: {0}", &[&e]));
                         }
                         repaint();
                         return;
@@ -199,7 +201,7 @@ impl ProcessMonitor {
         if let Err(e) = spawned
             && let Ok(mut g) = snapshot.lock()
         {
-            g.error = Some(format!("Could not start the process monitor: {e}"));
+            g.error = Some(trf("Could not start the process monitor: {0}", &[&e]));
         }
 
         Self { snapshot, stop }

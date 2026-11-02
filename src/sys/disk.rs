@@ -6,6 +6,7 @@ use windows::Win32::Storage::FileSystem::{
 use windows::core::HSTRING;
 
 use super::format::fmt_bytes;
+use crate::i18n::n_;
 
 /// A mounted drive letter.
 #[derive(Clone, Debug)]
@@ -51,6 +52,32 @@ impl Drive {
     }
 }
 
+/// Space on a drive right now, or `None` if Windows can't say (an empty card
+/// reader, a disconnected network share).
+#[derive(Clone, Copy, Debug)]
+pub struct Space {
+    pub total: u64,
+    pub free: u64,
+}
+
+impl Space {
+    pub fn used(&self) -> u64 {
+        self.total.saturating_sub(self.free)
+    }
+
+    pub fn fraction(&self) -> f32 {
+        self.used() as f32 / self.total.max(1) as f32
+    }
+}
+
+pub fn space(root: &str) -> Option<Space> {
+    let wide = HSTRING::from(root);
+    let (mut total, mut free) = (0u64, 0u64);
+    // SAFETY: `wide` is NUL-terminated and both out-pointers are valid.
+    unsafe { GetDiskFreeSpaceExW(&wide, None, Some(&mut total), Some(&mut free)) }.ok()?;
+    (total > 0).then_some(Space { total, free })
+}
+
 /// Lists every drive letter currently mounted.
 pub fn list_drives() -> Vec<Drive> {
     // SAFETY: GetLogicalDrives has no parameters and cannot fail unsafely.
@@ -63,11 +90,11 @@ pub fn list_drives() -> Vec<Drive> {
             // SAFETY: `wide` is a valid NUL-terminated path for the duration of the call.
             let drive_type = unsafe { GetDriveTypeW(&wide) };
             let (kind, scannable) = match drive_type {
-                2 => ("Removable", true),
-                3 => ("Local Disk", true),
-                4 => ("Network", false),
-                5 => ("CD/DVD", false),
-                6 => ("RAM Disk", true),
+                2 => (n_("Removable"), true),
+                3 => (n_("Local Disk"), true),
+                4 => (n_("Network"), false),
+                5 => (n_("CD/DVD"), false),
+                6 => (n_("RAM Disk"), true),
                 _ => return None, // DRIVE_UNKNOWN / DRIVE_NO_ROOT_DIR
             };
 
@@ -120,5 +147,7 @@ mod tests {
                 .iter()
                 .any(|d| d.volume().eq_ignore_ascii_case("C:") && d.scannable)
         );
+        let c = space("C:\\").expect("C: reports its space");
+        assert!(c.free <= c.total && c.used() > 0);
     }
 }

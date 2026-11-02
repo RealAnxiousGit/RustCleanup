@@ -3,6 +3,35 @@
 All notable changes to RustCleanup are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.0.1] - 2026-11-02
+
+A Settings window, 12 languages, automatic updates and a storage overview.
+
+### Added
+- **Settings window**, from the new **Settings** button between Credits and the theme button, or from **Settings** in the tray menu. It has:
+  - **Language**, with a flag and the language's own name for each choice. All text is translated into English, Español, Português, Français, Deutsch, Italiano, Nederlands, Polski, Türkçe, Русский, 日本語 and 中文. On first launch RustCleanup follows your Windows display language.
+  - **Start minimized**: start in the notification area instead of opening the window.
+  - **Open on startup**: a Task Scheduler logon task that starts RustCleanup with admin rights, so there is no UAC prompt at sign-in. It follows the exe if you move it or it is updated.
+  - **Close to the notification area**, **Theme** and **Interface size** (90% to 175%).
+  - **Notifications**, to turn off the Windows notifications shown while RustCleanup is hidden.
+  - **Automatically check for updates**. On: a new release is downloaded, checked against its published SHA-256 and installed by itself, then RustCleanup restarts. Off: a window shows the new version's changelog with **Update Now** and **Never Update**, and it can be closed to decide later. **Check for updates now** checks on demand.
+  - **Auto-Clean RAM**, which cleans RAM by itself when memory use goes above an amount you set with a slider (50% to 95%), at most once every 2 minutes.
+  - **Hardware-accelerated UI**, which switches the interface to Direct3D 12. It is smoother on some GPUs but uses about 3 times the memory (about 335 MB versus 100 MB), so it is off by default.
+  - **Reset all settings**. Settings are kept in `HKCU\Software\RustCleanup`.
+- **Storage overview under Scan Disk**: how much of the selected drive is used, how much is available and its total size, with a meter that turns amber above 90%.
+- **Manage Storage** button next to **Run check**. It opens Windows Settings at Storage for the system drive, or Disks & volumes for other drives.
+- **Single instance.** Opening RustCleanup while it is already running brings up the copy that is running instead of starting a second one.
+
+### Changed
+- **New app icon**: a white outline of a small brush on pure black.
+- **Task list, Settings and Credits opened from the tray** now open on their own, without bringing up the main window. Closing them leaves RustCleanup running in the tray.
+- **The tray icon stays** in the notification area the whole time RustCleanup is running, not only while it is hidden.
+- The tray menu has a **Settings** item above **Credits**.
+
+### Fixed
+- **Starting minimized showed a black, empty window** for a moment. The window now stays hidden until you open it from the tray.
+- **Japanese and Chinese text sat too high** next to Latin text. The fallback fonts are now lined up with Segoe UI.
+
 ## [2.0.0] - 2026-11-01
 
 A redesign, plus a tray icon and much lower memory use.

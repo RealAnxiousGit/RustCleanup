@@ -7,6 +7,7 @@ use eframe::egui::{
 
 use super::theme::{Palette, semibold};
 use crate::events::Logger;
+use crate::i18n::tr;
 use crate::sys::shell;
 
 /// Section heading in the semibold face.
@@ -70,9 +71,60 @@ pub fn switch(ui: &mut Ui, pal: &Palette, on: bool, enabled: bool, label: &str) 
     }
 }
 
+/// A settings row: title and explanation on the left, switch on the right.
+/// Returns the requested new value when the switch is clicked.
+pub fn switch_row(
+    ui: &mut Ui,
+    pal: &Palette,
+    title: &str,
+    detail: &str,
+    on: bool,
+    enabled: bool,
+) -> Option<bool> {
+    let mut result = None;
+    ui.horizontal(|ui| {
+        let text_width = (ui.available_width() - 64.0).max(120.0);
+        ui.vertical(|ui| {
+            ui.set_width(text_width);
+            ui.label(RichText::new(title).family(semibold()));
+            if !detail.is_empty() {
+                note(ui, pal, detail);
+            }
+        });
+        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+            if switch(ui, pal, on, enabled, title).clicked() {
+                result = Some(!on);
+            }
+        });
+    });
+    result
+}
+
 fn lerp(a: Color32, b: Color32, t: f32) -> Color32 {
     let l = |x: u8, y: u8| (x as f32 + (y as f32 - x as f32) * t).round() as u8;
     Color32::from_rgb(l(a.r(), b.r()), l(a.g(), b.g()), l(a.b(), b.b()))
+}
+
+/// A big figure, its description, and an optional percentage on the right.
+pub fn figure_row(ui: &mut Ui, pal: &Palette, big: &str, rest: &str, percent: Option<f32>) {
+    ui.horizontal(|ui| {
+        ui.label(
+            RichText::new(big)
+                .family(semibold())
+                .size(22.0)
+                .color(pal.text),
+        );
+        ui.label(RichText::new(rest).color(pal.muted));
+        if let Some(p) = percent {
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                ui.label(
+                    RichText::new(format!("{:.0}%", p * 100.0))
+                        .family(semibold())
+                        .size(15.0),
+                );
+            });
+        }
+    });
 }
 
 /// A thin usage bar. `warn` switches the fill to the warning colour, which
@@ -123,7 +175,11 @@ pub fn button(ui: &mut Ui, text: &str, enabled: bool) -> Response {
 /// The theme button: a sun while dark (it switches to light), a crescent
 /// moon while light. The tooltip names the mode a click switches to.
 pub fn theme_button(ui: &mut Ui, pal: &Palette, light: bool) -> Response {
-    let label = if light { "Dark Mode" } else { "Light Mode" };
+    let label = if light {
+        tr("Dark Mode")
+    } else {
+        tr("Light Mode")
+    };
     let (rect, response) = ui.allocate_exact_size(egui::vec2(30.0, 28.0), Sense::click());
     response.widget_info(|| WidgetInfo::labeled(Role::Button, true, label));
     if ui.is_rect_visible(rect) {

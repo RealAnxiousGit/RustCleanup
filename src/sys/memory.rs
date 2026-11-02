@@ -22,6 +22,7 @@ use windows::Win32::System::Threading::{
 use super::format::fmt_bytes;
 use super::privilege::{OwnedHandle, enable_privilege};
 use crate::events::Logger;
+use crate::i18n::{tr, trf};
 
 /// Physical RAM, as Task Manager's Memory page reports it.
 #[derive(Clone, Copy, Debug, Default)]
@@ -285,7 +286,7 @@ pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
     // Needed to open protected/system processes and to call EmptyWorkingSet on them.
     for privilege in ["SeDebugPrivilege", "SeIncreaseQuotaPrivilege"] {
         if let Err(e) = enable_privilege(privilege) {
-            log.warn(format!("Could not enable {privilege}: {e}"));
+            log.warn(trf("Could not enable {0}: {1}", &[&privilege, &e]));
         }
     }
 
@@ -298,20 +299,21 @@ pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
             Err(_) => skipped += 1,
         }
     }
-    log.info(format!(
-        "Trimmed {trimmed} processes. {skipped} protected processes were skipped."
+    log.info(trf(
+        "Trimmed {0} processes. {1} protected processes were skipped.",
+        &[&trimmed, &skipped],
     ));
 
     if purge_standby {
         match enable_privilege("SeProfileSingleProcessPrivilege") {
-            Err(e) => log.warn(format!("Standby list not purged: {e}")),
+            Err(e) => log.warn(trf("Standby list not purged: {0}", &[&e])),
             Ok(()) => {
                 if let Err(e) = memory_list_command(MEMORY_FLUSH_MODIFIED_LIST) {
-                    log.warn(format!("Flushing the modified page list failed: {e}"));
+                    log.warn(trf("Flushing the modified page list failed: {0}", &[&e]));
                 }
                 match memory_list_command(MEMORY_PURGE_STANDBY_LIST) {
-                    Ok(()) => log.info("Standby list purged."),
-                    Err(e) => log.warn(format!("Purging the standby list failed: {e}")),
+                    Ok(()) => log.info(tr("Standby list purged.")),
+                    Err(e) => log.warn(trf("Purging the standby list failed: {0}", &[&e])),
                 }
             }
         }
@@ -320,12 +322,14 @@ pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
     // Give the memory manager a moment to rebalance before measuring.
     std::thread::sleep(std::time::Duration::from_millis(500));
     match (before, physical(None)) {
-        (Some(b), Some(a)) => log.success(format!(
-            "Clean RAM finished. {} freed, {} now available.",
-            fmt_bytes(a.available.saturating_sub(b.available)),
-            fmt_bytes(a.available)
+        (Some(b), Some(a)) => log.success(trf(
+            "Clean RAM finished. {0} freed, {1} now available.",
+            &[
+                &fmt_bytes(a.available.saturating_sub(b.available)),
+                &fmt_bytes(a.available),
+            ],
         )),
-        _ => log.success("Clean RAM finished."),
+        _ => log.success(tr("Clean RAM finished.")),
     }
     Ok(())
 }

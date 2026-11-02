@@ -1,0 +1,829 @@
+# 简体中文 (Simplified Chinese) translation of RustCleanup.
+
+A check is running in its own window.
+检查正在单独的窗口中运行。
+
+Activity
+活动
+
+Also pause updates for {0} days
+同时暂停更新 {0} 天
+
+Also purge the standby list (file cache)
+同时清除备用列表（文件缓存）
+
+Anything unsaved in them will be lost.
+其中未保存的内容将会丢失。
+
+App
+应用
+
+Auto-Clean RAM
+自动清理内存
+
+Auto-Clean RAM amount
+自动清理内存阈值
+
+Automatically check for updates
+自动检查更新
+
+Background
+后台
+
+Built with
+构建工具
+
+CD/DVD
+CD/DVD 驱动器
+
+Cancel
+取消
+
+Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan.
+接通电源时将 CPU 限制为 60%，使用电池时限制为 50%，并关闭睿频加速。关闭后恢复之前的电源计划。
+
+Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+更改需要管理员权限。请关闭 RustCleanup 后重新打开，并在 UAC 提示中选择“是”。
+
+Check for updates now
+立即检查更新
+
+Checking for updates.
+正在检查更新。
+
+Checksum verified.
+校验和已验证。
+
+Clean RAM
+清理内存
+
+Clean RAM finished.
+内存清理已完成。
+
+Clean RAM finished. {0} freed, {1} now available.
+内存清理已完成。已释放 {0}，当前可用 {1}。
+
+Clean when more than {0} of {1} is in use.
+当 {1} 中已用超过 {0} 时清理。
+
+Cleaning
+正在清理
+
+Cleaning RAM.
+正在清理内存。
+
+Clear
+清除
+
+Clear selection
+清除选择
+
+Clear the filter
+清除筛选
+
+Close
+关闭
+
+Close and reopen the task list to try again.
+请关闭并重新打开任务列表后重试。
+
+Close to the notification area
+关闭时最小化到通知区域
+
+Code graph used to plan and check the module layout
+用于规划和检查模块布局的代码图
+
+Command Prompt
+命令提示符
+
+Command Prompt [Admin]
+命令提示符 [管理员]
+
+Committed {0} of {1} (RAM plus page file)
+已提交 {0}/{1}（内存加页面文件）
+
+Copilot disabled.
+已禁用 Copilot。
+
+Copilot policy TurnOffWindowsCopilot=1 written to HKCU and HKLM.
+已将 Copilot 策略 TurnOffWindowsCopilot=1 写入 HKCU 和 HKLM。
+
+Copilot policy removed; Windows defaults restored.
+已删除 Copilot 策略，并恢复 Windows 默认设置。
+
+Copilot re-enabled.
+已重新启用 Copilot。
+
+Copy
+复制
+
+Copy output
+复制输出
+
+Could not check for updates: {0}
+无法检查更新：{0}
+
+Could not check the disk, errors could not be fixed, or errors were not fixed because /f was not given.
+无法检查磁盘、无法修复错误，或因未指定 /f 而未修复错误。
+
+Could not enable {0}: {1}
+无法启用 {0}：{1}
+
+Could not install the update: {0}
+无法安装更新：{0}
+
+Could not reach GitHub ({0}): {1}
+无法连接到 GitHub（{0}）：{1}
+
+Could not reach GitHub: {0}
+无法连接到 GitHub：{0}
+
+Could not read the process list: {0}
+无法读取进程列表：{0}
+
+Could not restart RustCleanup: {0}. Close it and open it again.
+无法重新启动 RustCleanup：{0}。请将其关闭后重新打开。
+
+Could not start a background thread: {0}
+无法启动后台线程：{0}
+
+Could not start the process monitor: {0}
+无法启动进程监视器：{0}
+
+Could not stop chkdsk: {0}
+无法停止 chkdsk：{0}
+
+Counters and data collectors
+计数器和数据收集器
+
+Created the "RustCleanup Low Power" power scheme.
+已创建“RustCleanup Low Power”电源计划。
+
+Credits
+致谢
+
+Dark
+深色
+
+Dark Mode
+深色模式
+
+Design rules applied to the interface
+界面所遵循的设计规则
+
+Disable Copilot
+禁用 Copilot
+
+Disable Telemetry
+禁用遥测
+
+Disk Cleanup
+磁盘清理
+
+Disk Management
+磁盘管理
+
+Disk check cancelled.
+磁盘检查已取消。
+
+Disk cleanup was performed (e.g. garbage collection) or not done because /f was not given.
+已执行磁盘清理（例如垃圾回收），或因未指定 /f 而未执行。
+
+Done
+完成
+
+Downloaded {0}%.
+已下载 {0}%。
+
+Downloading RustCleanup {0}.
+正在下载 RustCleanup {0}。
+
+Downloading and installing.
+正在下载并安装。
+
+Draws the interface with Direct3D 12 instead of OpenGL. It can be smoother on older or integrated graphics, but uses about three times as much memory.
+使用 Direct3D 12 代替 OpenGL 绘制界面。在较旧的显卡或集成显卡上可能更流畅，但内存占用约为三倍。
+
+Elevated prompt
+提升权限的提示符
+
+End task
+结束任务
+
+End these tasks?
+是否结束这些任务？
+
+Ended {0} of {1} processes.
+已结束 {0}/{1} 个进程。
+
+Errors were found and fixed.
+发现错误并已修复。
+
+Every setting goes back to its default. Open on startup is kept.
+所有设置都将恢复为默认值。“开机时打开”将保留。
+
+Exit
+退出
+
+Explorer did not restart and could not be started: {0}
+资源管理器未能重新启动，也无法启动：{0}
+
+Explorer restarted.
+已重新启动资源管理器。
+
+Explorer was started manually. Sign out and back in if the taskbar misbehaves.
+已手动启动资源管理器。如果任务栏工作不正常，请注销后重新登录。
+
+Failed
+失败
+
+Filter
+筛选
+
+Finished in {0} s. {1}
+已在 {0} 秒内完成。{1}
+
+Flushing the modified page list failed: {0}
+刷新已修改页面列表失败：{0}
+
+Forced updates and automatic reboots are now blocked.
+已阻止强制更新和自动重启。
+
+General
+常规
+
+GitHub answered with HTTP status {0}.
+GitHub 返回了 HTTP 状态 {0}。
+
+GitHub sent a reply RustCleanup could not read: {0}
+GitHub 返回了 RustCleanup 无法读取的响应：{0}
+
+Hardware-accelerated UI
+硬件加速界面
+
+Info
+信息
+
+Interface size
+界面大小
+
+Language
+语言
+
+Light
+浅色
+
+Light Mode
+浅色模式
+
+Live CPU, memory, disk and network
+实时 CPU、内存、磁盘和网络
+
+Local Disk
+本地磁盘
+
+Look for drives again
+重新查找驱动器
+
+Low Power Mode
+低功耗模式
+
+Low Power Mode off.
+已关闭低功耗模式。
+
+Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.
+已开启低功耗模式：CPU 限制为 60%（接通电源）/ 50%（使用电池），睿频加速已关闭。
+
+MIT licensed.
+采用 MIT 许可证。
+
+Makes text and controls larger or smaller in every window.
+放大或缩小所有窗口中的文本和控件。
+
+Memory
+内存
+
+Memory use reached {0}% (limit {1}%), so RAM is being cleaned automatically.
+内存使用率已达到 {0}%（上限 {1}%），正在自动清理内存。
+
+Name
+名称
+
+Name or PID
+名称或 PID
+
+Network
+网络
+
+Never Update
+从不更新
+
+No Forced Updates
+禁止强制更新
+
+No drives
+没有驱动器
+
+No drives were found. Connect a drive, then press Refresh.
+未找到驱动器。请连接驱动器，然后按“刷新”。
+
+No errors were found.
+未发现错误。
+
+No page file is configured, so Windows is running on physical memory only. You can add one in System Properties, Advanced, Performance settings.
+未配置页面文件，因此 Windows 仅使用物理内存运行。可以在“系统属性”的“高级”选项卡中通过“性能”设置添加页面文件。
+
+No process matches "{0}".
+没有与“{0}”匹配的进程。
+
+No tray icon ({0}). Closing the window will quit RustCleanup.
+没有托盘图标（{0}）。关闭窗口将退出 RustCleanup。
+
+Not running as Administrator
+未以管理员身份运行
+
+Nothing has run yet. Everything RustCleanup changes is listed here.
+尚未运行任何操作。RustCleanup 所做的所有更改都会列在这里。
+
+Notifications
+通知
+
+On: when RustCleanup starts, a new release on GitHub is downloaded, checked and installed by itself. Off: you are asked first, with the changelog.
+开启：RustCleanup 启动时，会自动下载、校验并安装 GitHub 上的新版本。关闭：先显示更新日志并询问你。
+
+Online scan (NTFS only)
+联机扫描（仅限 NTFS）
+
+Open
+打开
+
+Open App
+打开应用
+
+Open RustCleanup when you sign in to Windows, without a UAC prompt.
+登录 Windows 时打开 RustCleanup，不显示 UAC 提示。
+
+Open on startup
+开机时打开
+
+Open task list
+打开任务列表
+
+Open the release page
+打开发布页面
+
+Opened {0}.
+已打开 {0}。
+
+Opens the built-in Windows tool you pick.
+打开所选的 Windows 内置工具。
+
+Optimize
+优化
+
+Optimize Task
+优化任务
+
+Optimized {0} of {1} processes.
+已优化 {0}/{1} 个进程。
+
+Partitions and volumes
+分区和卷
+
+Performance
+性能
+
+Performance Monitor
+性能监视器
+
+Physical Memory
+物理内存
+
+Power Config
+电源配置
+
+Power Options control panel
+电源选项控制面板
+
+Processes, performance, startup apps
+进程、性能、启动应用
+
+Programming
+编程
+
+Prompt Engineer
+提示词工程师
+
+Protected
+受保护
+
+Protected system processes were left out.
+已排除受保护的系统进程。
+
+Purging the standby list failed: {0}
+清除备用列表失败：{0}
+
+RAM Disk
+RAM 磁盘
+
+Read-only check
+只读检查
+
+Reading the current settings from Windows.
+正在从 Windows 读取当前设置。
+
+Reading the process list.
+正在读取进程列表。
+
+Refresh
+刷新
+
+Release {0} has no {1} to download.
+版本 {0} 没有可下载的 {1}。
+
+Removable
+可移动
+
+Remove temporary and system files
+删除临时文件和系统文件
+
+Removed the RustCleanup Low Power scheme.
+已删除“RustCleanup Low Power”电源计划。
+
+Reset all settings
+重置所有设置
+
+Resource Monitor
+资源监视器
+
+Restart Explorer so it applies right away
+重新启动资源管理器以立即生效
+
+Restart RustCleanup to apply this.
+重新启动 RustCleanup 以应用此设置。
+
+Restart now
+立即重启
+
+Restarting Explorer to apply the change.
+正在重新启动资源管理器以应用更改。
+
+Restored power scheme {0}.
+已恢复电源计划 {0}。
+
+Resume
+恢复
+
+Resumed {0} of {1} processes.
+已恢复 {0}/{1} 个进程。
+
+Run check
+运行检查
+
+Running as Administrator
+正在以管理员身份运行
+
+Running for {0} s
+已运行 {0} 秒
+
+Runs Clean RAM by itself when physical memory use reaches the amount below. It checks every 5 seconds and runs at most once every {0} minutes.
+当物理内存使用量达到下方设定值时，自动运行内存清理。每 5 秒检查一次，每 {0} 分钟最多运行一次。
+
+Runs chkdsk on the drive you pick and shows its output live.
+在所选驱动器上运行 chkdsk 并实时显示输出。
+
+RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt.
+RustCleanup 未以管理员身份运行，大多数更改将会失败。请重新启动它，并在 UAC 提示中选择“是”。
+
+RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit.
+RustCleanup 仍在通知区域中运行。右键单击其图标可查看选项，或选择“退出”以退出。
+
+RustCleanup is up to date.
+RustCleanup 已是最新版本。
+
+RustCleanup will no longer open when you sign in.
+登录时将不再打开 RustCleanup。
+
+RustCleanup will not ask about new versions again. Turn "Tell me about new versions" back on in Settings to change this.
+RustCleanup 将不再询问新版本。如需更改，请在“设置”中重新开启“通知我新版本”。
+
+RustCleanup will open when you sign in to Windows.
+登录 Windows 时将打开 RustCleanup。
+
+RustCleanup {0} is available
+RustCleanup {0} 可用
+
+RustCleanup {0} is available and will be installed now.
+RustCleanup {0} 可用，现在将进行安装。
+
+RustCleanup {0} is available.
+RustCleanup {0} 可用。
+
+RustCleanup {0} is installed. Restarting.
+已安装 RustCleanup {0}。正在重新启动。
+
+Same as Windows
+与 Windows 相同
+
+Scan Disk
+扫描磁盘
+
+Scan Disk: {0} {1}
+扫描磁盘：{0} {1}
+
+Scheduled tasks not changed: {0}
+计划任务未更改：{0}
+
+See what is using CPU and memory, then trim, slow down, pause or end it.
+查看占用 CPU 和内存的程序，然后进行精简、降速、暂停或结束。
+
+Select {0}
+选择 {0}
+
+Service {0} {1}: {2}
+服务 {0} {1}：{2}
+
+Service {0}: startup set to {1}.
+服务 {0}：启动类型已设置为 {1}。
+
+Service {0}: {1}
+服务 {0}：{1}
+
+Service {0}: {1} requested.
+服务 {0}：已请求 {1}。
+
+Sets AllowTelemetry to 0, stops DiagTrack and dmwappushservice, and turns off the data collection tasks.
+将 AllowTelemetry 设置为 0，停止 DiagTrack 和 dmwappushservice，并关闭数据收集任务。
+
+Settings
+设置
+
+Settings were reset to their defaults.
+设置已重置为默认值。
+
+Show background processes
+显示后台进程
+
+Shows the new release and its changelog when RustCleanup starts. "Never Update" turns this off.
+RustCleanup 启动时显示新版本及其更新日志。“从不更新”会关闭此功能。
+
+Sort by CPU
+按 CPU 排序
+
+Sort by memory
+按内存排序
+
+Sort by name
+按名称排序
+
+Source code
+源代码
+
+Standard (non-admin) prompt
+标准（非管理员）提示符
+
+Standby list not purged: {0}
+未清除备用列表：{0}
+
+Standby list purged.
+已清除备用列表。
+
+Start in the notification area instead of opening the window.
+启动时位于通知区域，而不打开窗口。
+
+Start minimized
+启动时最小化
+
+Started chkdsk on {0} ({1}).
+已在 {0}（{1}）上启动 chkdsk。
+
+Startup task not changed: {0}
+启动任务未更改：{0}
+
+Status
+状态
+
+Stop asking about new versions. You can turn this back on in Settings.
+不再询问新版本。可以在“设置”中重新开启。
+
+Stop check
+停止检查
+
+Suspend
+挂起
+
+Suspended
+已挂起
+
+Suspended {0} of {1} processes.
+已挂起 {0}/{1} 个进程。
+
+Switch any of these off again to restore the Windows default.
+再次关闭其中任意一项即可恢复 Windows 默认设置。
+
+System process: can only be trimmed
+系统进程：只能精简
+
+System tools
+系统工具
+
+Task Manager
+任务管理器
+
+Task list
+任务列表
+
+Task {0}: {1}
+任务 {0}：{1}
+
+Telemetry disabled.
+已禁用遥测。
+
+Telemetry policies removed.
+已删除遥测策略。
+
+Telemetry policy AllowTelemetry=0 written.
+已写入遥测策略 AllowTelemetry=0。
+
+Telemetry restored to Windows defaults.
+遥测已恢复为 Windows 默认设置。
+
+Tell me about new versions
+通知我新版本
+
+The close button hides the window and RustCleanup keeps running. Off: it quits.
+关闭按钮会隐藏窗口，RustCleanup 继续运行。关闭：直接退出。
+
+The download is not a valid RustCleanup.exe, so nothing was changed.
+下载的文件不是有效的 RustCleanup.exe，因此未做任何更改。
+
+The download's checksum does not match the release, so nothing was changed.
+下载文件的校验和与发布版本不匹配，因此未做任何更改。
+
+The last action is still running. Try again in a moment.
+上一个操作仍在运行。请稍后重试。
+
+Theme
+主题
+
+This release has no checksum file, so the download could not be verified.
+此版本没有校验和文件，因此无法验证下载内容。
+
+Toolkits
+工具包
+
+Trim memory and set Below Normal priority
+精简内存并将优先级设置为“低于正常”
+
+Trimmed {0} processes. {1} protected processes were skipped.
+已精简 {0} 个进程。已跳过 {1} 个受保护的进程。
+
+Turns on the TurnOffWindowsCopilot policy and hides the taskbar button.
+启用 TurnOffWindowsCopilot 策略并隐藏任务栏按钮。
+
+Type
+类型
+
+Update Now
+立即更新
+
+Update available
+有可用更新
+
+Updates
+更新
+
+Updates are paused until {0}.
+更新已暂停至 {0}。
+
+Updates paused until {0} (the maximum Windows allows).
+更新已暂停至 {0}（Windows 允许的最长期限）。
+
+Version {0}
+版本 {0}
+
+Virtual Memory
+虚拟内存
+
+Waiting for chkdsk to start.
+正在等待 chkdsk 启动。
+
+Warning
+警告
+
+What's new
+新增功能
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a Windows notification.
+当 RustCleanup 最小化或位于通知区域时，其记录的所有内容也会显示为 Windows 通知。
+
+Windows Update asks before installing and never restarts on its own while you are signed in.
+Windows 更新会在安装前询问，并且在你登录期间不会自动重启。
+
+Windows Update policies and pause removed.
+已删除 Windows 更新策略和暂停设置。
+
+Windows Update restored to default behaviour.
+Windows 更新已恢复为默认行为。
+
+Windows Update set to notify only, with no automatic reboots.
+Windows 更新已设置为仅通知，不自动重启。
+
+Windows did not report physical memory figures. They will appear here once it does.
+Windows 未报告物理内存数据。报告后将显示在这里。
+
+Windows did not report virtual memory figures.
+Windows 未报告虚拟内存数据。
+
+Windows settings
+Windows 设置
+
+You have version {0}.
+当前版本为 {0}。
+
+and {0} more
+以及其他 {0} 项
+
+chkdsk can't check {0} drives.
+chkdsk 无法检查 {0} 驱动器。
+
+chkdsk could not run: {0}
+chkdsk 无法运行：{0}
+
+chkdsk ended with an unexpected exit code.
+chkdsk 以意外的退出代码结束。
+
+could not create the tray window: {0}
+无法创建托盘窗口：{0}
+
+could not start the tray thread: {0}
+无法启动托盘线程：{0}
+
+in use of {0}
+已使用（共 {0}）
+
+internal error (the operation panicked)
+内部错误（操作发生崩溃）
+
+of {0} page file in use
+已使用（页面文件共 {0}）
+
+the tray thread stopped unexpectedly
+托盘线程意外停止
+
+{0} (PID {1})
+{0}（PID {1}）
+
+{0} (peak {1})
+{0}（峰值 {1}）
+
+{0} available, {1} cached
+可用 {0}，已缓存 {1}
+
+{0} available, {1} cached, {2} installed
+可用 {0}，已缓存 {1}，已安装 {2}
+
+{0} failed: {1}
+{0} 失败：{1}
+
+{0} finished: {1}
+{0} 已完成：{1}
+
+{0} is a protected system process and was left alone.
+{0} 是受保护的系统进程，未对其进行更改。
+
+{0} of {1} shown
+显示 {0}/{1} 项
+
+{0} selected
+已选择 {0} 项
+
+{0} suspended by RustCleanup
+{0} 已被 RustCleanup 挂起
+
+{0} telemetry scheduled tasks disabled ({1} not present on this Windows build).
+已禁用 {0} 个遥测计划任务（此 Windows 版本中不存在 {1} 个）。
+
+{0} telemetry scheduled tasks enabled ({1} not present on this Windows build).
+已启用 {0} 个遥测计划任务（此 Windows 版本中不存在 {1} 个）。
+
+{0} uses {1}, so only the read-only check is available.
+{0} 使用的是 {1}，因此只能进行只读检查。
+
+Manage Storage
+管理存储
+
+Open Storage in Windows Settings for this drive
+为此驱动器打开 Windows 设置中的“存储”
+
+Opened Windows storage settings for {0}.
+已打开 {0} 的 Windows 存储设置。
+
+Windows did not report how much space {0} has.
+Windows 未报告 {0} 的空间大小。
+
+used of {0}
+已用，共 {0}
+
+{0} used, {1} available, {2} in total
+已用 {0}，可用 {1}，共 {2}

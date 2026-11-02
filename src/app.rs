@@ -3,13 +3,21 @@
 //!
 //! The UI thread only draws and reads channels. Anything that could take
 //! more than a few milliseconds runs on a worker thread (`Jobs::start`).
+//!
+//! This window's pass also runs while it is hidden in the tray (eframe
+//! still repaints invisible windows), which is what keeps the detached
+//! windows and notifications working without it.
 
+use std::path::Path;
 use std::sync::mpsc::{self, Receiver};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use eframe::egui::{self, Align, Layout, Margin, RichText, ViewportCommand};
 
-use crate::events::{AppEvent, Job, Jobs, Level, Logger};
+use crate::background;
+use crate::events::{AppEvent, Job, Jobs, Level, LogEntry, Logger};
+use crate::i18n::{self, Lang, tr, trf};
+use crate::settings;
 use crate::sys::privilege::is_elevated;
 use crate::sys::shell::{self, WindowId};
 use crate::sys::tray::{NotifyKind, Tray, TrayCommand};
@@ -17,12 +25,61 @@ use crate::ui::activity::ActivityLog;
 use crate::ui::credits::Credits;
 use crate::ui::disk::DiskPanel;
 use crate::ui::memory::MemoryPanel;
+use crate::ui::settings::SettingsWindow;
 use crate::ui::tasks::TaskList;
 use crate::ui::theme::{self, Theme, semibold};
 use crate::ui::tweaks::TweaksPanel;
-use crate::ui::widgets;
+use crate::ui::update::UpdateWindow;
+use crate::ui::{self as views, widgets};
 
 pub const MAIN_TITLE: &str = "RustCleanup";
+
+/// Log entries that arrive close together become one notification: it is
+/// shown this long after the last of them...
+const NOTIFY_QUIET: Duration = Duration::from_millis(1200);
+/// ...or this long after the first, whichever comes sooner.
+const NOTIFY_MAX_WAIT: Duration = Duration::from_secs(4);
+/// Windows cuts notification text off at 255 characters.
+const NOTIFY_MAX_CHARS: usize = 255;
+
+/// Log entries waiting to be shown as one notification.
+#[derive(Default)]
+struct PendingNotification {
+    lines: Vec<String>,
+    kind: Option<NotifyKind>,
+    first: Option<Instant>,
+    last: Option<Instant>,
+}
+
+impl PendingNotification {
+    fn push(&mut self, entry: &LogEntry) {
+        let kind = match entry.level {
+            Level::Info | Level::Success => NotifyKind::Info,
+            Level::Warn => NotifyKind::Warning,
+            Level::Error => NotifyKind::Error,
+        };
+        self.kind = self.kind.max(Some(kind));
+        self.lines.push(entry.message.clone());
+        let now = Instant::now();
+        self.first.get_or_insert(now);
+        self.last = Some(now);
+    }
+
+    /// The notification to show now, if it is time.
+    fn take_due(&mut self) -> Option<(NotifyKind, String)> {
+        let (first, last) = (self.first?, self.last?);
+        if last.elapsed() < NOTIFY_QUIET && first.elapsed() < NOTIFY_MAX_WAIT {
+            return None;
+        }
+        let kind = self.kind.unwrap_or(NotifyKind::Info);
+        let mut body = self.lines.join("\n");
+        if body.chars().count() > NOTIFY_MAX_CHARS {
+            body = body.chars().take(NOTIFY_MAX_CHARS - 3).collect::<String>() + "...";
+        }
+        *self = Self::default();
+        Some((kind, body))
+    }
+}
 
 pub struct RustCleanupApp {
     rx: Receiver<AppEvent>,
@@ -36,22 +93,35 @@ pub struct RustCleanupApp {
     tweaks: TweaksPanel,
     tasks: TaskList,
     credits: Credits,
+    settings: SettingsWindow,
+    update: UpdateWindow,
 
     tray: Option<Tray>,
     main_window: Option<WindowId>,
-    /// Hidden to the tray (the close button was pressed).
+    /// Hidden to the tray (the close button was pressed, or it started there).
     in_tray: bool,
     minimized: bool,
     tray_hint_shown: bool,
+    /// Frames left in which to hide the window again. eframe makes the root
+    /// window visible after its first frame, even if it was built hidden.
+    hide_frames: u8,
+    pending: PendingNotification,
+    /// Language and size the fonts and zoom were last set up for.
+    applied_lang: Lang,
+    applied_scale: u16,
 }
 
 impl RustCleanupApp {
-    pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        theme::install_fonts(&cc.egui_ctx);
+    pub fn new(cc: &eframe::CreationContext<'_>, start_hidden: bool) -> Self {
+        let ctx = &cc.egui_ctx;
+        let s = settings::get();
+        i18n::set_language(s.language);
+        theme::install_fonts(ctx, s.language);
+        ctx.set_zoom_factor(s.ui_scale as f32 / 100.0);
 
         let (tx, rx) = mpsc::channel();
-        let log = Logger::new(tx, cc.egui_ctx.clone());
-        let mut jobs = Jobs::new(log.clone());
+        let log = Logger::new(tx, ctx.clone());
+        let jobs = Jobs::new(log.clone());
         let elevated = is_elevated();
 
         // The tray forwards menu picks into the same event channel.
@@ -59,34 +129,47 @@ impl RustCleanupApp {
         let tray = match Tray::start(move |cmd| tray_log.send(AppEvent::Tray(cmd))) {
             Ok(t) => Some(t),
             Err(e) => {
-                log.warn(format!(
-                    "No tray icon ({e}). Closing the window will quit RustCleanup."
+                log.warn(trf(
+                    "No tray icon ({0}). Closing the window will quit RustCleanup.",
+                    &[&e],
                 ));
                 None
             }
         };
+        // Without a tray there would be no way back to a hidden window.
+        let in_tray = start_hidden && tray.is_some();
+        if start_hidden && !in_tray {
+            ctx.send_viewport_cmd(ViewportCommand::Visible(true));
+        }
 
         if !elevated {
-            log.warn("RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt.");
+            log.warn(tr("RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt."));
         }
-        TweaksPanel::detect(&mut jobs);
+        TweaksPanel::detect(&jobs);
+        background::on_launch(&jobs);
 
         Self {
             rx,
-            jobs,
             elevated,
             theme: Theme::load(),
             activity: ActivityLog::new(),
             memory: MemoryPanel::new(),
-            disk: DiskPanel::new(),
+            disk: DiskPanel::new(jobs.clone()),
             tweaks: TweaksPanel::new(),
-            tasks: TaskList::new(),
-            credits: Credits::new(),
+            tasks: TaskList::new(jobs.clone()),
+            credits: Credits::new(log),
+            settings: SettingsWindow::new(jobs.clone()),
+            update: UpdateWindow::new(jobs.clone()),
+            jobs,
             tray,
             main_window: None,
-            in_tray: false,
+            in_tray,
             minimized: false,
-            tray_hint_shown: false,
+            tray_hint_shown: in_tray,
+            hide_frames: if in_tray { 2 } else { 0 },
+            pending: PendingNotification::default(),
+            applied_lang: s.language,
+            applied_scale: s.ui_scale,
         }
     }
 
@@ -98,7 +181,10 @@ impl RustCleanupApp {
             shell::show_window(id);
         }
         ctx.send_viewport_cmd(ViewportCommand::Visible(true));
+        ctx.send_viewport_cmd(ViewportCommand::Minimized(false));
+        ctx.send_viewport_cmd(ViewportCommand::Focus);
         self.in_tray = false;
+        self.hide_frames = 0;
         ctx.request_repaint();
     }
 
@@ -107,36 +193,51 @@ impl RustCleanupApp {
         self.in_tray = true;
         if !self.tray_hint_shown {
             self.tray_hint_shown = true;
-            let msg = "RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit.";
-            self.jobs.log.info(msg);
-            if let Some(tray) = &self.tray {
-                tray.notify(NotifyKind::Info, "RustCleanup", msg);
-            }
+            // Shown as a notification too, since the window is now hidden.
+            self.jobs.log.info(tr("RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit."));
         }
+    }
+
+    /// Undoes anything temporary: frozen processes and a running chkdsk.
+    fn clean_up(&mut self) {
+        self.tasks.resume_all();
+        self.disk.cancel();
     }
 
     /// Restores anything changed temporarily, then ends the process.
     fn exit(&mut self) -> ! {
-        self.tasks.resume_all();
-        self.disk.cancel(&self.jobs);
+        self.clean_up();
         if let Some(tray) = &mut self.tray {
             tray.remove();
         }
         std::process::exit(0);
     }
 
+    /// Starts `exe` (a new version, or this one again) and quits. The new
+    /// copy waits for this one to finish before taking over.
+    fn restart(&mut self, exe: &Path) {
+        let mut cmd = std::process::Command::new(exe);
+        cmd.arg(crate::RESTARTED_ARG);
+        if self.in_tray {
+            cmd.arg(crate::HIDDEN_ARG);
+        }
+        match cmd.spawn() {
+            Ok(_) => self.exit(),
+            Err(e) => self.jobs.log.error(trf(
+                "Could not restart RustCleanup: {0}. Close it and open it again.",
+                &[&e],
+            )),
+        }
+    }
+
     fn handle_tray(&mut self, ctx: &egui::Context, cmd: TrayCommand) {
         match cmd {
             TrayCommand::OpenApp => self.show_from_tray(ctx),
-            TrayCommand::CleanRam => self.memory.start_clean(&mut self.jobs),
-            TrayCommand::OpenTaskList => {
-                self.show_from_tray(ctx);
-                self.tasks.open(ctx);
-            }
-            TrayCommand::Credits => {
-                self.show_from_tray(ctx);
-                self.credits.open(ctx);
-            }
+            TrayCommand::CleanRam => MemoryPanel::start_clean(&self.jobs),
+            // These open as windows of their own; the main window stays where it is.
+            TrayCommand::OpenTaskList => self.tasks.open(ctx),
+            TrayCommand::Settings => self.settings.open(ctx),
+            TrayCommand::Credits => self.credits.open(ctx),
             TrayCommand::Exit => self.exit(),
         }
     }
@@ -146,17 +247,13 @@ impl RustCleanupApp {
         while let Ok(event) = self.rx.try_recv() {
             match event {
                 AppEvent::Log(entry) => {
-                    // While the window is out of sight, results also arrive as notifications.
-                    if self.in_tray || self.minimized {
-                        let kind = match entry.level {
-                            Level::Info => None,
-                            Level::Success => Some(NotifyKind::Info),
-                            Level::Warn => Some(NotifyKind::Warning),
-                            Level::Error => Some(NotifyKind::Error),
-                        };
-                        if let (Some(tray), Some(kind)) = (&self.tray, kind) {
-                            tray.notify(kind, "RustCleanup", &entry.message);
-                        }
+                    // While the window is out of sight, everything logged also
+                    // appears as a notification.
+                    if (self.in_tray || self.minimized)
+                        && self.tray.is_some()
+                        && settings::get().notifications
+                    {
+                        self.pending.push(&entry);
                     }
                     self.activity.push(entry);
                 }
@@ -164,22 +261,60 @@ impl RustCleanupApp {
                     self.tweaks.state = state;
                     self.tweaks.loaded = true;
                 }
-                AppEvent::JobFinished(job) => {
-                    self.jobs.finished(job);
-                    match job {
-                        // Switches always resync with the real system state,
-                        // so a failed change never leaves one showing the wrong value.
-                        Job::Copilot | Job::Telemetry | Job::Updates | Job::LowPower => {
-                            TweaksPanel::detect(&mut self.jobs)
-                        }
-                        Job::CleanRam => self.memory.refresh(true),
-                        _ => {}
+                AppEvent::JobFinished(job) => match job {
+                    // Switches always resync with the real system state,
+                    // so a failed change never leaves one showing the wrong value.
+                    Job::Copilot | Job::Telemetry | Job::Updates | Job::LowPower => {
+                        TweaksPanel::detect(&self.jobs)
+                    }
+                    Job::CleanRam => self.memory.refresh(true),
+                    _ => {}
+                },
+                AppEvent::Tray(cmd) => self.handle_tray(ctx, cmd),
+                AppEvent::UpdateAvailable(release) => {
+                    self.jobs
+                        .log
+                        .info(trf("RustCleanup {0} is available.", &[&release.version]));
+                    self.update.open(ctx, release);
+                }
+                AppEvent::UpToDate { manual } => {
+                    if manual {
+                        self.jobs.log.success(tr("RustCleanup is up to date."));
                     }
                 }
-                AppEvent::Tray(cmd) => self.handle_tray(ctx, cmd),
+                AppEvent::Restart(exe) => self.restart(&exe),
             }
         }
-        self.disk.pump(&self.jobs);
+        self.disk.pump();
+
+        if let Some((kind, body)) = self.pending.take_due() {
+            if let Some(tray) = &self.tray {
+                tray.notify(kind, "RustCleanup", &body);
+            }
+        } else if self.pending.first.is_some() {
+            ctx.request_repaint_after(Duration::from_millis(250));
+        }
+    }
+
+    /// Picks up changes made in the Settings window.
+    fn apply_settings(&mut self, ctx: &egui::Context) {
+        let s = settings::get();
+        if s.language != self.applied_lang {
+            self.applied_lang = s.language;
+            i18n::set_language(s.language);
+            // Japanese and Chinese share characters but not glyph styles,
+            // so the font order follows the language.
+            theme::install_fonts(ctx, s.language);
+            views::repaint_windows(ctx);
+        }
+        if s.ui_scale != self.applied_scale {
+            self.applied_scale = s.ui_scale;
+            ctx.set_zoom_factor(s.ui_scale as f32 / 100.0);
+            views::repaint_windows(ctx);
+        }
+        if self.theme.update(ctx) {
+            views::repaint_windows(ctx);
+        }
     }
 
     fn header(&mut self, ui: &mut egui::Ui) {
@@ -188,9 +323,9 @@ impl RustCleanupApp {
             ui.label(RichText::new("RustCleanup").family(semibold()).size(21.0));
             ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                 if self.elevated {
-                    widgets::note(ui, &pal, "Running as Administrator");
+                    widgets::note(ui, &pal, tr("Running as Administrator"));
                 } else {
-                    ui.label(RichText::new("Not running as Administrator").color(pal.error));
+                    ui.label(RichText::new(tr("Not running as Administrator")).color(pal.error));
                 }
                 if self.jobs.any_visible_busy() {
                     ui.add(egui::Spinner::new().size(14.0).color(pal.muted));
@@ -199,7 +334,7 @@ impl RustCleanupApp {
         });
         if !self.elevated {
             ui.label(
-                RichText::new("Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.")
+                RichText::new(tr("Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt."))
                     .color(pal.error),
             );
         }
@@ -207,48 +342,23 @@ impl RustCleanupApp {
 
     fn footer(&mut self, ui: &mut egui::Ui) {
         let pal = self.theme.palette;
+        // Right to left: the theme button sits at the far right, with
+        // Settings between it and Credits.
         ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
             if widgets::theme_button(ui, &pal, self.theme.light).clicked() {
                 self.theme.toggle();
             }
-            if widgets::button(ui, "Credits", true).clicked() {
+            if widgets::button(ui, tr("Settings"), true).clicked() {
+                self.settings.open(ui.ctx());
+            }
+            if widgets::button(ui, tr("Credits"), true).clicked() {
                 self.credits.open(ui.ctx());
             }
         });
     }
-}
 
-impl eframe::App for RustCleanupApp {
-    fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        self.pump_events(ctx);
-    }
-
-    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-        let ctx = ui.ctx().clone();
-        self.theme.update(&ctx);
+    fn main_panels(&mut self, ui: &mut egui::Ui) {
         let pal = self.theme.palette;
-        if self.main_window.is_none() {
-            self.main_window = shell::find_own_window(MAIN_TITLE);
-        }
-
-        // Close button: hide to the tray instead of quitting (if there is a tray).
-        let (close, minimized) =
-            ctx.input(|i| (i.viewport().close_requested(), i.viewport().minimized));
-        self.minimized = minimized.unwrap_or(false);
-        if close {
-            if self.tray.is_some() {
-                ctx.send_viewport_cmd(ViewportCommand::CancelClose);
-                self.hide_to_tray(&ctx);
-            } else {
-                self.tasks.resume_all();
-                self.disk.cancel(&self.jobs);
-            }
-        }
-
-        // The memory figures are live: refresh once a second, and only then.
-        self.memory.refresh(false);
-        ctx.request_repaint_after(Duration::from_secs(1));
-
         egui::Panel::top("header")
             .frame(egui::Frame::new().fill(pal.bg).inner_margin(Margin {
                 left: 20,
@@ -302,9 +412,9 @@ impl eframe::App for RustCleanupApp {
                                 |ui| {
                                     ui.set_width(left_w);
                                     ui.spacing_mut().item_spacing.x = 8.0;
-                                    self.memory.ui(ui, &pal, &mut self.jobs);
+                                    self.memory.ui(ui, &pal, &self.jobs);
                                     ui.add_space(22.0);
-                                    self.disk.ui(ui, &pal, &mut self.jobs);
+                                    self.disk.ui(ui, &pal);
                                     ui.add_space(22.0);
                                     self.tasks.section_ui(ui, &pal);
                                 },
@@ -315,25 +425,68 @@ impl eframe::App for RustCleanupApp {
                                 |ui| {
                                     ui.set_width(right_w);
                                     ui.spacing_mut().item_spacing.x = 8.0;
-                                    self.tweaks.settings_ui(ui, &pal, &mut self.jobs);
+                                    self.tweaks.settings_ui(ui, &pal, &self.jobs);
                                     ui.add_space(22.0);
-                                    self.tweaks.tools_ui(ui, &pal, &mut self.jobs);
+                                    self.tweaks.tools_ui(ui, &pal, &self.jobs);
                                 },
                             );
                         });
                     });
             });
+    }
+}
 
-        self.disk.window(&ctx, &self.theme, &self.jobs);
-        self.tasks.window(&ctx, &self.theme, &mut self.jobs);
-        self.credits.window(&ctx, &self.theme, &self.jobs.log);
+impl eframe::App for RustCleanupApp {
+    fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        self.pump_events(ctx);
+    }
+
+    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        let ctx = ui.ctx().clone();
+        if self.hide_frames > 0 {
+            self.hide_frames -= 1;
+            ctx.send_viewport_cmd(ViewportCommand::Visible(false));
+            ctx.request_repaint();
+        }
+        self.apply_settings(&ctx);
+        if self.main_window.is_none() {
+            self.main_window = shell::find_own_window(MAIN_TITLE);
+        }
+
+        // Close button: hide to the tray instead of quitting, if that is
+        // the setting and there is a tray to come back from.
+        let (close, minimized) =
+            ctx.input(|i| (i.viewport().close_requested(), i.viewport().minimized));
+        self.minimized = minimized.unwrap_or(false);
+        if close {
+            if self.tray.is_some() && settings::get().close_to_tray {
+                ctx.send_viewport_cmd(ViewportCommand::CancelClose);
+                self.hide_to_tray(&ctx);
+            } else {
+                self.clean_up();
+            }
+        }
+
+        // Nothing to draw while hidden; the detached windows below still
+        // need this pass to stay open.
+        if !self.in_tray {
+            // The memory figures are live: refresh once a second, and only then.
+            self.memory.refresh(false);
+            ctx.request_repaint_after(Duration::from_secs(1));
+            self.main_panels(ui);
+        }
+
+        self.disk.show(&ctx);
+        self.tasks.show(&ctx);
+        self.settings.show(&ctx);
+        self.credits.show(&ctx);
+        self.update.show(&ctx);
     }
 }
 
 impl Drop for RustCleanupApp {
     /// Never leave processes frozen behind us, or chkdsk running.
     fn drop(&mut self) {
-        self.tasks.resume_all();
-        self.disk.cancel(&self.jobs);
+        self.clean_up();
     }
 }

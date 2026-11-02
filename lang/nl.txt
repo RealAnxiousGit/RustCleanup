@@ -1,0 +1,829 @@
+# Nederlands (Dutch) translation of RustCleanup.
+
+A check is running in its own window.
+Er wordt een controle uitgevoerd in een eigen venster.
+
+Activity
+Activiteit
+
+Also pause updates for {0} days
+Updates ook {0} dagen onderbreken
+
+Also purge the standby list (file cache)
+Ook de stand-bylijst leegmaken (bestandscache)
+
+Anything unsaved in them will be lost.
+Alles wat daarin niet is opgeslagen, gaat verloren.
+
+App
+App
+
+Auto-Clean RAM
+RAM automatisch opschonen
+
+Auto-Clean RAM amount
+Drempel voor automatisch opschonen
+
+Automatically check for updates
+Automatisch controleren op updates
+
+Background
+Achtergrond
+
+Built with
+Gemaakt met
+
+CD/DVD
+Cd/dvd
+
+Cancel
+Annuleren
+
+Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan.
+Beperkt de CPU tot 60% op netstroom en 50% op batterij en schakelt turbo boost uit. Uit herstelt je vorige energiebeheerschema.
+
+Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+Voor wijzigingen zijn beheerdersrechten nodig. Sluit RustCleanup, open het opnieuw en kies Ja in de UAC-melding.
+
+Check for updates now
+Nu controleren op updates
+
+Checking for updates.
+Controleren op updates.
+
+Checksum verified.
+Controlesom geverifieerd.
+
+Clean RAM
+RAM opschonen
+
+Clean RAM finished.
+RAM opschonen voltooid.
+
+Clean RAM finished. {0} freed, {1} now available.
+RAM opschonen voltooid. {0} vrijgemaakt, nu {1} beschikbaar.
+
+Clean when more than {0} of {1} is in use.
+Opschonen als meer dan {0} van {1} in gebruik is.
+
+Cleaning
+Opschonen
+
+Cleaning RAM.
+RAM wordt opgeschoond.
+
+Clear
+Wissen
+
+Clear selection
+Selectie wissen
+
+Clear the filter
+Filter wissen
+
+Close
+Sluiten
+
+Close and reopen the task list to try again.
+Sluit de takenlijst en open deze opnieuw om het nog eens te proberen.
+
+Close to the notification area
+Sluiten naar het systeemvak
+
+Code graph used to plan and check the module layout
+Codegraaf gebruikt om de modulestructuur te plannen en te controleren
+
+Command Prompt
+Opdrachtprompt
+
+Command Prompt [Admin]
+Opdrachtprompt [Admin]
+
+Committed {0} of {1} (RAM plus page file)
+Toegewezen: {0} van {1} (RAM plus wisselbestand)
+
+Copilot disabled.
+Copilot uitgeschakeld.
+
+Copilot policy TurnOffWindowsCopilot=1 written to HKCU and HKLM.
+Copilot-beleid TurnOffWindowsCopilot=1 naar HKCU en HKLM geschreven.
+
+Copilot policy removed; Windows defaults restored.
+Copilot-beleid verwijderd, standaardinstellingen van Windows hersteld.
+
+Copilot re-enabled.
+Copilot weer ingeschakeld.
+
+Copy
+Kopiëren
+
+Copy output
+Uitvoer kopiëren
+
+Could not check for updates: {0}
+Kan niet controleren op updates: {0}
+
+Could not check the disk, errors could not be fixed, or errors were not fixed because /f was not given.
+De schijf kon niet worden gecontroleerd, fouten konden niet worden hersteld, of fouten zijn niet hersteld omdat /f niet is opgegeven.
+
+Could not enable {0}: {1}
+Kan {0} niet inschakelen: {1}
+
+Could not install the update: {0}
+Kan de update niet installeren: {0}
+
+Could not reach GitHub ({0}): {1}
+Kan GitHub niet bereiken ({0}): {1}
+
+Could not reach GitHub: {0}
+Kan GitHub niet bereiken: {0}
+
+Could not read the process list: {0}
+Kan de proceslijst niet lezen: {0}
+
+Could not restart RustCleanup: {0}. Close it and open it again.
+Kan RustCleanup niet opnieuw starten: {0}. Sluit het en open het opnieuw.
+
+Could not start a background thread: {0}
+Kan geen achtergrondthread starten: {0}
+
+Could not start the process monitor: {0}
+Kan de procesbewaking niet starten: {0}
+
+Could not stop chkdsk: {0}
+Kan chkdsk niet stoppen: {0}
+
+Counters and data collectors
+Prestatiemeteritems en gegevensverzamelaars
+
+Created the "RustCleanup Low Power" power scheme.
+Energiebeheerschema "RustCleanup Low Power" gemaakt.
+
+Credits
+Credits
+
+Dark
+Donker
+
+Dark Mode
+Donkere modus
+
+Design rules applied to the interface
+Ontwerpregels toegepast op de interface
+
+Disable Copilot
+Copilot uitschakelen
+
+Disable Telemetry
+Telemetrie uitschakelen
+
+Disk Cleanup
+Schijfopruiming
+
+Disk Management
+Schijfbeheer
+
+Disk check cancelled.
+Schijfcontrole geannuleerd.
+
+Disk cleanup was performed (e.g. garbage collection) or not done because /f was not given.
+Er is schijfopruiming uitgevoerd (bijv. garbage collection) of deze is niet uitgevoerd omdat /f niet is opgegeven.
+
+Done
+Gereed
+
+Downloaded {0}%.
+{0}% gedownload.
+
+Downloading RustCleanup {0}.
+RustCleanup {0} downloaden.
+
+Downloading and installing.
+Downloaden en installeren.
+
+Draws the interface with Direct3D 12 instead of OpenGL. It can be smoother on older or integrated graphics, but uses about three times as much memory.
+Tekent de interface met Direct3D 12 in plaats van OpenGL. Dit kan soepeler zijn op oudere of geïntegreerde graphics, maar gebruikt ongeveer drie keer zoveel geheugen.
+
+Elevated prompt
+Prompt met verhoogde bevoegdheden
+
+End task
+Taak beëindigen
+
+End these tasks?
+Deze taken beëindigen?
+
+Ended {0} of {1} processes.
+{0} van {1} processen beëindigd.
+
+Errors were found and fixed.
+Er zijn fouten gevonden en hersteld.
+
+Every setting goes back to its default. Open on startup is kept.
+Alle instellingen worden teruggezet naar de standaardwaarden. "Openen bij opstarten" blijft behouden.
+
+Exit
+Afsluiten
+
+Explorer did not restart and could not be started: {0}
+Verkenner is niet opnieuw gestart en kon niet worden gestart: {0}
+
+Explorer restarted.
+Verkenner opnieuw gestart.
+
+Explorer was started manually. Sign out and back in if the taskbar misbehaves.
+Verkenner is handmatig gestart. Meld je af en weer aan als de taakbalk niet goed werkt.
+
+Failed
+Mislukt
+
+Filter
+Filter
+
+Finished in {0} s. {1}
+Voltooid in {0} s. {1}
+
+Flushing the modified page list failed: {0}
+Leegmaken van de lijst met gewijzigde pagina's mislukt: {0}
+
+Forced updates and automatic reboots are now blocked.
+Geforceerde updates en automatisch opnieuw opstarten zijn nu geblokkeerd.
+
+General
+Algemeen
+
+GitHub answered with HTTP status {0}.
+GitHub antwoordde met HTTP-status {0}.
+
+GitHub sent a reply RustCleanup could not read: {0}
+GitHub stuurde een antwoord dat RustCleanup niet kon lezen: {0}
+
+Hardware-accelerated UI
+Hardwareversnelde interface
+
+Info
+Info
+
+Interface size
+Grootte van interface
+
+Language
+Taal
+
+Light
+Licht
+
+Light Mode
+Lichte modus
+
+Live CPU, memory, disk and network
+Live CPU, geheugen, schijf en netwerk
+
+Local Disk
+Lokale schijf
+
+Look for drives again
+Opnieuw zoeken naar stations
+
+Low Power Mode
+Energiebesparingsmodus
+
+Low Power Mode off.
+Energiebesparingsmodus uit.
+
+Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.
+Energiebesparingsmodus aan: CPU beperkt tot 60% (netstroom) / 50% (batterij), turbo boost uit.
+
+MIT licensed.
+MIT-licentie.
+
+Makes text and controls larger or smaller in every window.
+Maakt tekst en bedieningselementen groter of kleiner in elk venster.
+
+Memory
+Geheugen
+
+Memory use reached {0}% (limit {1}%), so RAM is being cleaned automatically.
+Het geheugengebruik heeft {0}% bereikt (limiet {1}%), dus het RAM wordt automatisch opgeschoond.
+
+Name
+Naam
+
+Name or PID
+Naam of PID
+
+Network
+Netwerk
+
+Never Update
+Nooit bijwerken
+
+No Forced Updates
+Geen geforceerde updates
+
+No drives
+Geen stations
+
+No drives were found. Connect a drive, then press Refresh.
+Er zijn geen stations gevonden. Sluit een station aan en klik dan op Vernieuwen.
+
+No errors were found.
+Er zijn geen fouten gevonden.
+
+No page file is configured, so Windows is running on physical memory only. You can add one in System Properties, Advanced, Performance settings.
+Er is geen wisselbestand ingesteld, dus Windows gebruikt alleen fysiek geheugen. Je kunt er een toevoegen via Systeemeigenschappen, Geavanceerd, Prestatie-instellingen.
+
+No process matches "{0}".
+Geen proces komt overeen met "{0}".
+
+No tray icon ({0}). Closing the window will quit RustCleanup.
+Geen pictogram in het systeemvak ({0}). Als je het venster sluit, wordt RustCleanup afgesloten.
+
+Not running as Administrator
+Niet uitgevoerd als administrator
+
+Nothing has run yet. Everything RustCleanup changes is listed here.
+Er is nog niets uitgevoerd. Alles wat RustCleanup wijzigt, wordt hier vermeld.
+
+Notifications
+Meldingen
+
+On: when RustCleanup starts, a new release on GitHub is downloaded, checked and installed by itself. Off: you are asked first, with the changelog.
+Aan: als RustCleanup start, wordt een nieuwe versie op GitHub automatisch gedownload, gecontroleerd en geïnstalleerd. Uit: je wordt eerst gevraagd, met het wijzigingslogboek.
+
+Online scan (NTFS only)
+Online scan (alleen NTFS)
+
+Open
+Openen
+
+Open App
+App openen
+
+Open RustCleanup when you sign in to Windows, without a UAC prompt.
+RustCleanup openen als je je aanmeldt bij Windows, zonder UAC-melding.
+
+Open on startup
+Openen bij opstarten
+
+Open task list
+Takenlijst openen
+
+Open the release page
+Versiepagina openen
+
+Opened {0}.
+{0} geopend.
+
+Opens the built-in Windows tool you pick.
+Opent het ingebouwde Windows-hulpprogramma dat je kiest.
+
+Optimize
+Optimaliseren
+
+Optimize Task
+Taak optimaliseren
+
+Optimized {0} of {1} processes.
+{0} van {1} processen geoptimaliseerd.
+
+Partitions and volumes
+Partities en volumes
+
+Performance
+Prestaties
+
+Performance Monitor
+Prestatiemeter
+
+Physical Memory
+Fysiek geheugen
+
+Power Config
+Energie-instellingen
+
+Power Options control panel
+Configuratiescherm Energiebeheer
+
+Processes, performance, startup apps
+Processen, prestaties, opstart-apps
+
+Programming
+Programmering
+
+Prompt Engineer
+Prompt Engineer
+
+Protected
+Beveiligd
+
+Protected system processes were left out.
+Beveiligde systeemprocessen zijn overgeslagen.
+
+Purging the standby list failed: {0}
+Leegmaken van de stand-bylijst mislukt: {0}
+
+RAM Disk
+RAM-schijf
+
+Read-only check
+Alleen-lezen controle
+
+Reading the current settings from Windows.
+Huidige instellingen uit Windows lezen.
+
+Reading the process list.
+Proceslijst lezen.
+
+Refresh
+Vernieuwen
+
+Release {0} has no {1} to download.
+Versie {0} bevat geen {1} om te downloaden.
+
+Removable
+Verwisselbaar
+
+Remove temporary and system files
+Tijdelijke bestanden en systeembestanden verwijderen
+
+Removed the RustCleanup Low Power scheme.
+Energiebeheerschema RustCleanup Low Power verwijderd.
+
+Reset all settings
+Alle instellingen herstellen
+
+Resource Monitor
+Broncontrole
+
+Restart Explorer so it applies right away
+Verkenner opnieuw starten zodat het direct wordt toegepast
+
+Restart RustCleanup to apply this.
+Start RustCleanup opnieuw om dit toe te passen.
+
+Restart now
+Nu opnieuw starten
+
+Restarting Explorer to apply the change.
+Verkenner wordt opnieuw gestart om de wijziging toe te passen.
+
+Restored power scheme {0}.
+Energiebeheerschema {0} hersteld.
+
+Resume
+Hervatten
+
+Resumed {0} of {1} processes.
+{0} van {1} processen hervat.
+
+Run check
+Controle uitvoeren
+
+Running as Administrator
+Uitgevoerd als administrator
+
+Running for {0} s
+Actief sinds {0} s
+
+Runs Clean RAM by itself when physical memory use reaches the amount below. It checks every 5 seconds and runs at most once every {0} minutes.
+Voert RAM opschonen automatisch uit als het gebruik van fysiek geheugen de onderstaande waarde bereikt. Er wordt elke 5 seconden gecontroleerd en hooguit eens per {0} minuten opgeschoond.
+
+Runs chkdsk on the drive you pick and shows its output live.
+Voert chkdsk uit op het gekozen station en toont de uitvoer live.
+
+RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt.
+RustCleanup wordt niet uitgevoerd als administrator, dus de meeste wijzigingen mislukken. Start het opnieuw en kies Ja in de UAC-melding.
+
+RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit.
+RustCleanup is nog actief in het systeemvak. Klik met de rechtermuisknop op het pictogram voor opties, of kies Afsluiten om te stoppen.
+
+RustCleanup is up to date.
+RustCleanup is up-to-date.
+
+RustCleanup will no longer open when you sign in.
+RustCleanup wordt niet meer geopend als je je aanmeldt.
+
+RustCleanup will not ask about new versions again. Turn "Tell me about new versions" back on in Settings to change this.
+RustCleanup vraagt niet meer naar nieuwe versies. Zet "Meld nieuwe versies" weer aan in Instellingen om dit te wijzigen.
+
+RustCleanup will open when you sign in to Windows.
+RustCleanup wordt geopend als je je aanmeldt bij Windows.
+
+RustCleanup {0} is available
+RustCleanup {0} is beschikbaar
+
+RustCleanup {0} is available and will be installed now.
+RustCleanup {0} is beschikbaar en wordt nu geïnstalleerd.
+
+RustCleanup {0} is available.
+RustCleanup {0} is beschikbaar.
+
+RustCleanup {0} is installed. Restarting.
+RustCleanup {0} is geïnstalleerd. Opnieuw starten.
+
+Same as Windows
+Zelfde als Windows
+
+Scan Disk
+Schijf scannen
+
+Scan Disk: {0} {1}
+Schijf scannen: {0} {1}
+
+Scheduled tasks not changed: {0}
+Geplande taken niet gewijzigd: {0}
+
+See what is using CPU and memory, then trim, slow down, pause or end it.
+Bekijk wat CPU en geheugen gebruikt en verklein, vertraag, onderbreek of beëindig het.
+
+Select {0}
+{0} selecteren
+
+Service {0} {1}: {2}
+Service {0} {1}: {2}
+
+Service {0}: startup set to {1}.
+Service {0}: opstarttype ingesteld op {1}.
+
+Service {0}: {1}
+Service {0}: {1}
+
+Service {0}: {1} requested.
+Service {0}: {1} aangevraagd.
+
+Sets AllowTelemetry to 0, stops DiagTrack and dmwappushservice, and turns off the data collection tasks.
+Zet AllowTelemetry op 0, stopt DiagTrack en dmwappushservice en schakelt de taken voor gegevensverzameling uit.
+
+Settings
+Instellingen
+
+Settings were reset to their defaults.
+De instellingen zijn teruggezet naar de standaardwaarden.
+
+Show background processes
+Achtergrondprocessen weergeven
+
+Shows the new release and its changelog when RustCleanup starts. "Never Update" turns this off.
+Toont de nieuwe versie en het wijzigingslogboek als RustCleanup start. "Nooit bijwerken" schakelt dit uit.
+
+Sort by CPU
+Sorteren op CPU
+
+Sort by memory
+Sorteren op geheugen
+
+Sort by name
+Sorteren op naam
+
+Source code
+Broncode
+
+Standard (non-admin) prompt
+Standaardprompt (zonder beheerdersrechten)
+
+Standby list not purged: {0}
+Stand-bylijst niet leeggemaakt: {0}
+
+Standby list purged.
+Stand-bylijst leeggemaakt.
+
+Start in the notification area instead of opening the window.
+In het systeemvak starten in plaats van het venster te openen.
+
+Start minimized
+Geminimaliseerd starten
+
+Started chkdsk on {0} ({1}).
+chkdsk gestart op {0} ({1}).
+
+Startup task not changed: {0}
+Opstarttaak niet gewijzigd: {0}
+
+Status
+Status
+
+Stop asking about new versions. You can turn this back on in Settings.
+Niet meer vragen naar nieuwe versies. Je kunt dit weer aanzetten in Instellingen.
+
+Stop check
+Controle stoppen
+
+Suspend
+Onderbreken
+
+Suspended
+Onderbroken
+
+Suspended {0} of {1} processes.
+{0} van {1} processen onderbroken.
+
+Switch any of these off again to restore the Windows default.
+Zet een van deze opties weer uit om de standaardinstelling van Windows te herstellen.
+
+System process: can only be trimmed
+Systeemproces: kan alleen worden verkleind
+
+System tools
+Systeemprogramma's
+
+Task Manager
+Taakbeheer
+
+Task list
+Takenlijst
+
+Task {0}: {1}
+Taak {0}: {1}
+
+Telemetry disabled.
+Telemetrie uitgeschakeld.
+
+Telemetry policies removed.
+Telemetriebeleid verwijderd.
+
+Telemetry policy AllowTelemetry=0 written.
+Telemetriebeleid AllowTelemetry=0 geschreven.
+
+Telemetry restored to Windows defaults.
+Telemetrie hersteld naar de standaardinstellingen van Windows.
+
+Tell me about new versions
+Meld nieuwe versies
+
+The close button hides the window and RustCleanup keeps running. Off: it quits.
+De knop Sluiten verbergt het venster en RustCleanup blijft actief. Uit: het wordt afgesloten.
+
+The download is not a valid RustCleanup.exe, so nothing was changed.
+De download is geen geldige RustCleanup.exe, dus er is niets gewijzigd.
+
+The download's checksum does not match the release, so nothing was changed.
+De controlesom van de download komt niet overeen met de versie, dus er is niets gewijzigd.
+
+The last action is still running. Try again in a moment.
+De vorige actie is nog bezig. Probeer het zo opnieuw.
+
+Theme
+Thema
+
+This release has no checksum file, so the download could not be verified.
+Deze versie heeft geen controlesombestand, dus de download kon niet worden geverifieerd.
+
+Toolkits
+Toolkits
+
+Trim memory and set Below Normal priority
+Geheugen verkleinen en prioriteit op Lager dan normaal zetten
+
+Trimmed {0} processes. {1} protected processes were skipped.
+{0} processen verkleind. {1} beveiligde processen zijn overgeslagen.
+
+Turns on the TurnOffWindowsCopilot policy and hides the taskbar button.
+Schakelt het beleid TurnOffWindowsCopilot in en verbergt de taakbalkknop.
+
+Type
+Type
+
+Update Now
+Nu bijwerken
+
+Update available
+Update beschikbaar
+
+Updates
+Updates
+
+Updates are paused until {0}.
+Updates zijn onderbroken tot {0}.
+
+Updates paused until {0} (the maximum Windows allows).
+Updates onderbroken tot {0} (het maximum dat Windows toestaat).
+
+Version {0}
+Versie {0}
+
+Virtual Memory
+Virtueel geheugen
+
+Waiting for chkdsk to start.
+Wachten tot chkdsk start.
+
+Warning
+Waarschuwing
+
+What's new
+Nieuw
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a Windows notification.
+Als RustCleanup geminimaliseerd is of in het systeemvak staat, verschijnt alles wat het logt ook als Windows-melding.
+
+Windows Update asks before installing and never restarts on its own while you are signed in.
+Windows Update vraagt het voor de installatie en start nooit zelf opnieuw op terwijl je bent aangemeld.
+
+Windows Update policies and pause removed.
+Windows Update-beleid en onderbreking verwijderd.
+
+Windows Update restored to default behaviour.
+Windows Update hersteld naar standaardgedrag.
+
+Windows Update set to notify only, with no automatic reboots.
+Windows Update ingesteld op alleen melden, zonder automatisch opnieuw opstarten.
+
+Windows did not report physical memory figures. They will appear here once it does.
+Windows heeft geen gegevens over fysiek geheugen doorgegeven. Ze verschijnen hier zodra dat gebeurt.
+
+Windows did not report virtual memory figures.
+Windows heeft geen gegevens over virtueel geheugen doorgegeven.
+
+Windows settings
+Windows-instellingen
+
+You have version {0}.
+Je hebt versie {0}.
+
+and {0} more
+en nog {0}
+
+chkdsk can't check {0} drives.
+chkdsk kan geen {0}-stations controleren.
+
+chkdsk could not run: {0}
+chkdsk kon niet worden uitgevoerd: {0}
+
+chkdsk ended with an unexpected exit code.
+chkdsk is beëindigd met een onverwachte afsluitcode.
+
+could not create the tray window: {0}
+kan het systeemvakvenster niet maken: {0}
+
+could not start the tray thread: {0}
+kan de systeemvakthread niet starten: {0}
+
+in use of {0}
+van {0} in gebruik
+
+internal error (the operation panicked)
+interne fout (de bewerking is vastgelopen)
+
+of {0} page file in use
+van {0} wisselbestand in gebruik
+
+the tray thread stopped unexpectedly
+de systeemvakthread is onverwacht gestopt
+
+{0} (PID {1})
+{0} (PID {1})
+
+{0} (peak {1})
+{0} (piek {1})
+
+{0} available, {1} cached
+{0} beschikbaar, {1} in cache
+
+{0} available, {1} cached, {2} installed
+{0} beschikbaar, {1} in cache, {2} geïnstalleerd
+
+{0} failed: {1}
+{0} mislukt: {1}
+
+{0} finished: {1}
+{0} voltooid: {1}
+
+{0} is a protected system process and was left alone.
+{0} is een beveiligd systeemproces en is niet aangepast.
+
+{0} of {1} shown
+{0} van {1} weergegeven
+
+{0} selected
+{0} geselecteerd
+
+{0} suspended by RustCleanup
+{0} onderbroken door RustCleanup
+
+{0} telemetry scheduled tasks disabled ({1} not present on this Windows build).
+{0} geplande telemetrietaken uitgeschakeld ({1} niet aanwezig in deze Windows-build).
+
+{0} telemetry scheduled tasks enabled ({1} not present on this Windows build).
+{0} geplande telemetrietaken ingeschakeld ({1} niet aanwezig in deze Windows-build).
+
+{0} uses {1}, so only the read-only check is available.
+{0} gebruikt {1}, dus alleen de alleen-lezen controle is beschikbaar.
+
+Manage Storage
+Opslag beheren
+
+Open Storage in Windows Settings for this drive
+Opent Opslag in Windows-instellingen voor dit station
+
+Opened Windows storage settings for {0}.
+Windows-opslaginstellingen geopend voor {0}.
+
+Windows did not report how much space {0} has.
+Windows heeft niet gemeld hoeveel ruimte {0} heeft.
+
+used of {0}
+gebruikt van {0}
+
+{0} used, {1} available, {2} in total
+{0} gebruikt, {1} beschikbaar, {2} totaal

@@ -1,23 +1,28 @@
 //! The Credits window.
 
-use eframe::egui::{self, Margin, RichText, Ui, ViewportBuilder, ViewportCommand, ViewportId};
+use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 
-use super::theme::{Palette, Theme, semibold};
+use eframe::egui::{self, Margin, RichText, Ui};
+
+use super::theme::{self, Palette, semibold};
 use super::widgets;
 use crate::events::Logger;
+use crate::i18n::{n_, tr, trf};
 
+pub const WINDOW: &str = "credits_window";
 const REPO: &str = "https://github.com/RealAnxiousGit/RustCleanup";
 
 /// (name, what it was used for, link)
 const TOOLKITS: [(&str, &str, &str); 2] = [
     (
         "graphify",
-        "Code graph used to plan and check the module layout",
+        n_("Code graph used to plan and check the module layout"),
         "https://github.com/Graphify-Labs/graphify",
     ),
     (
         "anti-slop",
-        "Design rules applied to the interface",
+        n_("Design rules applied to the interface"),
         "https://github.com/miqdadbadjuber/anti-slop",
     ),
 ];
@@ -34,22 +39,22 @@ const LIBRARIES: [(&str, &str); 5] = [
 ];
 
 pub struct Credits {
-    open: bool,
+    open: Arc<AtomicBool>,
+    log: Logger,
 }
 
 impl Credits {
-    pub fn new() -> Self {
-        Self { open: false }
+    pub fn new(log: Logger) -> Self {
+        Self {
+            open: Arc::default(),
+            log,
+        }
     }
 
-    pub fn open(&mut self, ctx: &egui::Context) {
-        if self.open {
-            ctx.send_viewport_cmd_to(
-                ViewportId::from_hash_of("credits_window"),
-                ViewportCommand::Focus,
-            );
+    pub fn open(&self, ctx: &egui::Context) {
+        if self.open.swap(true, Ordering::Relaxed) {
+            super::focus_window(ctx, WINDOW);
         }
-        self.open = true;
     }
 
     fn person(ui: &mut Ui, pal: &Palette, role: &str, name: &str) {
@@ -58,28 +63,19 @@ impl Credits {
         ui.add_space(8.0);
     }
 
-    pub fn window(&mut self, ctx: &egui::Context, theme: &Theme, log: &Logger) {
-        if !self.open {
+    /// Keeps the window alive. Called on every pass of the main window.
+    pub fn show(&self, ctx: &egui::Context) {
+        if !self.open.load(Ordering::Relaxed) {
             return;
         }
-        let pal = theme.palette;
-        let builder = ViewportBuilder::default()
-            .with_title("Credits")
-            .with_inner_size([460.0, 700.0])
-            .with_min_inner_size([360.0, 420.0])
-            .with_icon(super::app_icon());
-
-        let mut close = false;
-        ctx.show_viewport_immediate(
-            ViewportId::from_hash_of("credits_window"),
-            builder,
-            |ui, _class| {
-                if ui
-                    .ctx()
-                    .input(|i| i.viewport().close_requested() || i.key_pressed(egui::Key::Escape))
-                {
-                    close = true;
-                }
+        let open = self.open.clone();
+        let log = self.log.clone();
+        ctx.show_viewport_deferred(
+            super::window_id(WINDOW),
+            super::window_builder(tr("Credits"), [460.0, 700.0], [360.0, 420.0]),
+            move |ui, _class| {
+                let pal = theme::palette();
+                let mut close = super::close_pressed(ui.ctx());
                 egui::CentralPanel::default()
                     .frame(
                         egui::Frame::new()
@@ -96,46 +92,47 @@ impl Credits {
                                 widgets::note(
                                     ui,
                                     &pal,
-                                    format!("Version {}", env!("CARGO_PKG_VERSION")),
+                                    trf("Version {0}", &[&env!("CARGO_PKG_VERSION")]),
                                 );
                                 ui.add_space(14.0);
 
-                                Self::person(ui, &pal, "Programming", "Claude Opus 5.5");
-                                Self::person(ui, &pal, "Prompt Engineer", "Nicholas Slaughter");
+                                Self::person(ui, &pal, tr("Programming"), "Claude Opus 5.5");
+                                Self::person(ui, &pal, tr("Prompt Engineer"), "Nicholas Slaughter");
 
                                 ui.separator();
-                                widgets::heading(ui, "Toolkits");
+                                widgets::heading(ui, tr("Toolkits"));
                                 for (name, used_for, url) in TOOLKITS {
-                                    widgets::link(ui, log, name, url);
-                                    widgets::note(ui, &pal, used_for);
+                                    widgets::link(ui, &log, name, url);
+                                    widgets::note(ui, &pal, tr(used_for));
                                     ui.add_space(4.0);
                                 }
 
                                 ui.separator();
-                                widgets::heading(ui, "Built with");
+                                widgets::heading(ui, tr("Built with"));
                                 for (name, url) in LIBRARIES {
-                                    widgets::link(ui, log, name, url);
+                                    widgets::link(ui, &log, name, url);
                                 }
 
                                 ui.separator();
-                                widgets::heading(ui, "Source code");
+                                widgets::heading(ui, tr("Source code"));
                                 widgets::link(
                                     ui,
-                                    log,
+                                    &log,
                                     "github.com/RealAnxiousGit/RustCleanup",
                                     REPO,
                                 );
-                                widgets::note(ui, &pal, "MIT licensed.");
+                                widgets::note(ui, &pal, tr("MIT licensed."));
                                 ui.add_space(12.0);
-                                if widgets::button(ui, "Close", true).clicked() {
+                                if widgets::button(ui, tr("Close"), true).clicked() {
                                     close = true;
                                 }
                             });
                     });
+                if close {
+                    open.store(false, Ordering::Relaxed);
+                    super::closed(ui.ctx());
+                }
             },
         );
-        if close {
-            self.open = false;
-        }
     }
 }

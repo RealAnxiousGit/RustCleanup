@@ -1,0 +1,829 @@
+# Português (Portuguese, Brazil) translation of RustCleanup.
+
+A check is running in its own window.
+Uma verificação está em execução na própria janela.
+
+Activity
+Atividade
+
+Also pause updates for {0} days
+Também pausar as atualizações por {0} dias
+
+Also purge the standby list (file cache)
+Também limpar a lista de espera (cache de arquivos)
+
+Anything unsaved in them will be lost.
+Tudo o que não foi salvo nelas será perdido.
+
+App
+Aplicativo
+
+Auto-Clean RAM
+Limpar RAM automaticamente
+
+Auto-Clean RAM amount
+Limite da limpeza automática de RAM
+
+Automatically check for updates
+Verificar atualizações automaticamente
+
+Background
+Segundo plano
+
+Built with
+Feito com
+
+CD/DVD
+CD/DVD
+
+Cancel
+Cancelar
+
+Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan.
+Limita a CPU a 60% na tomada e 50% na bateria, e desativa o turbo boost. Desativado, restaura seu plano de energia anterior.
+
+Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+As alterações exigem direitos de administrador. Feche o RustCleanup, abra-o de novo e escolha Sim no aviso do UAC.
+
+Check for updates now
+Verificar atualizações agora
+
+Checking for updates.
+Verificando atualizações.
+
+Checksum verified.
+Soma de verificação confirmada.
+
+Clean RAM
+Limpar RAM
+
+Clean RAM finished.
+Limpeza de RAM concluída.
+
+Clean RAM finished. {0} freed, {1} now available.
+Limpeza de RAM concluída. {0} liberados, {1} disponíveis agora.
+
+Clean when more than {0} of {1} is in use.
+Limpar quando mais de {0} de {1} estiver em uso.
+
+Cleaning
+Limpando
+
+Cleaning RAM.
+Limpando a RAM.
+
+Clear
+Limpar
+
+Clear selection
+Limpar seleção
+
+Clear the filter
+Limpar o filtro
+
+Close
+Fechar
+
+Close and reopen the task list to try again.
+Feche e abra de novo a lista de tarefas para tentar outra vez.
+
+Close to the notification area
+Fechar para a área de notificação
+
+Code graph used to plan and check the module layout
+Grafo de código usado para planejar e verificar a estrutura dos módulos
+
+Command Prompt
+Prompt de Comando
+
+Command Prompt [Admin]
+Prompt de Comando [Admin]
+
+Committed {0} of {1} (RAM plus page file)
+Confirmada: {0} de {1} (RAM mais arquivo de paginação)
+
+Copilot disabled.
+Copilot desativado.
+
+Copilot policy TurnOffWindowsCopilot=1 written to HKCU and HKLM.
+Política do Copilot TurnOffWindowsCopilot=1 gravada em HKCU e HKLM.
+
+Copilot policy removed; Windows defaults restored.
+Política do Copilot removida; padrões do Windows restaurados.
+
+Copilot re-enabled.
+Copilot reativado.
+
+Copy
+Copiar
+
+Copy output
+Copiar saída
+
+Could not check for updates: {0}
+Não foi possível verificar atualizações: {0}
+
+Could not check the disk, errors could not be fixed, or errors were not fixed because /f was not given.
+Não foi possível verificar o disco, os erros não puderam ser corrigidos ou não foram corrigidos porque /f não foi informado.
+
+Could not enable {0}: {1}
+Não foi possível ativar {0}: {1}
+
+Could not install the update: {0}
+Não foi possível instalar a atualização: {0}
+
+Could not reach GitHub ({0}): {1}
+Não foi possível acessar o GitHub ({0}): {1}
+
+Could not reach GitHub: {0}
+Não foi possível acessar o GitHub: {0}
+
+Could not read the process list: {0}
+Não foi possível ler a lista de processos: {0}
+
+Could not restart RustCleanup: {0}. Close it and open it again.
+Não foi possível reiniciar o RustCleanup: {0}. Feche-o e abra-o de novo.
+
+Could not start a background thread: {0}
+Não foi possível iniciar uma thread em segundo plano: {0}
+
+Could not start the process monitor: {0}
+Não foi possível iniciar o monitor de processos: {0}
+
+Could not stop chkdsk: {0}
+Não foi possível parar o chkdsk: {0}
+
+Counters and data collectors
+Contadores e coletores de dados
+
+Created the "RustCleanup Low Power" power scheme.
+O esquema de energia "RustCleanup Low Power" foi criado.
+
+Credits
+Créditos
+
+Dark
+Escuro
+
+Dark Mode
+Modo escuro
+
+Design rules applied to the interface
+Regras de design aplicadas à interface
+
+Disable Copilot
+Desativar Copilot
+
+Disable Telemetry
+Desativar telemetria
+
+Disk Cleanup
+Limpeza de Disco
+
+Disk Management
+Gerenciamento de Disco
+
+Disk check cancelled.
+Verificação de disco cancelada.
+
+Disk cleanup was performed (e.g. garbage collection) or not done because /f was not given.
+Foi feita uma limpeza do disco (por exemplo, coleta de lixo) ou ela não foi feita porque /f não foi informado.
+
+Done
+Concluído
+
+Downloaded {0}%.
+Baixado: {0}%.
+
+Downloading RustCleanup {0}.
+Baixando o RustCleanup {0}.
+
+Downloading and installing.
+Baixando e instalando.
+
+Draws the interface with Direct3D 12 instead of OpenGL. It can be smoother on older or integrated graphics, but uses about three times as much memory.
+Desenha a interface com Direct3D 12 em vez de OpenGL. Pode ficar mais fluida em placas de vídeo antigas ou integradas, mas usa cerca de três vezes mais memória.
+
+Elevated prompt
+Prompt elevado
+
+End task
+Finalizar tarefa
+
+End these tasks?
+Finalizar estas tarefas?
+
+Ended {0} of {1} processes.
+{0} de {1} processos finalizados.
+
+Errors were found and fixed.
+Erros foram encontrados e corrigidos.
+
+Every setting goes back to its default. Open on startup is kept.
+Todas as configurações voltam ao padrão. Abrir na inicialização é mantido.
+
+Exit
+Sair
+
+Explorer did not restart and could not be started: {0}
+O Explorador não reiniciou e não pôde ser iniciado: {0}
+
+Explorer restarted.
+Explorador reiniciado.
+
+Explorer was started manually. Sign out and back in if the taskbar misbehaves.
+O Explorador foi iniciado manualmente. Saia e entre de novo se a barra de tarefas apresentar problemas.
+
+Failed
+Falhou
+
+Filter
+Filtrar
+
+Finished in {0} s. {1}
+Concluído em {0} s. {1}
+
+Flushing the modified page list failed: {0}
+Falha ao esvaziar a lista de páginas modificadas: {0}
+
+Forced updates and automatic reboots are now blocked.
+Atualizações forçadas e reinicializações automáticas agora estão bloqueadas.
+
+General
+Geral
+
+GitHub answered with HTTP status {0}.
+O GitHub respondeu com o status HTTP {0}.
+
+GitHub sent a reply RustCleanup could not read: {0}
+O GitHub enviou uma resposta que o RustCleanup não conseguiu ler: {0}
+
+Hardware-accelerated UI
+Interface acelerada por hardware
+
+Info
+Info
+
+Interface size
+Tamanho da interface
+
+Language
+Idioma
+
+Light
+Claro
+
+Light Mode
+Modo claro
+
+Live CPU, memory, disk and network
+CPU, memória, disco e rede em tempo real
+
+Local Disk
+Disco Local
+
+Look for drives again
+Procurar unidades de novo
+
+Low Power Mode
+Modo de baixo consumo
+
+Low Power Mode off.
+Modo de baixo consumo desativado.
+
+Low Power Mode on: CPU capped at 60% (plugged in) / 50% (battery), turbo boost off.
+Modo de baixo consumo ativado: CPU limitada a 60% (na tomada) / 50% (bateria), turbo boost desativado.
+
+MIT licensed.
+Licença MIT.
+
+Makes text and controls larger or smaller in every window.
+Deixa o texto e os controles maiores ou menores em todas as janelas.
+
+Memory
+Memória
+
+Memory use reached {0}% (limit {1}%), so RAM is being cleaned automatically.
+O uso de memória chegou a {0}% (limite {1}%), então a RAM está sendo limpa automaticamente.
+
+Name
+Nome
+
+Name or PID
+Nome ou PID
+
+Network
+Rede
+
+Never Update
+Nunca atualizar
+
+No Forced Updates
+Sem atualizações forçadas
+
+No drives
+Nenhuma unidade
+
+No drives were found. Connect a drive, then press Refresh.
+Nenhuma unidade encontrada. Conecte uma unidade e clique em Atualizar.
+
+No errors were found.
+Nenhum erro encontrado.
+
+No page file is configured, so Windows is running on physical memory only. You can add one in System Properties, Advanced, Performance settings.
+Nenhum arquivo de paginação está configurado, então o Windows usa apenas a memória física. Você pode adicionar um em Propriedades do Sistema, Avançado, Configurações de desempenho.
+
+No process matches "{0}".
+Nenhum processo corresponde a "{0}".
+
+No tray icon ({0}). Closing the window will quit RustCleanup.
+Sem ícone na área de notificação ({0}). Fechar a janela vai encerrar o RustCleanup.
+
+Not running as Administrator
+Não está em execução como administrador
+
+Nothing has run yet. Everything RustCleanup changes is listed here.
+Nada foi executado ainda. Tudo o que o RustCleanup altera aparece aqui.
+
+Notifications
+Notificações
+
+On: when RustCleanup starts, a new release on GitHub is downloaded, checked and installed by itself. Off: you are asked first, with the changelog.
+Ativado: ao iniciar o RustCleanup, uma nova versão no GitHub é baixada, verificada e instalada sozinha. Desativado: você é consultado antes, com o registro de alterações.
+
+Online scan (NTFS only)
+Verificação online (somente NTFS)
+
+Open
+Abrir
+
+Open App
+Abrir aplicativo
+
+Open RustCleanup when you sign in to Windows, without a UAC prompt.
+Abre o RustCleanup quando você entra no Windows, sem aviso do UAC.
+
+Open on startup
+Abrir na inicialização
+
+Open task list
+Abrir lista de tarefas
+
+Open the release page
+Abrir a página da versão
+
+Opened {0}.
+{0} aberto.
+
+Opens the built-in Windows tool you pick.
+Abre a ferramenta do Windows que você escolher.
+
+Optimize
+Otimizar
+
+Optimize Task
+Otimizar tarefa
+
+Optimized {0} of {1} processes.
+{0} de {1} processos otimizados.
+
+Partitions and volumes
+Partições e volumes
+
+Performance
+Desempenho
+
+Performance Monitor
+Monitor de Desempenho
+
+Physical Memory
+Memória Física
+
+Power Config
+Energia
+
+Power Options control panel
+Painel de controle Opções de Energia
+
+Processes, performance, startup apps
+Processos, desempenho, aplicativos de inicialização
+
+Programming
+Programação
+
+Prompt Engineer
+Engenheiro de prompts
+
+Protected
+Protegido
+
+Protected system processes were left out.
+Os processos protegidos do sistema foram ignorados.
+
+Purging the standby list failed: {0}
+Falha ao limpar a lista de espera: {0}
+
+RAM Disk
+Disco RAM
+
+Read-only check
+Verificação somente leitura
+
+Reading the current settings from Windows.
+Lendo as configurações atuais do Windows.
+
+Reading the process list.
+Lendo a lista de processos.
+
+Refresh
+Atualizar
+
+Release {0} has no {1} to download.
+A versão {0} não tem {1} para baixar.
+
+Removable
+Removível
+
+Remove temporary and system files
+Remover arquivos temporários e do sistema
+
+Removed the RustCleanup Low Power scheme.
+O esquema RustCleanup Low Power foi removido.
+
+Reset all settings
+Redefinir todas as configurações
+
+Resource Monitor
+Monitor de Recursos
+
+Restart Explorer so it applies right away
+Reiniciar o Explorador para aplicar na hora
+
+Restart RustCleanup to apply this.
+Reinicie o RustCleanup para aplicar isto.
+
+Restart now
+Reiniciar agora
+
+Restarting Explorer to apply the change.
+Reiniciando o Explorador para aplicar a alteração.
+
+Restored power scheme {0}.
+Esquema de energia {0} restaurado.
+
+Resume
+Retomar
+
+Resumed {0} of {1} processes.
+{0} de {1} processos retomados.
+
+Run check
+Verificar
+
+Running as Administrator
+Em execução como administrador
+
+Running for {0} s
+Em execução há {0} s
+
+Runs Clean RAM by itself when physical memory use reaches the amount below. It checks every 5 seconds and runs at most once every {0} minutes.
+Executa Limpar RAM sozinho quando o uso da memória física atinge o valor abaixo. Verifica a cada 5 segundos e executa no máximo uma vez a cada {0} minutos.
+
+Runs chkdsk on the drive you pick and shows its output live.
+Executa o chkdsk na unidade que você escolher e mostra a saída em tempo real.
+
+RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt.
+O RustCleanup não está em execução como administrador, então a maioria das alterações vai falhar. Reinicie-o e escolha Sim no aviso do UAC.
+
+RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit.
+O RustCleanup continua em execução na área de notificação. Clique com o botão direito no ícone para ver opções ou escolha Sair para encerrar.
+
+RustCleanup is up to date.
+O RustCleanup está atualizado.
+
+RustCleanup will no longer open when you sign in.
+O RustCleanup não vai mais abrir quando você entrar.
+
+RustCleanup will not ask about new versions again. Turn "Tell me about new versions" back on in Settings to change this.
+O RustCleanup não vai mais perguntar sobre novas versões. Ative de novo "Avisar sobre novas versões" em Configurações para mudar isso.
+
+RustCleanup will open when you sign in to Windows.
+O RustCleanup vai abrir quando você entrar no Windows.
+
+RustCleanup {0} is available
+RustCleanup {0} disponível
+
+RustCleanup {0} is available and will be installed now.
+O RustCleanup {0} está disponível e será instalado agora.
+
+RustCleanup {0} is available.
+O RustCleanup {0} está disponível.
+
+RustCleanup {0} is installed. Restarting.
+O RustCleanup {0} foi instalado. Reiniciando.
+
+Same as Windows
+Igual ao Windows
+
+Scan Disk
+Verificar disco
+
+Scan Disk: {0} {1}
+Verificar disco: {0} {1}
+
+Scheduled tasks not changed: {0}
+Tarefas agendadas não alteradas: {0}
+
+See what is using CPU and memory, then trim, slow down, pause or end it.
+Veja o que está usando CPU e memória e depois reduza, desacelere, pause ou finalize.
+
+Select {0}
+Selecionar {0}
+
+Service {0} {1}: {2}
+Serviço {0} {1}: {2}
+
+Service {0}: startup set to {1}.
+Serviço {0}: inicialização definida como {1}.
+
+Service {0}: {1}
+Serviço {0}: {1}
+
+Service {0}: {1} requested.
+Serviço {0}: {1} solicitado.
+
+Sets AllowTelemetry to 0, stops DiagTrack and dmwappushservice, and turns off the data collection tasks.
+Define AllowTelemetry como 0, para DiagTrack e dmwappushservice e desativa as tarefas de coleta de dados.
+
+Settings
+Configurações
+
+Settings were reset to their defaults.
+As configurações voltaram ao padrão.
+
+Show background processes
+Mostrar processos em segundo plano
+
+Shows the new release and its changelog when RustCleanup starts. "Never Update" turns this off.
+Mostra a nova versão e o registro de alterações quando o RustCleanup inicia. "Nunca atualizar" desativa isso.
+
+Sort by CPU
+Ordenar por CPU
+
+Sort by memory
+Ordenar por memória
+
+Sort by name
+Ordenar por nome
+
+Source code
+Código-fonte
+
+Standard (non-admin) prompt
+Prompt padrão (sem admin)
+
+Standby list not purged: {0}
+Lista de espera não limpa: {0}
+
+Standby list purged.
+Lista de espera limpa.
+
+Start in the notification area instead of opening the window.
+Iniciar na área de notificação em vez de abrir a janela.
+
+Start minimized
+Iniciar minimizado
+
+Started chkdsk on {0} ({1}).
+chkdsk iniciado em {0} ({1}).
+
+Startup task not changed: {0}
+Tarefa de inicialização não alterada: {0}
+
+Status
+Status
+
+Stop asking about new versions. You can turn this back on in Settings.
+Parar de perguntar sobre novas versões. Você pode ativar de novo em Configurações.
+
+Stop check
+Parar verificação
+
+Suspend
+Suspender
+
+Suspended
+Suspenso
+
+Suspended {0} of {1} processes.
+{0} de {1} processos suspensos.
+
+Switch any of these off again to restore the Windows default.
+Desative qualquer uma destas opções para restaurar o padrão do Windows.
+
+System process: can only be trimmed
+Processo do sistema: só pode ser reduzido
+
+System tools
+Ferramentas do sistema
+
+Task Manager
+Gerenciador de Tarefas
+
+Task list
+Lista de tarefas
+
+Task {0}: {1}
+Tarefa {0}: {1}
+
+Telemetry disabled.
+Telemetria desativada.
+
+Telemetry policies removed.
+Políticas de telemetria removidas.
+
+Telemetry policy AllowTelemetry=0 written.
+Política de telemetria AllowTelemetry=0 gravada.
+
+Telemetry restored to Windows defaults.
+Telemetria restaurada aos padrões do Windows.
+
+Tell me about new versions
+Avisar sobre novas versões
+
+The close button hides the window and RustCleanup keeps running. Off: it quits.
+O botão fechar oculta a janela e o RustCleanup continua em execução. Desativado: ele é encerrado.
+
+The download is not a valid RustCleanup.exe, so nothing was changed.
+O download não é um RustCleanup.exe válido, então nada foi alterado.
+
+The download's checksum does not match the release, so nothing was changed.
+A soma de verificação do download não corresponde à versão, então nada foi alterado.
+
+The last action is still running. Try again in a moment.
+A última ação ainda está em execução. Tente de novo em instantes.
+
+Theme
+Tema
+
+This release has no checksum file, so the download could not be verified.
+Esta versão não tem arquivo de soma de verificação, então o download não pôde ser verificado.
+
+Toolkits
+Ferramentas
+
+Trim memory and set Below Normal priority
+Reduzir memória e definir prioridade Abaixo do normal
+
+Trimmed {0} processes. {1} protected processes were skipped.
+{0} processos reduzidos. {1} processos protegidos foram ignorados.
+
+Turns on the TurnOffWindowsCopilot policy and hides the taskbar button.
+Ativa a política TurnOffWindowsCopilot e oculta o botão na barra de tarefas.
+
+Type
+Tipo
+
+Update Now
+Atualizar agora
+
+Update available
+Atualização disponível
+
+Updates
+Atualizações
+
+Updates are paused until {0}.
+As atualizações estão pausadas até {0}.
+
+Updates paused until {0} (the maximum Windows allows).
+Atualizações pausadas até {0} (o máximo que o Windows permite).
+
+Version {0}
+Versão {0}
+
+Virtual Memory
+Memória Virtual
+
+Waiting for chkdsk to start.
+Aguardando o chkdsk iniciar.
+
+Warning
+Aviso
+
+What's new
+Novidades
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a Windows notification.
+Enquanto o RustCleanup estiver minimizado ou na área de notificação, tudo o que ele registra também aparece como notificação do Windows.
+
+Windows Update asks before installing and never restarts on its own while you are signed in.
+O Windows Update pergunta antes de instalar e nunca reinicia sozinho enquanto você estiver conectado.
+
+Windows Update policies and pause removed.
+Políticas e pausa do Windows Update removidas.
+
+Windows Update restored to default behaviour.
+Windows Update restaurado ao comportamento padrão.
+
+Windows Update set to notify only, with no automatic reboots.
+Windows Update configurado para apenas notificar, sem reinicializações automáticas.
+
+Windows did not report physical memory figures. They will appear here once it does.
+O Windows não informou os dados da memória física. Eles vão aparecer aqui quando isso acontecer.
+
+Windows did not report virtual memory figures.
+O Windows não informou os dados da memória virtual.
+
+Windows settings
+Configurações do Windows
+
+You have version {0}.
+Você tem a versão {0}.
+
+and {0} more
+e mais {0}
+
+chkdsk can't check {0} drives.
+O chkdsk não consegue verificar unidades {0}.
+
+chkdsk could not run: {0}
+Não foi possível executar o chkdsk: {0}
+
+chkdsk ended with an unexpected exit code.
+O chkdsk terminou com um código de saída inesperado.
+
+could not create the tray window: {0}
+não foi possível criar a janela da área de notificação: {0}
+
+could not start the tray thread: {0}
+não foi possível iniciar a thread da área de notificação: {0}
+
+in use of {0}
+em uso de {0}
+
+internal error (the operation panicked)
+erro interno (a operação falhou de forma inesperada)
+
+of {0} page file in use
+de {0} do arquivo de paginação em uso
+
+the tray thread stopped unexpectedly
+a thread da área de notificação parou inesperadamente
+
+{0} (PID {1})
+{0} (PID {1})
+
+{0} (peak {1})
+{0} (pico {1})
+
+{0} available, {1} cached
+{0} disponíveis, {1} em cache
+
+{0} available, {1} cached, {2} installed
+{0} disponíveis, {1} em cache, {2} instalados
+
+{0} failed: {1}
+{0} falhou: {1}
+
+{0} finished: {1}
+{0} concluído: {1}
+
+{0} is a protected system process and was left alone.
+{0} é um processo protegido do sistema e não foi alterado.
+
+{0} of {1} shown
+{0} de {1} exibidos
+
+{0} selected
+{0} selecionados
+
+{0} suspended by RustCleanup
+{0} suspenso pelo RustCleanup
+
+{0} telemetry scheduled tasks disabled ({1} not present on this Windows build).
+{0} tarefas agendadas de telemetria desativadas ({1} não existem nesta versão do Windows).
+
+{0} telemetry scheduled tasks enabled ({1} not present on this Windows build).
+{0} tarefas agendadas de telemetria ativadas ({1} não existem nesta versão do Windows).
+
+{0} uses {1}, so only the read-only check is available.
+{0} usa {1}, então só a verificação somente leitura está disponível.
+
+Manage Storage
+Gerenciar armazenamento
+
+Open Storage in Windows Settings for this drive
+Abre Armazenamento nas Configurações do Windows para esta unidade
+
+Opened Windows storage settings for {0}.
+As configurações de armazenamento do Windows foram abertas para {0}.
+
+Windows did not report how much space {0} has.
+O Windows não informou quanto espaço {0} tem.
+
+used of {0}
+usados de {0}
+
+{0} used, {1} available, {2} in total
+{0} usados, {1} disponíveis, {2} no total
