@@ -119,11 +119,7 @@ impl UpdateWindow {
                         widgets::heading(ui, tr("What's new"));
                         egui::ScrollArea::vertical()
                             .auto_shrink([false, false])
-                            .show(ui, |ui| {
-                                notes(ui, &pal, &r.notes, &mut |ui, url| {
-                                    widgets::link(ui, &jobs.log, tr("Watch the trailer"), url);
-                                });
-                            });
+                            .show(ui, |ui| notes(ui, &pal, &r.notes));
                     });
 
                 if close {
@@ -135,31 +131,16 @@ impl UpdateWindow {
     }
 }
 
-/// True for a line that is only a video: an uploaded GitHub attachment, an
-/// .mp4 link or a <video> tag. Returns its address.
-fn video_url(line: &str) -> Option<&str> {
-    let line = line.trim();
-    if let Some(rest) = line.strip_prefix("<video") {
-        let src = rest.split("src=\"").nth(1)?;
-        return src.split('"').next();
-    }
-    let is_url = line.starts_with("https://") && !line.contains(char::is_whitespace);
-    (is_url && (line.contains("/user-attachments/assets/") || line.ends_with(".mp4"))).then_some(line)
-}
-
 /// Draws GitHub release notes: headings, bullets and plain lines. Images,
-/// links and emphasis markers are reduced to their text, and each video
-/// line is handed to `video`.
-pub fn notes(ui: &mut Ui, pal: &Palette, markdown: &str, video: &mut dyn FnMut(&mut Ui, &str)) {
+/// links and emphasis markers are reduced to their text.
+pub fn notes(ui: &mut Ui, pal: &Palette, markdown: &str) {
     let clean = |s: &str| s.replace("**", "").replace('`', "");
     for line in markdown.lines() {
         let line = line.trim_end();
         if line.trim().is_empty() {
             ui.add_space(4.0);
-        } else if line.trim_start().starts_with("![") || line.trim_start().starts_with("</video") {
+        } else if line.trim_start().starts_with("![") {
             continue;
-        } else if let Some(url) = video_url(line) {
-            video(ui, url);
         } else if let Some(h) = line.strip_prefix('#') {
             ui.add_space(4.0);
             ui.label(
