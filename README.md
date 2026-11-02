@@ -1,9 +1,4 @@
-# RustCleanup
-
 ![RustCleanup: the Windows 11 optimizer, built in Rust.](docs/banner.png)
-
-A native Windows 11 tool for freeing memory, checking disks and turning off the parts of Windows you don't want.
-It ships as one portable `RustCleanup.exe` with nothing to install, in 12 languages.
 
 **[Download the latest release](https://github.com/RealAnxiousGit/RustCleanup/releases/latest)**
 
