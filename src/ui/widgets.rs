@@ -379,6 +379,46 @@ pub fn menu_button(ui: &mut Ui, pal: &Palette, open: bool, label: &str) -> Respo
         .on_hover_text(label)
 }
 
+/// A small filled status dot with a slightly darker rim, like the window
+/// buttons on macOS. `label` is its tooltip and accessible name.
+pub fn status_dot(ui: &mut Ui, color: Color32, label: &str) -> Response {
+    let (rect, response) = ui.allocate_exact_size(egui::vec2(14.0, 14.0), Sense::hover());
+    response.widget_info(|| WidgetInfo::labeled(Role::Image, true, label));
+    if ui.is_rect_visible(rect) {
+        let rim = blend(color, Color32::BLACK, 0.25);
+        ui.painter()
+            .circle(rect.center(), 5.5, color, Stroke::new(1.0, rim));
+    }
+    response.on_hover_text(label)
+}
+
+/// A warning triangle with an exclamation mark. `label` is its tooltip.
+pub fn warning_sign(ui: &mut Ui, color: Color32, label: &str) -> Response {
+    let (rect, response) = ui.allocate_exact_size(egui::vec2(16.0, 14.0), Sense::hover());
+    response.widget_info(|| WidgetInfo::labeled(Role::Image, true, label));
+    if ui.is_rect_visible(rect) {
+        let c = rect.center();
+        let points = vec![
+            c + egui::vec2(0.0, -6.5),
+            c + egui::vec2(7.0, 5.5),
+            c + egui::vec2(-7.0, 5.5),
+        ];
+        ui.painter().add(egui::epaint::PathShape::convex_polygon(
+            points,
+            color,
+            Stroke::NONE,
+        ));
+        let ink = Color32::WHITE;
+        ui.painter().line_segment(
+            [c + egui::vec2(0.0, -2.5), c + egui::vec2(0.0, 1.5)],
+            Stroke::new(1.6, ink),
+        );
+        ui.painter()
+            .circle_filled(c + egui::vec2(0.0, 3.6), 0.95, ink);
+    }
+    response.on_hover_text(label)
+}
+
 /// A hyperlink that opens through Explorer so the browser does not inherit
 /// RustCleanup's admin rights.
 pub fn link(ui: &mut Ui, log: &Logger, text: &str, url: &str) {

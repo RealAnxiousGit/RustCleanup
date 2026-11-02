@@ -1093,3 +1093,15 @@ This version
 
 Every version's notes, from RustCleanup's releases on GitHub.
 GitHub の RustCleanup リリースから、すべてのバージョンのノート。
+
+Admin Privileges
+管理者権限
+
+Checking for Admin...
+管理者権限を確認しています...
+
+Standard Privileges
+標準の権限
+
+Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+管理者権限がないと、一部の機能は動作しません。RustCleanup を閉じて再度開き、UAC の確認で [はい] を選んでください。

@@ -1093,3 +1093,15 @@ This version
 
 Every version's notes, from RustCleanup's releases on GitHub.
 来自 GitHub 上 RustCleanup 发布的每个版本的说明。
+
+Admin Privileges
+管理员权限
+
+Checking for Admin...
+正在检查管理员权限...
+
+Standard Privileges
+标准权限
+
+Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+没有管理员权限，部分功能将无法使用。请关闭 RustCleanup，重新打开，并在 UAC 提示中选择“是”。

@@ -8,7 +8,7 @@
 
 ## Features
 
-![RustCleanup 3.0.0 main window in dark mode, showing Physical and Virtual Memory, Scan Disk with storage figures and Manage Storage, the Windows settings switches and System tools](docs/screenshot.png)
+![RustCleanup 3.0.2 main window in dark mode, showing Physical and Virtual Memory, Scan Disk with storage figures and Manage Storage, the Windows settings switches, System tools, and a green admin status dot in the bottom bar](docs/screenshot.png)
 
 | Feature | What it does | How to undo |
 |---|---|---|

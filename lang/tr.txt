@@ -1093,3 +1093,15 @@ Bu sürüm
 
 Every version's notes, from RustCleanup's releases on GitHub.
 GitHub'daki RustCleanup sürümlerinden her sürümün notları.
+
+Admin Privileges
+Yönetici Ayrıcalıkları
+
+Checking for Admin...
+Yönetici izni denetleniyor...
+
+Standard Privileges
+Standart Ayrıcalıklar
+
+Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+Yönetici hakları olmadan tüm özellikler çalışmaz. RustCleanup'ı kapatıp yeniden açın ve UAC isteminde Evet'i seçin.

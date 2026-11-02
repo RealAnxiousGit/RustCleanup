@@ -28,7 +28,7 @@ use crate::ui::disk::DiskPanel;
 use crate::ui::memory::MemoryPanel;
 use crate::ui::settings::SettingsWindow;
 use crate::ui::tasks::TaskList;
-use crate::ui::theme::{self, Theme, semibold};
+use crate::ui::theme::{self, Theme};
 use crate::ui::tweaks::TweaksPanel;
 use crate::ui::update::UpdateWindow;
 use crate::ui::{self as views, widgets};
@@ -85,7 +85,9 @@ impl PendingNotification {
 pub struct RustCleanupApp {
     rx: Receiver<AppEvent>,
     jobs: Jobs,
-    elevated: bool,
+    /// `None` until the background check below answers.
+    elevated: Option<bool>,
+    elevation: Option<Receiver<bool>>,
     theme: Theme,
 
     activity: ActivityLog,
@@ -125,7 +127,13 @@ impl RustCleanupApp {
         let (tx, rx) = mpsc::channel();
         let log = Logger::new(tx, ctx.clone());
         let jobs = Jobs::new(log.clone());
-        let elevated = is_elevated();
+        // Checked on a worker so the footer can show "checking" first.
+        let (elevated_tx, elevation) = mpsc::channel();
+        let repaint = ctx.clone();
+        std::thread::spawn(move || {
+            let _ = elevated_tx.send(is_elevated());
+            repaint.request_repaint();
+        });
 
         // The tray forwards menu picks into the same event channel.
         let tray_log = log.clone();
@@ -145,9 +153,6 @@ impl RustCleanupApp {
             ctx.send_viewport_cmd(ViewportCommand::Visible(true));
         }
 
-        if !elevated {
-            log.warn(tr("RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt."));
-        }
         TweaksPanel::detect(&jobs);
         // Read before on_launch deletes the old exe an update leaves behind.
         let updated = settings::note_version(
@@ -163,7 +168,8 @@ impl RustCleanupApp {
 
         Self {
             rx,
-            elevated,
+            elevated: None,
+            elevation: Some(elevation),
             theme: Theme::load(),
             activity: ActivityLog::new(),
             memory: MemoryPanel::new(),
@@ -259,6 +265,15 @@ impl RustCleanupApp {
 
     /// Drains worker and tray messages. Runs even while the window is hidden.
     fn pump_events(&mut self, ctx: &egui::Context) {
+        if let Some(rx) = &self.elevation
+            && let Ok(elevated) = rx.try_recv()
+        {
+            self.elevation = None;
+            self.elevated = Some(elevated);
+            if !elevated {
+                self.jobs.log.warn(tr("RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt."));
+            }
+        }
         while let Ok(event) = self.rx.try_recv() {
             match event {
                 AppEvent::Log(entry) => {
@@ -333,33 +348,10 @@ impl RustCleanupApp {
         }
     }
 
-    fn header(&mut self, ui: &mut egui::Ui) {
-        let pal = self.theme.palette;
-        ui.horizontal(|ui| {
-            ui.label(RichText::new("RustCleanup").family(semibold()).size(21.0));
-            ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                if self.elevated {
-                    widgets::note(ui, &pal, tr("Running as Administrator"));
-                } else {
-                    ui.label(RichText::new(tr("Not running as Administrator")).color(pal.error));
-                }
-                if self.jobs.any_visible_busy() {
-                    ui.add(egui::Spinner::new().size(14.0).color(pal.muted));
-                }
-            });
-        });
-        if !self.elevated {
-            ui.label(
-                RichText::new(tr("Changes need admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt."))
-                    .color(pal.error),
-            );
-        }
-    }
-
     fn footer(&mut self, ui: &mut egui::Ui) {
         let pal = self.theme.palette;
         // Right to left: the theme button sits at the far right, then
-        // Settings, Credits and Changelog.
+        // Settings, Credits and Changelog. The admin status fills the left.
         ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
             if widgets::theme_button(ui, &pal, self.theme.light).clicked() {
                 self.theme.toggle();
@@ -382,20 +374,46 @@ impl RustCleanupApp {
             {
                 self.changelog.open(ui.ctx());
             }
+            ui.with_layout(Layout::left_to_right(Align::Center), |ui| {
+                self.admin_status(ui);
+            });
         });
+    }
+
+    /// A macOS-style dot: green with admin rights, yellow while checking,
+    /// red (plus a warning sign) without them.
+    fn admin_status(&mut self, ui: &mut egui::Ui) {
+        let pal = self.theme.palette;
+        match self.elevated {
+            Some(true) => {
+                widgets::status_dot(ui, pal.ok, tr("Admin Privileges"));
+                widgets::note(ui, &pal, tr("Running as Administrator"));
+            }
+            None => {
+                widgets::status_dot(ui, pal.warn, tr("Checking for Admin..."));
+                widgets::note(ui, &pal, tr("Checking for Admin..."));
+            }
+            Some(false) => {
+                widgets::status_dot(ui, pal.error, tr("Standard Privileges"));
+                widgets::warning_sign(
+                    ui,
+                    pal.error,
+                    tr("Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt."),
+                );
+                ui.label(
+                    RichText::new(tr("Not running as Administrator"))
+                        .size(12.5)
+                        .color(pal.error),
+                );
+            }
+        }
+        if self.jobs.any_visible_busy() {
+            ui.add(egui::Spinner::new().size(14.0).color(pal.muted));
+        }
     }
 
     fn main_panels(&mut self, ui: &mut egui::Ui) {
         let pal = self.theme.palette;
-        egui::Panel::top("header")
-            .frame(egui::Frame::new().fill(pal.bg).inner_margin(Margin {
-                left: 20,
-                right: 20,
-                top: 14,
-                bottom: 8,
-            }))
-            .show(ui, |ui| self.header(ui));
-
         egui::Panel::bottom("activity")
             .resizable(true)
             .default_size(150.0)
@@ -420,7 +438,7 @@ impl RustCleanupApp {
             .frame(egui::Frame::new().fill(pal.bg).inner_margin(Margin {
                 left: 20,
                 right: 20,
-                top: 6,
+                top: 14,
                 bottom: 6,
             }))
             .show(ui, |ui| {

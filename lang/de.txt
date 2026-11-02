@@ -1093,3 +1093,15 @@ Diese Version
 
 Every version's notes, from RustCleanup's releases on GitHub.
 Die Hinweise jeder Version, aus den Veröffentlichungen von RustCleanup auf GitHub.
+
+Admin Privileges
+Administratorrechte
+
+Checking for Admin...
+Administratorrechte werden geprüft...
+
+Standard Privileges
+Standardrechte
+
+Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
+Ohne Administratorrechte funktionieren nicht alle Funktionen. Schließen Sie RustCleanup, öffnen Sie es erneut und wählen Sie in der UAC-Abfrage „Ja“.
