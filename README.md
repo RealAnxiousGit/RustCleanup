@@ -18,9 +18,9 @@ It ships as one portable `RustCleanup.exe` with nothing to install, in 12 langua
 | **Clean RAM** | Trims the working set of every process (`EmptyWorkingSet`), flushes the modified page list and, optionally, purges the standby list (file cache) via `NtSetSystemInformation`. Reports how much memory was freed. | Nothing to undo: Windows pages memory back in on demand. |
 | **Physical Memory** | Live RAM in use, out of usable and installed RAM, plus available and cached memory, refreshed every second. | n/a |
 | **Virtual Memory** | Page file size, usage and peak for each page file, plus the commit charge (RAM plus page file). | n/a |
-| **Scan Disk** | Shows how much of the selected drive is used, how much is available and its total size. **Manage Storage** opens Windows Settings at Storage (system drive) or Disks & volumes (other drives). Run `chkdsk` on any mounted drive: Output streams live into its own window. Modes: **Read-only check** (`chkdsk X:`) on any drive, or **Online scan** (`chkdsk X: /scan`) on NTFS drives. | Read-only: never modifies the disk. |
+| **Scan Disk** | Shows how much of the selected drive is used, how much is available and its total size. **Manage Storage** opens Windows Settings at Storage for the system drive. For any other drive it goes on to Storage used on other drives and opens that drive's own page. Run `chkdsk` on any mounted drive: Output streams live into its own window. Modes: **Read-only check** (`chkdsk X:`) on any drive, or **Online scan** (`chkdsk X: /scan`) on NTFS drives. | Read-only: never modifies the disk. |
 | **Disable Copilot** | Sets `TurnOffWindowsCopilot = 1` under `HKCU` and `HKLM\Software\Policies\Microsoft\Windows\WindowsCopilot`, hides the taskbar button, and can restart Explorer so it applies right away. | Switch off: the values are deleted. |
-| **Disable Telemetry** | Sets `AllowTelemetry = 0` (policy and system keys), disables and stops `DiagTrack` and `dmwappushservice`, and disables the telemetry scheduled tasks with a silent PowerShell run. Tasks missing on your Windows build are skipped. | Switch off: policies removed, services set back to Automatic/Manual, tasks re-enabled. |
+| **Disable Telemetry** | Sets `AllowTelemetry = 0` (policy and system keys), disables and stops `DiagTrack` and `dmwappushservice`, and disables the telemetry scheduled tasks through Task Scheduler. Tasks missing on your Windows build are skipped. | Switch off: policies removed, services set back to Automatic/Manual, tasks re-enabled. |
 | **No Forced Updates** | Under `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU`: `NoAutoRebootWithLoggedOnUsers = 1`, `AUOptions = 2` (ask before download and install). Can also pause updates for 35 days, the most Windows allows. | Switch off: all policy and pause values removed. |
 | **Optimize Task** | A live task list (App or Background, CPU %, memory) with filter and sorting, in its own window. For the selected processes: **Optimize** (trim memory and set Below Normal priority), **Suspend**, **Resume**, **End task**. | Resume suspended processes. Anything still suspended is resumed when RustCleanup exits. |
 | **Low Power Mode** | Creates and activates a "RustCleanup Low Power" plan: CPU capped at 60% plugged in and 50% on battery, turbo boost off, passive cooling. | Switch off: your previous power plan is restored and the custom plan deleted. |
@@ -58,7 +58,8 @@ The button to the right of **Settings** switches themes: a sun means "switch to 
 - **End task asks first.** It lists which programs will lose unsaved work.
 - **Switches show the real state.** They are read back from Windows on launch and after every change, so a failed change never leaves a switch showing the wrong state.
 - **Nothing is left behind.** Suspended processes are resumed and running scans are stopped when RustCleanup exits.
-- **No surprise programs.** System tools are started by their full `System32` path, never looked up on `PATH`. Links and the normal Command Prompt open through Explorer, so they don't inherit admin rights.
+- **No surprise programs.** System tools are started by their full `System32` path, never looked up on `PATH`. Links and the normal Command Prompt are started by the desktop's Explorer, so they run as you and don't inherit admin rights.
+- **No scripts.** RustCleanup never runs PowerShell or any other script host. Scheduled tasks are changed through the Task Scheduler API, the same way the Task Scheduler window does it.
 - **No crash on errors.** System calls never `unwrap()`. Every failure is written to the Activity log.
 
 ## Using it
@@ -67,7 +68,10 @@ The button to the right of **Settings** switches themes: a sun means "switch to 
 2. Double-click it and choose **Yes** on the UAC prompt (Administrator rights are required).
 3. Use the buttons and switches. Everything RustCleanup does is written to the **Activity** log. **Copy** puts the log on the clipboard.
 
-Windows SmartScreen may warn about an unsigned app: click **More info**, then **Run anyway**.
+Windows SmartScreen may warn about an unsigned app: click **More info**, then **Run anyway**. Each release also has `RustCleanup.exe.sha256`, so you can check the download with `certutil -hashfile RustCleanup.exe SHA256`. If an antivirus flags it, see [False positives](#false-positives).
+
+### False positives
+2.0.1 was flagged by Microsoft Defender as `Trojan:Win32/Bearfoos.A!ml`. That is a machine-learning guess, not a known virus: 2.0.1 ran hidden PowerShell to create its startup task, which is also what a lot of malware does. 2.0.2 removes all PowerShell use. The exe is not code-signed yet, and new unsigned programs are judged by behaviour, so if your antivirus still flags it, please report it as a false positive (for Defender: https://www.microsoft.com/en-us/wdsi/filesubmission). The source and build steps are below, so you can also build the exe yourself.
 
 ### Notes
 - Windows 11 Home and Pro treat `AllowTelemetry = 0` as "Required" (level 1), the lowest level those editions allow. Enterprise and Education honour level 0.
@@ -114,6 +118,7 @@ $env:__COMPAT_LAYER = "RunAsInvoker"; cargo test
 ```powershell
 cargo test -- --ignored --test-threads=1
 ```
+`cargo test desktop_ -- --ignored --test-threads=1`, also from an Administrator terminal, opens every System Tool and the Settings page for each non-system drive, so you can check them by eye.
 
 ### Adding a language
 Copy `lang/de.txt` to `lang/<code>.txt`, replace each second line with the translation, then add the language to `Lang` in `src/i18n.rs` (including its `include_str!` line) and a flag in `src/ui/flags.rs`.
@@ -155,8 +160,11 @@ src/
     ├── tools.rs        System Tools launchers
     ├── updater.rs      GitHub release check, download, SHA-256 check, exe swap
     ├── startup.rs      Open on startup (Task Scheduler logon task)
+    ├── tasks.rs        Task Scheduler API (ITaskService)
+    ├── storage_page.rs drive page in Settings, found with UI Automation
     ├── single_instance.rs  one running copy; a second launch shows the first
-    ├── shell.rs        Explorer restart, unelevated links, window helpers
+    ├── shell.rs        Explorer restart, unelevated links and programs, window helpers
+    ├── com.rs          COM setup for the API modules
     ├── command.rs      hidden console tools and output decoding
     ├── privilege.rs    elevation check, token privileges
     ├── registry.rs     winreg helpers

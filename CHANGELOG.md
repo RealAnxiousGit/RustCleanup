@@ -3,6 +3,19 @@
 All notable changes to RustCleanup are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.0.2] - 2026-11-02
+
+Fixes for an antivirus false positive, Command Prompt and Manage Storage.
+
+### Fixed
+- **Microsoft Defender flagged 2.0.1 as `Trojan:Win32/Bearfoos.A!ml`** and removed it. This was a machine-learning guess, set off by RustCleanup running hidden PowerShell to create its startup task, which is also what a lot of malware does. RustCleanup no longer runs PowerShell at all: Open on startup and the telemetry scheduled tasks now use the Task Scheduler API directly, and Command Prompt [Admin] starts `cmd.exe` itself.
+- **Command Prompt opened the Documents folder** in File Explorer instead of a prompt. It now opens a real Command Prompt with normal (non-admin) rights, started by the desktop's Explorer.
+- **Manage Storage on a non-system drive opened Disks & volumes.** It now opens that drive's own page under System, Storage, Storage used on other drives. The system drive still opens Storage. If Settings changes and the drive can't be picked, Settings stays at Storage and the Activity log says where to go.
+
+### Changed
+- An existing Open on startup task from 2.0.1 keeps working and is updated in place.
+- New hand-run tests (`cargo test desktop_ -- --ignored`) open every System Tool and each drive's Settings page.
+
 ## [2.0.1] - 2026-11-02
 
 A Settings window, 12 languages, automatic updates and a storage overview.

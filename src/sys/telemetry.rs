@@ -1,7 +1,8 @@
 //! Disable Telemetry: data-collection policies, services and scheduled tasks.
 
-use super::command::{run_hidden, run_powershell};
+use super::command::run_hidden;
 use super::registry::{self, Hive};
+use super::tasks::{self, Outcome};
 use crate::events::Logger;
 use crate::i18n::{tr, trf};
 
@@ -100,38 +101,16 @@ pub fn set_telemetry_disabled(log: &Logger, disable: bool) -> Result<(), String>
         }
     }
 
-    // 3. Scheduled tasks, in one silent PowerShell run. Each task prints a
-    //    status line we can parse, so a missing task never stops the others.
-    let verb = if disable {
-        "Disable-ScheduledTask"
-    } else {
-        "Enable-ScheduledTask"
-    };
-    let list = TELEMETRY_TASKS
-        .iter()
-        .map(|t| format!("'{t}'"))
-        .collect::<Vec<_>>()
-        .join(",");
-    // Existence is checked first (rather than parsing error text) so this
-    // works the same on every display language.
-    let script = format!(
-        r#"foreach($t in @({list})) {{
-             $i=$t.LastIndexOf('\'); $p=$t.Substring(0,$i+1); $n=$t.Substring($i+1);
-             $task=Get-ScheduledTask -TaskPath $p -TaskName $n -ErrorAction SilentlyContinue;
-             if (-not $task) {{ "MISSING|$t" }}
-             else {{ try {{ $task | {verb} -ErrorAction Stop | Out-Null; "OK|$t" }}
-                    catch {{ "FAIL|$t|$($_.Exception.Message)" }} }} }}"#
-    );
-    match run_powershell(&script) {
-        Ok(out) => {
+    // 3. Scheduled tasks, through Task Scheduler directly. A missing task
+    //    never stops the others.
+    match tasks::set_enabled_all(&TELEMETRY_TASKS, !disable) {
+        Ok(results) => {
             let (mut ok, mut missing) = (0, 0);
-            for line in out.stdout.lines() {
-                let parts: Vec<&str> = line.trim().splitn(3, '|').collect();
-                match parts.as_slice() {
-                    ["OK", _] => ok += 1,
-                    ["MISSING", _] => missing += 1,
-                    ["FAIL", task, msg] => log.warn(trf("Task {0}: {1}", &[task, &msg.trim()])),
-                    _ => {}
+            for (task, outcome) in results {
+                match outcome {
+                    Outcome::Changed => ok += 1,
+                    Outcome::Missing => missing += 1,
+                    Outcome::Failed(msg) => log.warn(trf("Task {0}: {1}", &[&task, &msg])),
                 }
             }
             log.info(if disable {

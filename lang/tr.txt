@@ -827,3 +827,5 @@ kullanılan, toplam {0}
 
 {0} used, {1} available, {2} in total
 Kullanılan: {0}, boş: {1}, toplam: {2}
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+Ayarlar Depolama sayfasında açık, ancak {0} seçilemedi ({1}). Gelişmiş depolama ayarları'nı, ardından Diğer sürücülerde kullanılan depolama alanı'nı açın.

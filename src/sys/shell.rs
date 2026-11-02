@@ -4,13 +4,22 @@
 use std::time::Duration;
 
 use windows::Win32::Foundation::{HWND, LPARAM};
+use windows::Win32::System::Com::{
+    CLSCTX_LOCAL_SERVER, CoCreateInstance, IDispatch, IServiceProvider,
+};
+use windows::Win32::System::Variant::VARIANT;
+use windows::Win32::UI::Shell::{
+    CSIDL_DESKTOP, IShellBrowser, IShellDispatch2, IShellFolderViewDual, IShellView, IShellWindows,
+    SID_STopLevelBrowser, SVGIO_BACKGROUND, SWC_DESKTOP, SWFO_NEEDDISPATCH, ShellWindows,
+};
 use windows::Win32::UI::WindowsAndMessaging::{
     EnumWindows, GetWindowTextW, GetWindowThreadProcessId, IsIconic, SPI_GETCLIENTAREAANIMATION,
     SW_RESTORE, SW_SHOW, SYSTEM_PARAMETERS_INFO_UPDATE_FLAGS, SetForegroundWindow, ShowWindow,
     SystemParametersInfoW,
 };
-use windows::core::BOOL;
+use windows::core::{BOOL, BSTR, Interface};
 
+use super::com::{self, Apartment};
 use super::command::{run_hidden, windows_dir};
 use super::registry::{self, Hive};
 use crate::events::Logger;
@@ -58,6 +67,49 @@ pub fn open_unelevated(target: &str) -> Result<(), String> {
         .spawn()
         .map(|_| ())
         .map_err(|e| format!("could not open {target}: {e}"))
+}
+
+/// Starts a program as the signed-in user, without RustCleanup's admin token.
+///
+/// `open_unelevated` can't be used for programs: explorer.exe treats
+/// `cmd.exe` as a path and opens a folder instead. This asks the desktop's
+/// own Explorer window to run it (`IShellDispatch2::ShellExecute`), so it
+/// starts exactly as if the user had launched it from the Start menu.
+pub fn run_unelevated(program: &str, args: &str, dir: &str) -> Result<(), String> {
+    let (program, args, dir) = (program.to_string(), args.to_string(), dir.to_string());
+    // A fresh thread gets its own apartment whatever the caller's thread uses.
+    std::thread::spawn(move || {
+        let _com = Apartment::enter()?;
+        // SAFETY: plain COM calls; every result is checked.
+        unsafe {
+            let windows: IShellWindows = CoCreateInstance(&ShellWindows, None, CLSCTX_LOCAL_SERVER)
+                .map_err(|e| com::message(&e))?;
+            let desktop = VARIANT::from(CSIDL_DESKTOP as i32);
+            let none = VARIANT::default();
+            let mut hwnd = 0i32;
+            let shell = windows
+                .FindWindowSW(&desktop, &none, SWC_DESKTOP, &mut hwnd, SWFO_NEEDDISPATCH)
+                .and_then(|d| d.cast::<IServiceProvider>())
+                .and_then(|sp| sp.QueryService::<IShellBrowser>(&SID_STopLevelBrowser))
+                .and_then(|browser| browser.QueryActiveShellView())
+                .and_then(|view: IShellView| view.GetItemObject::<IDispatch>(SVGIO_BACKGROUND))
+                .and_then(|view| view.cast::<IShellFolderViewDual>())
+                .and_then(|folder| folder.Application())
+                .and_then(|app| app.cast::<IShellDispatch2>())
+                .map_err(|e| format!("the desktop shell is not available: {}", com::message(&e)))?;
+            shell
+                .ShellExecute(
+                    &BSTR::from(program.as_str()),
+                    &VARIANT::from(args.as_str()),
+                    &VARIANT::from(dir.as_str()),
+                    &VARIANT::from(""),
+                    &VARIANT::from(1i32), // SW_SHOWNORMAL
+                )
+                .map_err(|e| com::message(&e))
+        }
+    })
+    .join()
+    .unwrap_or_else(|_| Err("the launcher thread stopped".into()))
 }
 
 /// A window handle that can cross threads (HWND itself is not `Send`).

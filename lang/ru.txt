@@ -827,3 +827,5 @@ used of {0}
 
 {0} used, {1} available, {2} in total
 Занято: {0}, доступно: {1}, всего: {2}
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+Параметры открыты в разделе «Память», но не удалось выбрать {0} ({1}). Откройте «Дополнительные параметры хранилища», затем «Память, используемая на других дисках».

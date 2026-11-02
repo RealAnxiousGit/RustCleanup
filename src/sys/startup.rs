@@ -4,30 +4,17 @@
 //! that need Administrator rights there. A logon task with "run with highest
 //! privileges" starts RustCleanup elevated, without a UAC prompt.
 
-use super::command::run_powershell;
+use super::tasks::{self, xml_escape};
 use crate::events::Logger;
 use crate::i18n::{tr, trf};
 
-const TASK: &str = "RustCleanup";
+const TASK: &str = r"\RustCleanup";
 /// Passed to the exe when Task Scheduler starts it at sign-in.
 pub const STARTUP_ARG: &str = "--startup";
 
-/// Quotes a value for a single-quoted PowerShell string.
-fn ps_quote(text: &str) -> String {
-    format!("'{}'", text.replace('\'', "''"))
-}
-
 /// The program the startup task runs, or `None` if there is no task.
 pub fn registered_path() -> Option<String> {
-    let script = format!(
-        "$t = Get-ScheduledTask -TaskPath '\\' -TaskName {} -ErrorAction SilentlyContinue; \
-         if ($t) {{ 'PATH|' + $t.Actions[0].Execute }}",
-        ps_quote(TASK)
-    );
-    let out = run_powershell(&script).ok()?;
-    out.stdout
-        .lines()
-        .find_map(|l| l.trim().strip_prefix("PATH|").map(str::to_string))
+    tasks::exec_path(TASK)
 }
 
 fn current_exe() -> Result<String, String> {
@@ -36,31 +23,47 @@ fn current_exe() -> Result<String, String> {
         .map_err(|e| e.to_string())
 }
 
+/// `DOMAIN\user` for the signed-in account.
+fn current_user() -> String {
+    let user = std::env::var("USERNAME").unwrap_or_default();
+    match std::env::var("USERDOMAIN") {
+        Ok(domain) if !domain.is_empty() => format!(r"{domain}\{user}"),
+        _ => user,
+    }
+}
+
+/// The task definition: at this user's sign-in, run this exe with highest
+/// privileges, on battery too, with no time limit and one copy at a time.
+fn task_xml(exe: &str) -> String {
+    let user = xml_escape(&current_user());
+    format!(
+        r#"<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo><Description>Starts RustCleanup when you sign in.</Description></RegistrationInfo>
+  <Triggers><LogonTrigger><Enabled>true</Enabled><UserId>{user}</UserId></LogonTrigger></Triggers>
+  <Principals><Principal id="Author"><UserId>{user}</UserId><LogonType>InteractiveToken</LogonType><RunLevel>HighestAvailable</RunLevel></Principal></Principals>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+    <Priority>4</Priority>
+    <Enabled>true</Enabled>
+  </Settings>
+  <Actions Context="Author"><Exec><Command>{exe}</Command><Arguments>{arg}</Arguments></Exec></Actions>
+</Task>"#,
+        exe = xml_escape(exe),
+        arg = STARTUP_ARG,
+    )
+}
+
 /// Adds or removes the startup task.
 pub fn set_enabled(log: &Logger, enable: bool) -> Result<(), String> {
-    let script = if enable {
-        format!(
-            r#"$me = [Security.Principal.WindowsIdentity]::GetCurrent().Name
-$a = New-ScheduledTaskAction -Execute {exe} -Argument {arg}
-$t = New-ScheduledTaskTrigger -AtLogOn -User $me
-$p = New-ScheduledTaskPrincipal -UserId $me -LogonType Interactive -RunLevel Highest
-$s = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit ([TimeSpan]::Zero) -MultipleInstances IgnoreNew -Priority 4
-Register-ScheduledTask -TaskPath '\' -TaskName {task} -Action $a -Trigger $t -Principal $p -Settings $s -Description 'Starts RustCleanup when you sign in.' -Force -ErrorAction Stop | Out-Null
-'OK'"#,
-            exe = ps_quote(&current_exe()?),
-            arg = ps_quote(STARTUP_ARG),
-            task = ps_quote(TASK),
-        )
+    let result = if enable {
+        tasks::register(TASK, &task_xml(&current_exe()?))
     } else {
-        format!(
-            "Unregister-ScheduledTask -TaskPath '\\' -TaskName {} -Confirm:$false -ErrorAction SilentlyContinue; 'OK'",
-            ps_quote(TASK)
-        )
+        tasks::delete(TASK)
     };
-    let out = run_powershell(&script)?;
-    if !out.stdout.contains("OK") {
-        return Err(trf("Startup task not changed: {0}", &[&out.summary()]));
-    }
+    result.map_err(|e| trf("Startup task not changed: {0}", &[&e]))?;
     log.success(if enable {
         tr("RustCleanup will open when you sign in to Windows.")
     } else {

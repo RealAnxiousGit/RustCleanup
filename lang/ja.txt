@@ -827,3 +827,5 @@ used of {0}
 
 {0} used, {1} available, {2} in total
 使用中 {0}、空き {1}、合計 {2}
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+設定のストレージは開きましたが、{0} を選択できませんでした ({1})。[ストレージの詳細設定] を開き、[他のドライブで使用されている記憶域] を選んでください。

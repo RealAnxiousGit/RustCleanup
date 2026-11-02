@@ -827,3 +827,5 @@ usados de {0}
 
 {0} used, {1} available, {2} in total
 {0} usados, {1} disponibles, {2} en total
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+Configuración está abierta en Almacenamiento, pero no se pudo seleccionar {0} ({1}). Abra Configuración de almacenamiento avanzada y luego Almacenamiento usado en otras unidades.

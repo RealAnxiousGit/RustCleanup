@@ -827,3 +827,5 @@ belegt von {0}
 
 {0} used, {1} available, {2} in total
 {0} belegt, {1} verfügbar, {2} insgesamt
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+Die Einstellungen sind bei Speicher geöffnet, aber {0} konnte nicht ausgewählt werden ({1}). Öffnen Sie Erweiterte Speichereinstellungen und dann Von anderen Laufwerken verwendeter Speicher.

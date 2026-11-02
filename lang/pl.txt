@@ -827,3 +827,5 @@ zajęte z {0}
 
 {0} used, {1} available, {2} in total
 Zajęte: {0}, dostępne: {1}, łącznie: {2}
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+Ustawienia są otwarte w sekcji Magazyn, ale nie udało się wybrać {0} ({1}). Otwórz Zaawansowane ustawienia magazynu, a następnie Magazyn używany na innych dyskach.

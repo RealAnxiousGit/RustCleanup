@@ -827,3 +827,5 @@ utilisés sur {0}
 
 {0} used, {1} available, {2} in total
 {0} utilisés, {1} disponibles, {2} au total
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+Les Paramètres sont ouverts sur Stockage, mais {0} n'a pas pu être sélectionné ({1}). Ouvrez Paramètres de stockage avancés, puis Stockage utilisé sur d'autres lecteurs.

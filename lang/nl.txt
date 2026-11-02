@@ -827,3 +827,5 @@ gebruikt van {0}
 
 {0} used, {1} available, {2} in total
 {0} gebruikt, {1} beschikbaar, {2} totaal
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+Instellingen is geopend bij Opslag, maar {0} kon niet worden geselecteerd ({1}). Open Geavanceerde opslaginstellingen en daarna Opslag die wordt gebruikt op andere stations.

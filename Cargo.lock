@@ -2431,7 +2431,7 @@ dependencies = [
 
 [[package]]
 name = "rustcleanup"
-version = "2.0.1"
+version = "2.0.2"
 dependencies = [
  "eframe",
  "embed-resource",

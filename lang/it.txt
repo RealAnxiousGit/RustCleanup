@@ -827,3 +827,5 @@ usati su {0}
 
 {0} used, {1} available, {2} in total
 {0} usati, {1} disponibili, {2} in totale
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+Impostazioni è aperto su Archiviazione, ma non è stato possibile selezionare {0} ({1}). Apri Impostazioni di archiviazione avanzate, poi Spazio di archiviazione usato in altre unità.

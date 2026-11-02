@@ -79,21 +79,6 @@ pub fn run_hidden(exe: &str, args: &[&str]) -> Result<CmdOutput, String> {
     })
 }
 
-/// Runs a PowerShell script hidden, without profiles or prompts.
-pub fn run_powershell(script: &str) -> Result<CmdOutput, String> {
-    run_hidden(
-        r"WindowsPowerShell\v1.0\powershell.exe",
-        &[
-            "-NoProfile",
-            "-NonInteractive",
-            "-ExecutionPolicy",
-            "Bypass",
-            "-Command",
-            script,
-        ],
-    )
-}
-
 /// Decodes console output. Most tools write in the OEM code page when
 /// redirected, but a few write UTF-16LE, so that is detected first.
 pub fn decode_console(bytes: &[u8]) -> String {

@@ -13,7 +13,7 @@ use crate::i18n::{tr, trf};
 use crate::sys::chkdsk::{self, ScanEvent, ScanMode};
 use crate::sys::disk::{self, Drive, Space};
 use crate::sys::format::fmt_bytes;
-use crate::sys::{process_actions, shell};
+use crate::sys::{process_actions, shell, storage_page};
 
 pub const WINDOW: &str = "scan_window";
 const MAX_SCAN_LINES: usize = 10_000;
@@ -223,23 +223,30 @@ impl DiskPanel {
         );
     }
 
-    /// Windows Settings has a Storage page for the system drive and a
-    /// Disks & volumes page that lists every other drive; it has no link
-    /// straight to one drive's page.
+    /// System drive: Settings > Storage. Other drives: that drive's page
+    /// under Storage used on other drives, found in the background.
     fn manage_storage(&self, drive: &Drive) {
         let system = std::env::var("SystemDrive").unwrap_or_else(|_| "C:".into());
-        let page = if drive.volume().eq_ignore_ascii_case(&system) {
-            "ms-settings:storagesense"
-        } else {
-            "ms-settings:disksandvolumes"
-        };
-        match shell::open_unelevated(page) {
-            Ok(()) => self.jobs.log.info(trf(
-                "Opened Windows storage settings for {0}.",
-                &[&drive.volume()],
-            )),
-            Err(e) => self.jobs.log.error(e),
+        let volume = drive.volume().to_string();
+        let log = self.jobs.log.clone();
+        if volume.eq_ignore_ascii_case(&system) {
+            match shell::open_unelevated("ms-settings:storagesense") {
+                Ok(()) => log.info(trf("Opened Windows storage settings for {0}.", &[&volume])),
+                Err(e) => log.error(e),
+            }
+            return;
         }
+        // A separate thread: finding the drive's page takes a few seconds.
+        std::thread::spawn(move || {
+            if let Err(e) = storage_page::open_drive(&volume) {
+                log.warn(trf(
+                    "Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.",
+                    &[&volume, &e],
+                ));
+            } else {
+                log.info(trf("Opened Windows storage settings for {0}.", &[&volume]));
+            }
+        });
     }
 
     fn start(&mut self, ctx: &egui::Context, drive: &Drive) {

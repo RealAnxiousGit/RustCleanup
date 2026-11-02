@@ -827,3 +827,5 @@ used of {0}
 
 {0} used, {1} available, {2} in total
 已用 {0}，可用 {1}，共 {2}
+Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
+已在“设置”中打开“存储”，但无法选择 {0} ({1})。请打开“高级存储设置”，然后打开“其他驱动器上使用的存储”。
