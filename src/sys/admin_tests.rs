@@ -7,7 +7,10 @@
 use std::sync::mpsc::{self, Receiver};
 use std::time::{Duration, Instant};
 
-use super::{chkdsk, copilot, disk, memory, power, privilege, startup, telemetry, updates};
+use super::{
+    chkdsk, copilot, disk, memory, power, privilege, process_actions, process_monitor, shell,
+    startup, tasks, telemetry, updates,
+};
 use crate::events::{AppEvent, Level, Logger};
 
 fn logger() -> (Logger, Receiver<AppEvent>) {
@@ -116,6 +119,63 @@ fn startup_task_registers_and_removes() {
     startup::set_enabled(&log, false).unwrap();
     assert!(startup::registered_path().is_none());
     assert!(problems(&rx).is_empty());
+}
+
+#[test]
+#[ignore = "restarts Explorer; needs Administrator"]
+fn explorer_restarts_unelevated() {
+    require_admin();
+    let before = process_monitor::pids_named("explorer.exe");
+    let (log, rx) = logger();
+    shell::restart_explorer(&log).unwrap();
+    let after = process_monitor::pids_named("explorer.exe");
+    println!("  explorer before {before:?}, after {after:?}");
+    assert!(!after.is_empty() && after.is_disjoint(&before), "a new Explorer is running");
+    assert!(after.iter().all(|&pid| !process_actions::is_elevated(pid)));
+    assert!(problems(&rx).is_empty());
+}
+
+#[test]
+#[ignore = "starts and restarts a program; needs Administrator"]
+fn restart_reopens_an_unelevated_program() {
+    require_admin();
+    let ping = |pids: &std::collections::HashSet<u32>| {
+        process_monitor::pids_named("PING.EXE")
+            .into_iter()
+            .chain(process_monitor::pids_named("ping.exe"))
+            .filter(|p| !pids.contains(p))
+            .collect::<std::collections::HashSet<_>>()
+    };
+    let wait_new = |old: &std::collections::HashSet<u32>| {
+        let deadline = Instant::now() + Duration::from_secs(10);
+        loop {
+            let new = ping(old);
+            if !new.is_empty() || Instant::now() > deadline {
+                return new;
+            }
+            std::thread::sleep(Duration::from_millis(200));
+        }
+    };
+    let none = Default::default();
+    let existing = ping(&none);
+    tasks::run_as_user(r"C:\Windows\System32\PING.EXE", "-n 120 127.0.0.1", r"C:\Windows").unwrap();
+    let first = wait_new(&existing);
+    assert_eq!(first.len(), 1, "the test program started");
+    let pid = *first.iter().next().unwrap();
+    assert!(!process_actions::is_elevated(pid));
+
+    let results = process_actions::restart(&[pid]);
+    println!("  restart: {results:?}");
+    assert!(results.iter().all(|r| r.1.is_ok()));
+    let mut seen = existing.clone();
+    seen.insert(pid);
+    let second = wait_new(&seen);
+    for &p in first.iter().chain(&second) {
+        let _ = process_actions::terminate(p);
+    }
+    assert!(!ping(&existing).contains(&pid), "the old copy was ended");
+    assert_eq!(second.len(), 1, "it was started again");
+    assert!(!process_actions::is_elevated(*second.iter().next().unwrap()));
 }
 
 #[test]

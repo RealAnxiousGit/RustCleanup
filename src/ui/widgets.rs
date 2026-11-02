@@ -312,23 +312,7 @@ pub fn theme_button(ui: &mut Ui, pal: &Palette, light: bool) -> Response {
     let (rect, response) = ui.allocate_exact_size(egui::vec2(30.0, 28.0), Sense::click());
     response.widget_info(|| WidgetInfo::labeled(Role::Button, true, label));
     if ui.is_rect_visible(rect) {
-        let w = &ui.visuals().widgets;
-        let hover = fade(ui, response.id, response.hovered());
-        let bg = blend(w.inactive.weak_bg_fill, w.hovered.weak_bg_fill, hover);
-        let stroke = Stroke::new(
-            w.inactive.bg_stroke.width,
-            blend(w.inactive.bg_stroke.color, w.hovered.bg_stroke.color, hover),
-        );
-        ui.painter()
-            .rect(rect, CornerRadius::same(5), bg, stroke, StrokeKind::Inside);
-        if response.has_focus() {
-            ui.painter().rect_stroke(
-                rect,
-                CornerRadius::same(5),
-                ui.visuals().selection.stroke,
-                StrokeKind::Outside,
-            );
-        }
+        let bg = icon_button_frame(ui, &response, false);
         let c = rect.center();
         let ink = pal.text;
         if light {
@@ -344,6 +328,50 @@ pub fn theme_button(ui: &mut Ui, pal: &Palette, light: bool) -> Response {
                 ui.painter()
                     .line_segment([c + dir * 6.2, c + dir * 8.6], Stroke::new(1.6, ink));
             }
+        }
+    }
+    response
+        .on_hover_cursor(egui::CursorIcon::PointingHand)
+        .on_hover_text(label)
+}
+
+/// Paints a small square button's background, hover fade and focus ring,
+/// and returns the background colour. `on` keeps it lit, as while a menu
+/// it opens is showing.
+fn icon_button_frame(ui: &Ui, response: &Response, on: bool) -> Color32 {
+    let rect = response.rect;
+    let w = &ui.visuals().widgets;
+    let hover = fade(ui, response.id, response.hovered() || on);
+    let bg = blend(w.inactive.weak_bg_fill, w.hovered.weak_bg_fill, hover);
+    let stroke = Stroke::new(
+        w.inactive.bg_stroke.width,
+        blend(w.inactive.bg_stroke.color, w.hovered.bg_stroke.color, hover),
+    );
+    ui.painter()
+        .rect(rect, CornerRadius::same(5), bg, stroke, StrokeKind::Inside);
+    if response.has_focus() {
+        ui.painter().rect_stroke(
+            rect,
+            CornerRadius::same(5),
+            ui.visuals().selection.stroke,
+            StrokeKind::Outside,
+        );
+    }
+    bg
+}
+
+/// A hamburger button (three lines) that opens and closes a side menu.
+pub fn menu_button(ui: &mut Ui, pal: &Palette, open: bool, label: &str) -> Response {
+    let (rect, response) = ui.allocate_exact_size(egui::vec2(30.0, 28.0), Sense::click());
+    response.widget_info(|| WidgetInfo::selected(Role::Button, true, open, label));
+    if ui.is_rect_visible(rect) {
+        icon_button_frame(ui, &response, open);
+        let c = rect.center();
+        for dy in [-5.0, 0.0, 5.0] {
+            ui.painter().line_segment(
+                [c + egui::vec2(-7.0, dy), c + egui::vec2(7.0, dy)],
+                Stroke::new(1.6, pal.text),
+            );
         }
     }
     response

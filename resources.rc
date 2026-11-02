@@ -6,8 +6,8 @@
 IDI_ICON1 ICON "assets/icon.ico"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,1,0
- PRODUCTVERSION 3,0,1,0
+ FILEVERSION 3,0,2,0
+ PRODUCTVERSION 3,0,2,0
  FILEOS VOS_NT_WINDOWS32
  FILETYPE VFT_APP
 BEGIN
@@ -17,11 +17,11 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "RealAnxiousGit"
       VALUE "FileDescription", "RustCleanup: Windows 11 optimizer"
-      VALUE "FileVersion", "3.0.1"
+      VALUE "FileVersion", "3.0.2"
       VALUE "InternalName", "RustCleanup"
       VALUE "OriginalFilename", "RustCleanup.exe"
       VALUE "ProductName", "RustCleanup"
-      VALUE "ProductVersion", "3.0.1"
+      VALUE "ProductVersion", "3.0.2"
     END
   END
   BLOCK "VarFileInfo"

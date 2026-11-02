@@ -21,7 +21,8 @@ use crate::i18n::{tr, trf};
 
 const LATEST_RELEASE: &str =
     "https://api.github.com/repos/RealAnxiousGit/RustCleanup/releases/latest";
-const RELEASE_BY_TAG: &str = "https://api.github.com/repos/RealAnxiousGit/RustCleanup/releases/tags/v";
+const ALL_RELEASES: &str =
+    "https://api.github.com/repos/RealAnxiousGit/RustCleanup/releases?per_page=100";
 const ASSET: &str = "RustCleanup.exe";
 /// Test hook: pretend to be this version, to exercise the update flow
 /// against the real releases page.
@@ -95,34 +96,61 @@ pub fn check() -> Result<Option<Release>, String> {
 /// One version's release, for the Changelog window.
 #[derive(Clone)]
 pub struct ReleaseNotes {
+    /// The version without its `v`, like `3.0.2`.
+    pub version: String,
+    /// The release's title, like `RustCleanup 3.0.2`.
+    pub title: String,
     pub markdown: String,
     pub page: String,
     /// When it was published, like `November 2nd, 2026`.
     pub published: Option<String>,
 }
 
-/// The release notes, page and date of one version, for the Changelog window.
-pub fn notes_for(version: &str) -> Result<ReleaseNotes, String> {
-    let body = http_get(&format!("{RELEASE_BY_TAG}{version}"), |_, _| {}).map_err(|e| {
-        // A build that was never released (or a removed release) has no notes.
-        if e == trf("GitHub answered with HTTP status {0}.", &[&404]) {
-            trf("There is no release of version {0} on GitHub yet.", &[&version])
-        } else {
-            e
-        }
-    })?;
-    let json: serde_json::Value = serde_json::from_slice(&body)
-        .map_err(|e| trf("GitHub sent a reply RustCleanup could not read: {0}", &[&e]))?;
-    Ok(ReleaseNotes {
-        markdown: json["body"]
+impl ReleaseNotes {
+    fn from_json(json: &serde_json::Value) -> Self {
+        let version = json["tag_name"]
             .as_str()
             .unwrap_or_default()
-            .replace("\r\n", "\n"),
-        page: json["html_url"].as_str().unwrap_or_default().to_string(),
-        published: json["published_at"]
-            .as_str()
-            .and_then(crate::sys::format::long_date),
-    })
+            .trim_start_matches(['v', 'V'])
+            .to_string();
+        let title = match json["name"].as_str().map(str::trim) {
+            Some(name) if !name.is_empty() => name.to_string(),
+            _ => format!("RustCleanup {version}"),
+        };
+        Self {
+            version,
+            title,
+            markdown: json["body"]
+                .as_str()
+                .unwrap_or_default()
+                .replace("\r\n", "\n"),
+            page: json["html_url"].as_str().unwrap_or_default().to_string(),
+            published: json["published_at"]
+                .as_str()
+                .and_then(crate::sys::format::long_date),
+        }
+    }
+}
+
+/// Every published release, newest first, for the Changelog window.
+pub fn all_notes() -> Result<Vec<ReleaseNotes>, String> {
+    let body = http_get(ALL_RELEASES, |_, _| {})?;
+    let json: serde_json::Value = serde_json::from_slice(&body)
+        .map_err(|e| trf("GitHub sent a reply RustCleanup could not read: {0}", &[&e]))?;
+    let releases = json
+        .as_array()
+        .ok_or_else(|| trf("GitHub sent a reply RustCleanup could not read: {0}", &[&"not a list"]))?;
+    let mut notes: Vec<(String, ReleaseNotes)> = releases
+        .iter()
+        .filter(|r| r["draft"].as_bool() != Some(true))
+        .map(|r| {
+            let at = r["published_at"].as_str().unwrap_or_default().to_string();
+            (at, ReleaseNotes::from_json(r))
+        })
+        .collect();
+    // GitHub lists by creation time; ISO 8601 dates sort as text.
+    notes.sort_by(|a, b| b.0.cmp(&a.0));
+    Ok(notes.into_iter().map(|(_, n)| n).collect())
 }
 
 /// Downloads `release`, checks it, and swaps it in for the running exe.

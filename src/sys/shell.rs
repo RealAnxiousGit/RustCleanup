@@ -21,29 +21,55 @@ use windows::core::{BOOL, BSTR, Interface};
 
 use super::com::{self, Apartment};
 use super::command::{run_hidden, windows_dir};
+use super::{process_monitor, tasks};
 use super::registry::{self, Hive};
 use crate::events::Logger;
 use crate::i18n::{tr, trf};
 
 /// Restarts explorer.exe so shell policies apply without signing out.
 ///
-/// Explorer is only killed; Winlogon relaunches it (`AutoRestartShell`).
-/// Starting it ourselves would make the shell inherit our elevated token,
-/// so that is only a fallback if Winlogon does not bring it back.
+/// Explorer is ended, then started again as the signed-in user. Winlogon
+/// used to bring it back by itself (`AutoRestartShell`), but current
+/// Windows 11 builds leave the desktop empty after it is ended, so it is only
+/// given a moment to do so. Starting explorer.exe straight from RustCleanup
+/// would make the shell inherit the admin token; that is the last resort.
 pub fn restart_explorer(log: &Logger) -> Result<(), String> {
+    const EXPLORER: &str = "explorer.exe";
     log.info(tr("Restarting Explorer to apply the change."));
-    let out = run_hidden("taskkill.exe", &["/F", "/IM", "explorer.exe"])?;
+    let old = process_monitor::pids_named(EXPLORER);
+    let out = run_hidden("taskkill.exe", &["/F", "/IM", EXPLORER])?;
     if !out.success {
         log.warn(format!("taskkill explorer.exe: {}", out.summary()));
     }
+    // A new Explorer is one whose PID was not there before.
+    let came_back = |ticks: u32| {
+        (0..ticks).any(|_| {
+            std::thread::sleep(Duration::from_millis(250));
+            !process_monitor::pids_named(EXPLORER).is_subset(&old)
+        })
+    };
+    // Wait for the old one to be gone before deciding it did not come back.
     for _ in 0..20 {
+        if process_monitor::pids_named(EXPLORER).is_disjoint(&old) {
+            break;
+        }
         std::thread::sleep(Duration::from_millis(250));
-        if super::process_monitor::is_running("explorer.exe") {
+    }
+    if came_back(8) {
+        log.info(tr("Explorer restarted."));
+        return Ok(());
+    }
+    let program = windows_dir().join(EXPLORER);
+    let dir = windows_dir();
+    match tasks::run_as_user(&program.to_string_lossy(), "", &dir.to_string_lossy()) {
+        Ok(()) if came_back(20) => {
             log.info(tr("Explorer restarted."));
             return Ok(());
         }
+        Ok(()) => log.warn("Explorer did not start from its task; starting it directly."),
+        Err(e) => log.warn(format!("Explorer task: {e}")),
     }
-    std::process::Command::new(windows_dir().join("explorer.exe"))
+    std::process::Command::new(program)
         .spawn()
         .map_err(|e| {
             trf(
@@ -74,7 +100,8 @@ pub fn open_unelevated(target: &str) -> Result<(), String> {
 /// `open_unelevated` can't be used for programs: explorer.exe treats
 /// `cmd.exe` as a path and opens a folder instead. This asks the desktop's
 /// own Explorer window to run it (`IShellDispatch2::ShellExecute`), so it
-/// starts exactly as if the user had launched it from the Start menu.
+/// starts exactly as if the user had launched it from the Start menu. With no
+/// desktop Explorer running, a one-off scheduled task starts it instead.
 pub fn run_unelevated(program: &str, args: &str, dir: &str) -> Result<(), String> {
     let (program, args, dir) = (program.to_string(), args.to_string(), dir.to_string());
     // A fresh thread gets its own apartment whatever the caller's thread uses.
@@ -96,7 +123,12 @@ pub fn run_unelevated(program: &str, args: &str, dir: &str) -> Result<(), String
                 .and_then(|view| view.cast::<IShellFolderViewDual>())
                 .and_then(|folder| folder.Application())
                 .and_then(|app| app.cast::<IShellDispatch2>())
-                .map_err(|e| format!("the desktop shell is not available: {}", com::message(&e)))?;
+                .map_err(|e| com::message(&e));
+            let Ok(shell) = shell else {
+                // No desktop to ask (Explorer is not running): use Task Scheduler.
+                return tasks::run_as_user(&program, &args, &dir)
+                    .map_err(|e| format!("the desktop shell is not available: {e}"));
+            };
             shell
                 .ShellExecute(
                     &BSTR::from(program.as_str()),

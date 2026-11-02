@@ -1,6 +1,6 @@
 [package]
 name = "rustcleanup"
-version = "3.0.1"
+version = "3.0.2"
 edition = "2024"
 description = "Windows 11 optimization and debloating utility written in Rust"
 license = "MIT"

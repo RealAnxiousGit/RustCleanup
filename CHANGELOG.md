@@ -3,6 +3,17 @@
 All notable changes to RustCleanup are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [3.0.2] - 2026-11-02
+
+A small fix-up: Restart reopens what it closes, scroll bars no longer cover buttons, and the Changelog holds every version.
+
+### Added
+- **The whole changelog in one place.** The Changelog window now lists the notes of every version, newest first, each with its title and release date. Scroll down to read further back, or open the menu button next to the title to see every version and jump straight to one. The "What's New in RustCleanup V3?" video stays with the 3.0.1 notes.
+
+### Fixed
+- **Restart brings the program back.** Restarting Windows Explorer from the task list ended it and left the taskbar and desktop empty, because current Windows 11 builds no longer start it again by themselves. RustCleanup now starts it again with your normal rights, and the same goes for any program restarted while Explorer is not running.
+- **Scroll bars sit beside the content** instead of on top of it, so they no longer cover buttons at the right edge of a list.
+
 ## [3.0.1] - 2026-11-02
 
 A quick update: the task list can now handle parts of Windows like Task Manager does, and the Changelog shows its date and a What's New video.

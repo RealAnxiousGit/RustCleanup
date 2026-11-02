@@ -4,7 +4,7 @@
 //! that need Administrator rights there. A logon task with "run with highest
 //! privileges" starts RustCleanup elevated, without a UAC prompt.
 
-use super::tasks::{self, xml_escape};
+use super::tasks::{self, current_user, xml_escape};
 use crate::events::Logger;
 use crate::i18n::{tr, trf};
 
@@ -24,14 +24,6 @@ fn current_exe() -> Result<String, String> {
 }
 
 /// `DOMAIN\user` for the signed-in account.
-fn current_user() -> String {
-    let user = std::env::var("USERNAME").unwrap_or_default();
-    match std::env::var("USERDOMAIN") {
-        Ok(domain) if !domain.is_empty() => format!(r"{domain}\{user}"),
-        _ => user,
-    }
-}
-
 /// The task definition: at this user's sign-in, run this exe with highest
 /// privileges, on battery too, with no time limit and one copy at a time.
 fn task_xml(exe: &str) -> String {

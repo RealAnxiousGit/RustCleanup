@@ -107,6 +107,70 @@ pub fn register(path: &str, xml: &str) -> Result<(), String> {
     }
 }
 
+/// `DOMAIN\user` for the signed-in user, as task principals name them.
+pub fn current_user() -> String {
+    let user = std::env::var("USERNAME").unwrap_or_default();
+    match std::env::var("USERDOMAIN") {
+        Ok(domain) if !domain.is_empty() => format!(r"{domain}\{user}"),
+        _ => user,
+    }
+}
+
+/// Starts a program right now as the signed-in user, without admin rights,
+/// through a one-off task that is deleted again once it has started.
+///
+/// Used when the desktop shell is not there to start it (Explorer itself is
+/// being restarted): this is how Windows' own tools run something unelevated.
+pub fn run_as_user(program: &str, args: &str, dir: &str) -> Result<(), String> {
+    const PATH: &str = r"\RustCleanup Restart";
+    let xml = format!(
+        r#"<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo><Description>Starts a program RustCleanup restarted. Deleted right away.</Description></RegistrationInfo>
+  <Principals><Principal id="Author"><UserId>{user}</UserId><LogonType>InteractiveToken</LogonType><RunLevel>LeastPrivilege</RunLevel></Principal></Principals>
+  <Settings>
+    <MultipleInstancesPolicy>Parallel</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+    <Priority>4</Priority>
+    <Enabled>true</Enabled>
+  </Settings>
+  <Actions Context="Author"><Exec><Command>{program}</Command><Arguments>{args}</Arguments><WorkingDirectory>{dir}</WorkingDirectory></Exec></Actions>
+</Task>"#,
+        user = xml_escape(&current_user()),
+        program = xml_escape(program),
+        args = xml_escape(args),
+        dir = xml_escape(dir),
+    );
+    let scheduler = Scheduler::connect()?;
+    let (folder, name) = split(PATH);
+    let none = VARIANT::default();
+    // SAFETY: plain COM calls; every result is checked.
+    let result = unsafe {
+        scheduler
+            .folder(folder)
+            .and_then(|f| {
+                f.RegisterTask(
+                    &BSTR::from(name),
+                    &BSTR::from(xml.as_str()),
+                    TASK_CREATE_OR_UPDATE.0,
+                    &none,
+                    &none,
+                    TASK_LOGON_INTERACTIVE_TOKEN,
+                    &none,
+                )
+            })
+            .and_then(|task| task.Run(&none))
+            .map(|_| ())
+            .map_err(|e| com::message(&e))
+    };
+    // Deleting the task does not stop the program it started. Give Task
+    // Scheduler a moment to launch it first.
+    std::thread::sleep(std::time::Duration::from_millis(500));
+    let _ = delete(PATH);
+    result
+}
+
 /// Deletes the task. A task that does not exist counts as deleted.
 pub fn delete(path: &str) -> Result<(), String> {
     let scheduler = Scheduler::connect()?;

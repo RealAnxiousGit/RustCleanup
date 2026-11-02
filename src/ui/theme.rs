@@ -423,5 +423,9 @@ pub fn install_fonts(ctx: &egui::Context, lang: Lang, font: FontChoice) {
             points_per_second: 2200.0,
             duration: egui::Rangef::new(0.08, 0.18),
         };
+        // Scroll bars still float, but get a strip of their own at the right
+        // edge, so a hovered (wider) bar never covers buttons near it.
+        style.spacing.scroll.floating_allocated_width =
+            style.spacing.scroll.bar_width + style.spacing.scroll.bar_inner_margin;
     });
 }

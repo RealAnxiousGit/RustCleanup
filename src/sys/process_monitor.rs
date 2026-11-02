@@ -82,15 +82,15 @@ pub struct ProcSnapshot {
     pub error: Option<String>,
 }
 
-/// True if a process with this exact image name is running.
-pub fn is_running(name: &str) -> bool {
+/// PIDs of every running process with exactly this file name.
+pub fn pids_named(name: &str) -> HashSet<u32> {
     let Ok(mut sys) = System::new() else {
-        return false;
+        return HashSet::new();
     };
     sys.refresh_processes_specifics(ProcessesToUpdate::All, true, ProcessRefreshKind::nothing());
     sys.processes_by_exact_name(OsStr::new(name))
-        .next()
-        .is_some()
+        .map(|p| p.pid().as_u32())
+        .collect()
 }
 
 /// PIDs that own at least one visible, unowned, titled top-level window,
@@ -270,7 +270,7 @@ mod tests {
                 .iter()
                 .any(|p| p.name_lower == "csrss.exe" && p.protected)
         );
-        assert!(is_running("explorer.exe"));
+        assert!(!pids_named("explorer.exe").is_empty());
         let explorer = snap.rows.iter().find(|p| p.name_lower == "explorer.exe");
         assert!(explorer.is_some_and(|p| p.system && !p.protected));
     }

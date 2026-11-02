@@ -36,7 +36,7 @@
 ### Settings
 ![The Settings window: language, start minimized, open on startup, close to the notification area, theme, font, interface size, notifications and updates](docs/settings.png)
 
-The **Settings** button sits between **Credits** and the theme button. **Changelog**, next to **Credits**, shows the release notes of the version you are running. It also opens by itself on the first start after an update. Settings are saved in `HKCU\Software\RustCleanup`.
+The **Settings** button sits between **Credits** and the theme button. **Changelog**, next to **Credits**, shows the release notes of every version, newest first, each with its title and release date. Scroll down to read further back, or use the menu button next to the title to jump straight to a version. It also opens by itself on the first start after an update. Settings are saved in `HKCU\Software\RustCleanup`.
 
 | Setting | What it does |
 |---|---|
@@ -56,7 +56,7 @@ The button to the right of **Settings** switches themes: a sun means "switch to 
 
 ### Safety built in
 - **Protected processes.** csrss, wininit, winlogon, services, lsass, Defender and others can't be suspended or ended, and neither can RustCleanup itself. They can only be trimmed.
-- **Windows components.** Explorer, dwm, svchost, sihost, fontdrvhost and audiodg show as **System** in the task list. Like in Task Manager they can be ended, and Windows starts them again by itself; Explorer can also be restarted. They can't be suspended, and RustCleanup warns before acting on them.
+- **Windows components.** Explorer, dwm, svchost, sihost, fontdrvhost and audiodg show as **System** in the task list. Like in Task Manager they can be ended, and Windows starts them again by itself; Explorer can also be restarted, and RustCleanup starts it again with your normal rights. They can't be suspended, and RustCleanup warns before acting on them.
 - **End task asks first.** It lists which programs will lose unsaved work.
 - **Switches show the real state.** They are read back from Windows on launch and after every change, so a failed change never leaves a switch showing the wrong state.
 - **Nothing is left behind.** Suspended processes are resumed and running scans are stopped when RustCleanup exits.
@@ -142,7 +142,7 @@ src/
 │   ├── tasks.rs        Optimize Task and the task list window
 │   ├── tweaks.rs       Windows settings switches and System tools
 │   ├── credits.rs      Credits window
-│   ├── changelog.rs    Changelog window (this version's release notes)
+│   ├── changelog.rs    Changelog window (every release's notes, with a version menu)
 │   ├── settings.rs     Settings window
 │   ├── update.rs       new-version window with the changelog
 │   ├── flags.rs        flags for the language picker

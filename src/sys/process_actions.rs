@@ -162,7 +162,7 @@ pub fn suspended_pids() -> HashSet<u32> {
 }
 
 /// True if the process runs with an elevated (administrator) token.
-fn is_elevated(pid: u32) -> bool {
+pub fn is_elevated(pid: u32) -> bool {
     let Ok(process) = open(pid, PROCESS_QUERY_LIMITED_INFORMATION) else {
         return false;
     };

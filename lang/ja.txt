@@ -1081,3 +1081,15 @@ Watch what's new
 
 {0} is not a video RustCleanup can play.
 {0} は RustCleanup で再生できる動画ではありません。
+
+Jump to a version
+バージョンに移動
+
+Versions
+バージョン
+
+This version
+このバージョン
+
+Every version's notes, from RustCleanup's releases on GitHub.
+GitHub の RustCleanup リリースから、すべてのバージョンのノート。

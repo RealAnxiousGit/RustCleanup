@@ -1081,3 +1081,15 @@ Bekijk wat er nieuw is
 
 {0} is not a video RustCleanup can play.
 {0} is geen video die RustCleanup kan afspelen.
+
+Jump to a version
+Naar een versie gaan
+
+Versions
+Versies
+
+This version
+Deze versie
+
+Every version's notes, from RustCleanup's releases on GitHub.
+De notities van elke versie, uit de releases van RustCleanup op GitHub.

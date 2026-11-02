@@ -1081,3 +1081,15 @@ Watch what's new
 
 {0} is not a video RustCleanup can play.
 {0} 不是 RustCleanup 可以播放的视频。
+
+Jump to a version
+跳转到版本
+
+Versions
+版本
+
+This version
+此版本
+
+Every version's notes, from RustCleanup's releases on GitHub.
+来自 GitHub 上 RustCleanup 发布的每个版本的说明。
