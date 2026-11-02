@@ -55,7 +55,8 @@ The **Settings** button sits between **Credits** and the theme button. **Changel
 The button to the right of **Settings** switches themes: a sun means "switch to Light Mode", a crescent moon means "switch to Dark Mode". The change fades over about a quarter of a second, or happens instantly if Windows animation effects are turned off. On first launch RustCleanup follows your Windows app theme, then remembers your choice.
 
 ### Safety built in
-- **Protected processes.** csrss, wininit, winlogon, services, lsass, svchost, dwm, explorer, Defender and others can't be suspended or ended, and neither can RustCleanup itself. They can only be trimmed.
+- **Protected processes.** csrss, wininit, winlogon, services, lsass, Defender and others can't be suspended or ended, and neither can RustCleanup itself. They can only be trimmed.
+- **Windows components.** Explorer, dwm, svchost, sihost, fontdrvhost and audiodg show as **System** in the task list. Like in Task Manager they can be ended, and Windows starts them again by itself; Explorer can also be restarted. They can't be suspended, and RustCleanup warns before acting on them.
 - **End task asks first.** It lists which programs will lose unsaved work.
 - **Switches show the real state.** They are read back from Windows on launch and after every change, so a failed change never leaves a switch showing the wrong state.
 - **Nothing is left behind.** Suspended processes are resumed and running scans are stopped when RustCleanup exits.
