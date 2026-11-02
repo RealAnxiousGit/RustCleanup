@@ -168,11 +168,30 @@ fn replace_exe(exe: &Path, bytes: &[u8]) -> Result<(), String> {
 }
 
 /// Deletes the previous version left behind by an update.
+///
+/// Right after an update the old copy may still be exiting, and Windows keeps
+/// its file locked until it is gone, so this keeps trying for a few seconds.
 pub fn remove_leftovers() {
-    if let Ok(exe) = std::env::current_exe() {
-        let _ = std::fs::remove_file(old_path(&exe));
-        let _ = std::fs::remove_file(exe.with_extension("exe.new"));
+    let Ok(exe) = std::env::current_exe() else {
+        return;
+    };
+    let leftovers = [old_path(&exe), exe.with_extension("exe.new")];
+    if !leftovers.iter().any(|p| p.exists()) {
+        return;
     }
+    let _ = std::thread::Builder::new()
+        .name("remove-leftovers".into())
+        .spawn(move || {
+            for _ in 0..30 {
+                for path in &leftovers {
+                    let _ = std::fs::remove_file(path);
+                }
+                if !leftovers.iter().any(|p| p.exists()) {
+                    return;
+                }
+                std::thread::sleep(std::time::Duration::from_millis(500));
+            }
+        });
 }
 
 /// Closes a WinHTTP handle when dropped.

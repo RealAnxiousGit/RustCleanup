@@ -1,6 +1,6 @@
 [package]
 name = "rustcleanup"
-version = "2.0.2"
+version = "2.0.3"
 edition = "2024"
 description = "Windows 11 optimization and debloating utility written in Rust"
 license = "MIT"
@@ -56,3 +56,8 @@ opt-level = 3
 lto = true
 codegen-units = 1
 strip = true
+
+# eframe 0.37.0 with one fix: closing a detached window crashed the Intel
+# OpenGL driver. See patches/README.md.
+[patch.crates-io]
+eframe = { path = "patches/eframe" }

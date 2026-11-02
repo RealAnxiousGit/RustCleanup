@@ -170,6 +170,7 @@ src/
     ├── registry.rs     winreg helpers
     └── format.rs       sizes and dates
 lang/                   one file per language: English line, then its translation
+patches/eframe/         eframe 0.37.0 with a fix for closing windows (see patches/README.md)
 DESIGN.md               design direction and the reason for each choice
 app.manifest            UAC requireAdministrator manifest
 resources.rc            embeds manifest, icon and version info

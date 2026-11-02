@@ -3,6 +3,14 @@
 All notable changes to RustCleanup are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.0.3] - 2026-11-02
+
+A hotfix for crashes when closing windows.
+
+### Fixed
+- **Closing a window crashed RustCleanup.** Closing the Task list, Settings, Credits, Scan Disk or Update window could close the whole program, on PCs with Intel graphics. The window's drawing surface was thrown away while the graphics driver was still using it. RustCleanup now lets go of it first. The fix is in a patched copy of eframe, the window library, kept in `patches/eframe`.
+- **An update left the old version behind** as `RustCleanup.exe.old` next to the exe. The new version now waits for the old one to finish closing and then deletes it.
+
 ## [2.0.2] - 2026-11-02
 
 Fixes for an antivirus false positive, Command Prompt and Manage Storage.
