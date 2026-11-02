@@ -3,6 +3,33 @@
 All notable changes to RustCleanup are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [3.0.0] - 2026-11-02
+
+A rebuilt task list with Restart, a Changelog window, a font picker and a smoother, roomier interface.
+
+### Added
+- **Restart** in the task list closes a program and opens it again with the same command line and folder. A program made of many processes (like a browser) is restarted once, from its top process. Programs that ran as administrator start again as administrator; the rest start with normal rights.
+- **Changelog** button next to Credits. It shows this version's release notes from GitHub, with the promotional trailer. After an update, it opens by itself on the first start of the new version (and only then).
+- **Font** setting, under Theme: System (Segoe UI), Arial, Times New Roman, Light UI (Segoe UI Light), Comic Sans MS and more.
+- **System tools**: Windows Security, Device Manager and Settings, before Command Prompt.
+- **Credits**: a Promotional trailer section. Animation by Claude Opus 5.5, music "Promo" by BombinSound on Pixabay.
+- More tooltips: on the main buttons, every task list action and column, the System tools Open button, the Activity log buttons and several checkboxes.
+
+### Changed
+- **Task list sorting works on every column.** Click Name, PID, Type, CPU, Memory or Status to sort by it (Type puts apps first, Status puts suspended and protected first). Click it again to reverse the order. The sorted column is highlighted and shows an arrow, and every header lights up under the cursor.
+- **Task list selection works like File Explorer.** Click a task to select it, Ctrl+click to add or remove one, Shift+click to select everything in between, Ctrl+A to select all and Esc to clear. Right-click a task for its actions, and Delete ends the selection (after asking).
+- **Memory turns yellow, then red** in the task list when a process uses 4%, then 10%, of your RAM. Hover the value to see its share.
+- **Suspended tasks are detected from Windows itself**, so a task shows as Suspended even if another program paused it. Suspend skips tasks that already are, and Resume undoes every suspend, so a task is never left frozen. The list refreshes right after an action.
+- **Clean RAM bars turn yellow above 75% and red above 90%**, Physical Memory and Virtual Memory each by their own use.
+- Buttons, task rows and column headers fade in and out on hover instead of switching at once.
+- More space between controls and around dividers, so sections no longer feel cramped.
+- Scrolling glides briefly instead of jumping, and the task list draws its rows directly, which keeps long lists smooth.
+
+### Fixed
+- **Updating closed RustCleanup instead of restarting it.** The new version could not take over from the old one and gave up. It now starts as soon as the old one has closed. The same fix applies to the restart after changing the hardware-accelerated UI setting.
+- Task list column headers did not respond to clicks.
+- Disabled buttons, like Copy and Clear on an empty Activity log, kept bright text and looked clickable.
+
 ## [2.0.3] - 2026-11-02
 
 A hotfix for crashes when closing windows.

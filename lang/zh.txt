@@ -829,3 +829,159 @@ used of {0}
 已用 {0}，可用 {1}，共 {2}
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 已在“设置”中打开“存储”，但无法选择 {0} ({1})。请打开“高级存储设置”，然后打开“其他驱动器上使用的存储”。
+
+"Promo" by {0}
+{0} 的“Promo”
+
+Animation
+动画
+
+Background processes have no window of their own, like services and helpers
+后台进程没有自己的窗口，例如服务和辅助程序
+
+Changelog
+更新日志
+
+Close it and open it again with the same settings
+关闭后以相同设置重新打开
+
+Close it right away (Delete)
+立即关闭（Delete）
+
+Copy the whole log to the clipboard
+将整个日志复制到剪贴板
+
+Could not load the changelog: {0}
+无法加载更新日志：{0}
+
+Could not restart {0}: {1}
+无法重新启动 {0}：{1}
+
+Deselect everything (Esc)
+取消全部选择（Esc）
+
+Device Manager
+设备管理器
+
+Empty the activity log
+清空活动日志
+
+Every running program with its CPU and memory use
+所有正在运行的程序及其 CPU 和内存使用情况
+
+Font
+字体
+
+Free memory other programs are holding but not using
+释放其他程序占用但未使用的内存
+
+Frees more, but recently used files load a little slower the next time
+释放更多内存，但最近使用的文件下次加载会稍慢
+
+From this version's release on GitHub.
+来自 GitHub 上此版本的发布页面。
+
+Hardware and drivers
+硬件和驱动程序
+
+Language, theme, font, startup and updates
+语言、主题、字体、启动和更新
+
+Let a suspended process run again
+让已挂起的进程重新运行
+
+Light UI (Segoe UI Light)
+轻量界面（Segoe UI Light）
+
+Listen on Pixabay
+在 Pixabay 上收听
+
+Loading the changelog.
+正在加载更新日志。
+
+Music
+音乐
+
+Open the selected tool
+打开所选工具
+
+Pause it completely until you resume it
+完全挂起，直到你恢复它
+
+Paused: it gets no CPU time until it is resumed
+已暂停：恢复之前不会获得 CPU 时间
+
+Play the trailer in your browser
+在浏览器中播放预告片
+
+Promotional trailer
+宣传预告片
+
+Restart
+重新启动
+
+Restart these tasks?
+要重新启动这些任务吗？
+
+Restarted {0} of {1} programs.
+已重新启动 {0} 个程序（共 {1} 个）。
+
+Run chkdsk on this drive with the mode on the left
+使用左侧的模式在此驱动器上运行 chkdsk
+
+Show only processes whose name contains this text, or one PID
+仅显示名称包含此文本的进程，或某个 PID
+
+Sort by process ID
+按进程 ID 排序
+
+Sort by status: suspended and protected first
+按状态排序：已挂起和受保护的优先
+
+Sort by type: apps first, then background processes
+按类型排序：先应用，后后台进程
+
+System (Segoe UI)
+系统（Segoe UI）
+
+The taskbar and open folder windows disappear for a moment
+任务栏和打开的文件夹窗口会短暂消失
+
+The typeface used for all text.
+所有文本使用的字体。
+
+They will close and open again. Anything unsaved in them will be lost.
+它们将关闭并重新打开。其中所有未保存的内容都将丢失。
+
+Try again
+重试
+
+Virus protection, firewall and device security
+病毒防护、防火墙和设备安全
+
+Watch the trailer
+观看预告片
+
+What changed in this version
+此版本的更改内容
+
+What's new in RustCleanup {0}
+RustCleanup {0} 的新功能
+
+Who made RustCleanup and what it is built with
+RustCleanup 的作者及其构建技术
+
+Windows Security
+Windows 安全中心
+
+Windows Settings
+Windows 设置
+
+Windows will not download any updates until then
+在此之前，Windows 不会下载任何更新
+
+{0}% of your RAM
+RAM 的 {0}%
+
+There is no release of version {0} on GitHub yet.
+GitHub 上还没有 {0} 版本的发布。

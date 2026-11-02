@@ -15,7 +15,7 @@ use super::widgets;
 use crate::background;
 use crate::events::{AppEvent, Job, Jobs};
 use crate::i18n::{self, Lang, tr, trf};
-use crate::settings::{self, AUTO_CLEAN_RANGE, Settings, ThemeMode, UI_SCALES};
+use crate::settings::{self, AUTO_CLEAN_RANGE, FontChoice, Settings, ThemeMode, UI_SCALES};
 use crate::sys::format::fmt_bytes;
 use crate::sys::{memory, startup, updater};
 
@@ -90,9 +90,9 @@ impl SettingsWindow {
 }
 
 fn section(ui: &mut Ui, title: &str) {
-    ui.add_space(10.0);
+    ui.add_space(16.0);
     widgets::heading(ui, title);
-    ui.separator();
+    widgets::divider(ui);
 }
 
 /// A label on the left and a control on the right.
@@ -163,6 +163,24 @@ fn body(ui: &mut Ui, pal: &Palette, jobs: &Jobs, s: Settings, launched_hw: bool)
                 }
             });
     });
+    labeled(
+        ui,
+        pal,
+        tr("Font"),
+        tr("The typeface used for all text."),
+        |ui| {
+            egui::ComboBox::from_id_salt("font")
+                .width(170.0)
+                .selected_text(s.font.label())
+                .show_ui(ui, |ui| {
+                    for font in FontChoice::ALL {
+                        if ui.selectable_label(s.font == font, font.label()).clicked() {
+                            settings::update(|s| s.font = font);
+                        }
+                    }
+                });
+        },
+    );
     labeled(
         ui,
         pal,
@@ -313,7 +331,7 @@ fn body(ui: &mut Ui, pal: &Palette, jobs: &Jobs, s: Settings, launched_hw: bool)
     }
 
     ui.add_space(14.0);
-    ui.separator();
+    widgets::divider(ui);
     if widgets::button(ui, tr("Reset all settings"), true)
         .on_hover_text(tr(
             "Every setting goes back to its default. Open on startup is kept.",

@@ -7,6 +7,7 @@
 //! the tray. Their state is shared with the main window behind a mutex.
 
 pub mod activity;
+pub mod changelog;
 pub mod credits;
 pub mod disk;
 pub mod flags;
@@ -35,12 +36,13 @@ pub fn app_icon() -> Arc<IconData> {
 }
 
 /// Every detached window, by viewport name.
-pub const WINDOWS: [&str; 5] = [
+pub const WINDOWS: [&str; 6] = [
     disk::WINDOW,
     tasks::WINDOW,
     settings::WINDOW,
     credits::WINDOW,
     update::WINDOW,
+    changelog::WINDOW,
 ];
 
 pub fn window_id(name: &str) -> ViewportId {

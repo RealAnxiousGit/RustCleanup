@@ -829,3 +829,159 @@ zajęte z {0}
 Zajęte: {0}, dostępne: {1}, łącznie: {2}
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 Ustawienia są otwarte w sekcji Magazyn, ale nie udało się wybrać {0} ({1}). Otwórz Zaawansowane ustawienia magazynu, a następnie Magazyn używany na innych dyskach.
+
+"Promo" by {0}
+„Promo”, wyk. {0}
+
+Animation
+Animacja
+
+Background processes have no window of their own, like services and helpers
+Procesy w tle nie mają własnego okna, np. usługi i programy pomocnicze
+
+Changelog
+Lista zmian
+
+Close it and open it again with the same settings
+Zamknij i otwórz ponownie z tymi samymi ustawieniami
+
+Close it right away (Delete)
+Zamknij natychmiast (Delete)
+
+Copy the whole log to the clipboard
+Kopiuj cały dziennik do schowka
+
+Could not load the changelog: {0}
+Nie można wczytać listy zmian: {0}
+
+Could not restart {0}: {1}
+Nie można ponownie uruchomić {0}: {1}
+
+Deselect everything (Esc)
+Usuń całe zaznaczenie (Esc)
+
+Device Manager
+Menedżer urządzeń
+
+Empty the activity log
+Wyczyść dziennik aktywności
+
+Every running program with its CPU and memory use
+Wszystkie uruchomione programy z użyciem CPU i pamięci
+
+Font
+Czcionka
+
+Free memory other programs are holding but not using
+Zwolnij pamięć, którą inne programy zajmują, ale nie używają
+
+Frees more, but recently used files load a little slower the next time
+Zwalnia więcej, ale ostatnio używane pliki wczytają się następnym razem nieco wolniej
+
+From this version's release on GitHub.
+Z wydania tej wersji na GitHub.
+
+Hardware and drivers
+Sprzęt i sterowniki
+
+Language, theme, font, startup and updates
+Język, motyw, czcionka, uruchamianie i aktualizacje
+
+Let a suspended process run again
+Pozwól wstrzymanemu procesowi znowu działać
+
+Light UI (Segoe UI Light)
+Lekki interfejs (Segoe UI Light)
+
+Listen on Pixabay
+Posłuchaj w serwisie Pixabay
+
+Loading the changelog.
+Wczytywanie listy zmian.
+
+Music
+Muzyka
+
+Open the selected tool
+Otwórz wybrane narzędzie
+
+Pause it completely until you resume it
+Wstrzymaj go całkowicie do czasu wznowienia
+
+Paused: it gets no CPU time until it is resumed
+Wstrzymany: nie dostaje czasu CPU, dopóki nie zostanie wznowiony
+
+Play the trailer in your browser
+Odtwórz zwiastun w przeglądarce
+
+Promotional trailer
+Zwiastun promocyjny
+
+Restart
+Uruchom ponownie
+
+Restart these tasks?
+Uruchomić ponownie te zadania?
+
+Restarted {0} of {1} programs.
+Ponownie uruchomiono {0} z {1} programów.
+
+Run chkdsk on this drive with the mode on the left
+Uruchom chkdsk na tym dysku w trybie wybranym po lewej
+
+Show only processes whose name contains this text, or one PID
+Pokaż tylko procesy, których nazwa zawiera ten tekst, lub jeden PID
+
+Sort by process ID
+Sortuj według identyfikatora procesu
+
+Sort by status: suspended and protected first
+Sortuj według stanu: najpierw wstrzymane i chronione
+
+Sort by type: apps first, then background processes
+Sortuj według typu: najpierw aplikacje, potem procesy w tle
+
+System (Segoe UI)
+Systemowy (Segoe UI)
+
+The taskbar and open folder windows disappear for a moment
+Pasek zadań i otwarte okna folderów na chwilę znikną
+
+The typeface used for all text.
+Krój pisma używany w całym tekście.
+
+They will close and open again. Anything unsaved in them will be lost.
+Zostaną zamknięte i otwarte ponownie. Wszystko, co nie zostało w nich zapisane, zostanie utracone.
+
+Try again
+Spróbuj ponownie
+
+Virus protection, firewall and device security
+Ochrona przed wirusami, zapora i zabezpieczenia urządzenia
+
+Watch the trailer
+Obejrzyj zwiastun
+
+What changed in this version
+Co zmieniło się w tej wersji
+
+What's new in RustCleanup {0}
+Nowości w RustCleanup {0}
+
+Who made RustCleanup and what it is built with
+Kto stworzył RustCleanup i z czego jest zbudowany
+
+Windows Security
+Zabezpieczenia Windows
+
+Windows Settings
+Ustawienia systemu Windows
+
+Windows will not download any updates until then
+Do tego czasu system Windows nie pobierze żadnych aktualizacji
+
+{0}% of your RAM
+{0}% pamięci RAM
+
+There is no release of version {0} on GitHub yet.
+Na GitHubie nie ma jeszcze wydania wersji {0}.

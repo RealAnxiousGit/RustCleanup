@@ -8,7 +8,7 @@ use eframe::egui::{
 };
 
 use crate::i18n::Lang;
-use crate::settings::{self, ThemeMode};
+use crate::settings::{self, FontChoice, ThemeMode};
 use crate::sys::shell;
 
 /// Every colour the UI uses. Panels read status colours from here so both
@@ -331,8 +331,9 @@ fn cjk_fonts() -> &'static [(&'static str, &'static [u8], u32)] {
 /// Loads the Windows UI and console fonts, keeping egui's bundled fonts as
 /// fallbacks so missing glyphs (or a missing file) still render. Japanese or
 /// Chinese comes first among the CJK fallbacks depending on `lang`, because
-/// the two draw many shared characters differently.
-pub fn install_fonts(ctx: &egui::Context, lang: Lang) {
+/// the two draw many shared characters differently. `font` is the face
+/// picked in Settings; Segoe UI stays behind it for any glyph it lacks.
+pub fn install_fonts(ctx: &egui::Context, lang: Lang, font: FontChoice) {
     let fonts_dir = crate::sys::command::windows_dir().join("Fonts");
     let read = |file: &str| {
         std::fs::read(fonts_dir.join(file))
@@ -347,19 +348,32 @@ pub fn install_fonts(ctx: &egui::Context, lang: Lang) {
         .cloned()
         .unwrap_or_default();
 
-    if let Some(data) = read("SegUIVar.ttf") {
-        defs.font_data.insert("segoe".into(), data);
-        if let Some(list) = defs.families.get_mut(&FontFamily::Proportional) {
-            list.insert(0, "segoe".into());
+    let (regular, bold) = font.files();
+    let mut prop_list = fallback_prop.clone();
+    let mut semibold_list = fallback_prop.clone();
+    // The picked face first, then Segoe UI, then egui's own fonts.
+    let mut faces = vec![("segoe", "SegUIVar.ttf", "segoe_semibold", "seguisb.ttf")];
+    if font != FontChoice::System {
+        faces.insert(0, ("chosen", regular, "chosen_bold", bold));
+    }
+    for (at, (name, file, bold_name, bold_file)) in faces.into_iter().enumerate() {
+        let Some(data) = read(file) else { continue };
+        defs.font_data.insert(name.into(), data);
+        let at = at.min(prop_list.len());
+        prop_list.insert(at, name.into());
+        if let Some(data) = read(bold_file) {
+            defs.font_data.insert(bold_name.into(), data);
+            semibold_list.insert(at.min(semibold_list.len()), bold_name.into());
+        } else {
+            semibold_list.insert(at.min(semibold_list.len()), name.into());
         }
     }
-    let mut semibold_list = fallback_prop.clone();
-    if let Some(data) = read("seguisb.ttf") {
-        defs.font_data.insert("segoe_semibold".into(), data);
-        semibold_list.insert(0, "segoe_semibold".into());
-    } else if defs.font_data.contains_key("segoe") {
-        semibold_list.insert(0, "segoe".into());
-    }
+    // A face that failed to load leaves fewer entries; drop duplicates.
+    let mut seen = std::collections::HashSet::new();
+    prop_list.retain(|n| seen.insert(n.clone()));
+    seen.clear();
+    semibold_list.retain(|n| seen.insert(n.clone()));
+    defs.families.insert(FontFamily::Proportional, prop_list);
     defs.families.insert(semibold(), semibold_list);
 
     if let Some(data) = read("consola.ttf") {
@@ -398,9 +412,16 @@ pub fn install_fonts(ctx: &egui::Context, lang: Lang) {
             (TextStyle::Monospace, FontId::monospace(13.0)),
         ]
         .into();
-        style.spacing.button_padding = egui::vec2(12.0, 6.0);
-        style.spacing.item_spacing = egui::vec2(8.0, 6.0);
-        style.spacing.interact_size.y = 28.0;
+        style.spacing.button_padding = egui::vec2(14.0, 7.0);
+        style.spacing.item_spacing = egui::vec2(10.0, 8.0);
+        style.spacing.interact_size.y = 30.0;
         style.interaction.tooltip_delay = 0.25;
+        // Hover and open/close fades, quick enough not to feel slow.
+        style.animation_time = 0.12;
+        // Wheel scrolling glides a short way instead of jumping.
+        style.scroll_animation = egui::style::ScrollAnimation {
+            points_per_second: 2200.0,
+            duration: egui::Rangef::new(0.08, 0.18),
+        };
     });
 }

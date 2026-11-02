@@ -33,7 +33,7 @@ pub fn switch(ui: &mut Ui, pal: &Palette, on: bool, enabled: bool, label: &str) 
     if ui.is_rect_visible(rect) {
         let t = ui.ctx().animate_bool_responsive(response.id, on);
         let radius = rect.height() / 2.0;
-        let mut fill = lerp(pal.meter_track, pal.accent, t);
+        let mut fill = blend(pal.meter_track, pal.accent, t);
         if !enabled {
             fill = fill.gamma_multiply(0.55);
         }
@@ -100,9 +100,16 @@ pub fn switch_row(
     result
 }
 
-fn lerp(a: Color32, b: Color32, t: f32) -> Color32 {
+/// Mixes two colours, alpha included; `t = 0` is `a`, `t = 1` is `b`.
+pub fn blend(a: Color32, b: Color32, t: f32) -> Color32 {
+    let t = t.clamp(0.0, 1.0);
     let l = |x: u8, y: u8| (x as f32 + (y as f32 - x as f32) * t).round() as u8;
-    Color32::from_rgb(l(a.r(), b.r()), l(a.g(), b.g()), l(a.b(), b.b()))
+    Color32::from_rgba_premultiplied(
+        l(a.r(), b.r()),
+        l(a.g(), b.g()),
+        l(a.b(), b.b()),
+        l(a.a(), b.a()),
+    )
 }
 
 /// A big figure, its description, and an optional percentage on the right.
@@ -127,49 +134,171 @@ pub fn figure_row(ui: &mut Ui, pal: &Palette, big: &str, rest: &str, percent: Op
     });
 }
 
-/// A thin usage bar. `warn` switches the fill to the warning colour, which
-/// only happens when usage is genuinely high.
-pub fn meter(ui: &mut Ui, pal: &Palette, fraction: f32, warn: bool) {
-    let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 6.0), Sense::hover());
-    let radius = CornerRadius::same(2);
+/// How full a usage bar is: 0 normal, 1 high (yellow), 2 very high (red).
+pub fn usage_level(fraction: f32, high: f32, very_high: f32) -> u8 {
+    if fraction > very_high {
+        2
+    } else if fraction > high {
+        1
+    } else {
+        0
+    }
+}
+
+/// A thin usage bar. Its fill fades to yellow at `level` 1 and red at 2.
+pub fn meter(ui: &mut Ui, pal: &Palette, fraction: f32, level: u8) {
+    let (rect, response) =
+        ui.allocate_exact_size(egui::vec2(ui.available_width(), 6.0), Sense::hover());
+    let t = ui
+        .ctx()
+        .animate_value_with_time(response.id.with("level"), level.min(2) as f32, 0.25);
+    let color = if t <= 1.0 {
+        blend(pal.meter_fill, pal.warn, t)
+    } else {
+        blend(pal.warn, pal.error, t - 1.0)
+    };
+    let radius = CornerRadius::same(3);
     ui.painter().rect_filled(rect, radius, pal.meter_track);
     let mut fill = rect;
     fill.set_width(rect.width() * fraction.clamp(0.0, 1.0));
-    ui.painter()
-        .rect_filled(fill, radius, if warn { pal.warn } else { pal.meter_fill });
+    ui.painter().rect_filled(fill, radius, color);
+}
+
+/// A separator with breathing room above and below.
+pub fn divider(ui: &mut Ui) {
+    ui.add_space(4.0);
+    ui.separator();
+    ui.add_space(4.0);
+}
+
+/// How long hover and selection fades take.
+pub const FADE_TIME: f32 = 0.12;
+
+/// 0 to 1, easing towards 1 while `on` and back to 0 after.
+pub fn fade(ui: &Ui, id: egui::Id, on: bool) -> f32 {
+    ui.ctx().animate_bool_with_time(id, on, FADE_TIME)
+}
+
+/// Colours of a painted button in its resting, hovered and pressed states.
+struct ButtonLook {
+    rest: Color32,
+    hover: Color32,
+    press: Color32,
+    stroke: Stroke,
+    hover_stroke: Stroke,
+    text: Color32,
+    font: egui::FontId,
+    min: egui::Vec2,
+}
+
+/// A button whose fill fades between states instead of switching at once.
+fn painted_button(ui: &mut Ui, text: &str, enabled: bool, look: ButtonLook) -> Response {
+    let padding = ui.spacing().button_padding;
+    // The galley keeps the colour it is laid out with, so dim it here.
+    let ink = if enabled {
+        look.text
+    } else {
+        look.text.gamma_multiply(0.5)
+    };
+    let galley = ui
+        .painter()
+        .layout_no_wrap(text.to_owned(), look.font, ink);
+    let size = (galley.size() + padding * 2.0).max(look.min);
+    let sense = if enabled {
+        Sense::click()
+    } else {
+        Sense::hover()
+    };
+    let (rect, response) = ui.allocate_exact_size(size, sense);
+    response.widget_info(|| WidgetInfo::labeled(Role::Button, enabled, text));
+    if ui.is_rect_visible(rect) {
+        let hover = fade(ui, response.id, enabled && response.hovered());
+        let press = fade(ui, response.id.with("press"), enabled && response.is_pointer_button_down_on());
+        let mut fill = blend(blend(look.rest, look.hover, hover), look.press, press);
+        let mut stroke = Stroke::new(
+            look.stroke.width,
+            blend(look.stroke.color, look.hover_stroke.color, hover),
+        );
+        if !enabled {
+            fill = fill.gamma_multiply(0.55);
+            stroke.color = stroke.color.gamma_multiply(0.55);
+        }
+        let radius = CornerRadius::same(5);
+        ui.painter()
+            .rect(rect, radius, fill, stroke, StrokeKind::Inside);
+        if response.has_focus() {
+            ui.painter().rect_stroke(
+                rect,
+                radius,
+                ui.visuals().selection.stroke,
+                StrokeKind::Outside,
+            );
+        }
+        let pos = rect.center() - galley.size() / 2.0;
+        ui.painter().galley(pos, galley, ink);
+    }
+    if enabled {
+        response.on_hover_cursor(egui::CursorIcon::PointingHand)
+    } else {
+        response
+    }
 }
 
 /// The accent-filled button. Used for exactly one action per screen.
 pub fn primary_button(ui: &mut Ui, pal: &Palette, text: &str, enabled: bool) -> Response {
-    let fill = if enabled {
-        pal.accent
-    } else {
-        pal.accent.gamma_multiply(0.45)
-    };
-    let button = egui::Button::new(RichText::new(text).color(pal.on_accent).family(semibold()))
-        .fill(fill)
-        .stroke(Stroke::NONE)
-        .corner_radius(CornerRadius::same(4))
-        .min_size(egui::vec2(120.0, 32.0));
-    let response = ui.add_enabled(enabled, button);
-    if enabled {
-        response.on_hover_cursor(egui::CursorIcon::PointingHand)
-    } else {
-        response
-    }
+    let font = egui::FontId::new(egui::TextStyle::Button.resolve(ui.style()).size, semibold());
+    painted_button(
+        ui,
+        text,
+        enabled,
+        ButtonLook {
+            rest: pal.accent,
+            hover: pal.accent_hover,
+            press: blend(pal.accent, Color32::BLACK, 0.18),
+            stroke: Stroke::NONE,
+            hover_stroke: Stroke::NONE,
+            text: pal.on_accent,
+            font,
+            min: egui::vec2(120.0, 32.0),
+        },
+    )
 }
 
-/// A plain button with the pointing-hand cursor.
+/// A red button for actions that can lose work, like ending a task.
+pub fn danger_button(ui: &mut Ui, pal: &Palette, text: &str) -> Response {
+    let font = egui::FontId::new(egui::TextStyle::Button.resolve(ui.style()).size, semibold());
+    let base = blend(pal.error, Color32::BLACK, 0.12);
+    painted_button(
+        ui,
+        text,
+        true,
+        ButtonLook {
+            rest: base,
+            hover: pal.error,
+            press: blend(pal.error, Color32::BLACK, 0.25),
+            stroke: Stroke::NONE,
+            hover_stroke: Stroke::NONE,
+            text: pal.on_accent,
+            font,
+            min: egui::vec2(96.0, 30.0),
+        },
+    )
+}
+
+/// A plain button with a soft hover fade and the pointing-hand cursor.
 pub fn button(ui: &mut Ui, text: &str, enabled: bool) -> Response {
-    let response = ui.add_enabled(
-        enabled,
-        egui::Button::new(text).min_size(egui::vec2(0.0, 28.0)),
-    );
-    if enabled {
-        response.on_hover_cursor(egui::CursorIcon::PointingHand)
-    } else {
-        response
-    }
+    let w = ui.visuals().widgets.clone();
+    let look = ButtonLook {
+        rest: w.inactive.weak_bg_fill,
+        hover: w.hovered.weak_bg_fill,
+        press: w.active.weak_bg_fill,
+        stroke: w.inactive.bg_stroke,
+        hover_stroke: w.hovered.bg_stroke,
+        text: ui.visuals().text_color(),
+        font: egui::TextStyle::Button.resolve(ui.style()),
+        min: egui::vec2(0.0, 30.0),
+    };
+    painted_button(ui, text, enabled, look)
 }
 
 /// The theme button: a sun while dark (it switches to light), a crescent
@@ -183,18 +312,19 @@ pub fn theme_button(ui: &mut Ui, pal: &Palette, light: bool) -> Response {
     let (rect, response) = ui.allocate_exact_size(egui::vec2(30.0, 28.0), Sense::click());
     response.widget_info(|| WidgetInfo::labeled(Role::Button, true, label));
     if ui.is_rect_visible(rect) {
-        let visuals = ui.style().interact(&response);
-        ui.painter().rect(
-            rect,
-            CornerRadius::same(4),
-            visuals.weak_bg_fill,
-            visuals.bg_stroke,
-            StrokeKind::Inside,
+        let w = &ui.visuals().widgets;
+        let hover = fade(ui, response.id, response.hovered());
+        let bg = blend(w.inactive.weak_bg_fill, w.hovered.weak_bg_fill, hover);
+        let stroke = Stroke::new(
+            w.inactive.bg_stroke.width,
+            blend(w.inactive.bg_stroke.color, w.hovered.bg_stroke.color, hover),
         );
+        ui.painter()
+            .rect(rect, CornerRadius::same(5), bg, stroke, StrokeKind::Inside);
         if response.has_focus() {
             ui.painter().rect_stroke(
                 rect,
-                CornerRadius::same(4),
+                CornerRadius::same(5),
                 ui.visuals().selection.stroke,
                 StrokeKind::Outside,
             );
@@ -205,7 +335,7 @@ pub fn theme_button(ui: &mut Ui, pal: &Palette, light: bool) -> Response {
             // Crescent: a full disc with an offset disc in the button colour cut out of it.
             ui.painter().circle_filled(c, 7.0, ink);
             ui.painter()
-                .circle_filled(c + egui::vec2(3.6, -2.8), 6.0, visuals.weak_bg_fill);
+                .circle_filled(c + egui::vec2(3.6, -2.8), 6.0, bg);
         } else {
             ui.painter().circle_filled(c, 4.0, ink);
             for i in 0..8 {

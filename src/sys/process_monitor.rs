@@ -60,6 +60,8 @@ pub struct ProcInfo {
     pub kind: ProcKind,
     /// System-critical or RustCleanup itself: only memory trimming is allowed.
     pub protected: bool,
+    /// Every thread is suspended (by RustCleanup, Windows or another program).
+    pub suspended: bool,
 }
 
 /// A sample of all processes. `generation` increases with every sample so
@@ -118,13 +120,15 @@ fn windowed_pids() -> HashSet<u32> {
 pub struct ProcessMonitor {
     snapshot: Arc<Mutex<ProcSnapshot>>,
     stop: Arc<AtomicBool>,
+    wake: Arc<AtomicBool>,
 }
 
 impl ProcessMonitor {
     pub fn start(repaint: impl Fn() + Send + 'static) -> Self {
         let snapshot = Arc::new(Mutex::new(ProcSnapshot::default()));
         let stop = Arc::new(AtomicBool::new(false));
-        let (shared, stop_flag) = (snapshot.clone(), stop.clone());
+        let wake = Arc::new(AtomicBool::new(false));
+        let (shared, stop_flag, wake_flag) = (snapshot.clone(), stop.clone(), wake.clone());
 
         let spawned = std::thread::Builder::new()
             .name("process-monitor".into())
@@ -149,6 +153,7 @@ impl ProcessMonitor {
                 while !stop_flag.load(Ordering::Relaxed) {
                     sys.refresh_processes_specifics(ProcessesToUpdate::All, true, refresh);
                     let apps = windowed_pids();
+                    let suspended = super::process_actions::suspended_pids();
                     let rows: Vec<ProcInfo> = sys
                         .processes()
                         .values()
@@ -174,6 +179,7 @@ impl ProcessMonitor {
                                 protected: pid == me
                                     || pid <= 4
                                     || CRITICAL.contains(&name_lower.as_str()),
+                                suspended: suspended.contains(&pid),
                                 name,
                                 name_lower,
                             }
@@ -194,6 +200,9 @@ impl ProcessMonitor {
                         if stop_flag.load(Ordering::Relaxed) {
                             return;
                         }
+                        if wake_flag.swap(false, Ordering::Relaxed) {
+                            break;
+                        }
                         std::thread::sleep(Duration::from_millis(100));
                     }
                 }
@@ -204,7 +213,17 @@ impl ProcessMonitor {
             g.error = Some(trf("Could not start the process monitor: {0}", &[&e]));
         }
 
-        Self { snapshot, stop }
+        Self {
+            snapshot,
+            stop,
+            wake,
+        }
+    }
+
+    /// Setting this flag takes a new sample now instead of at the next 2 s
+    /// tick, so the list shows the result of an action right away.
+    pub fn waker(&self) -> Arc<AtomicBool> {
+        self.wake.clone()
     }
 
     /// The latest sample. Cheap: the rows are shared, not copied.

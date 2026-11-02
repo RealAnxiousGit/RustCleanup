@@ -829,3 +829,159 @@ usados de {0}
 {0} usados, {1} disponíveis, {2} no total
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 As Configurações estão abertas em Armazenamento, mas não foi possível selecionar {0} ({1}). Abra Configurações avançadas de armazenamento e depois Armazenamento usado em outras unidades.
+
+"Promo" by {0}
+"Promo" de {0}
+
+Animation
+Animação
+
+Background processes have no window of their own, like services and helpers
+Processos em segundo plano não têm janela própria, como serviços e auxiliares
+
+Changelog
+Registro de alterações
+
+Close it and open it again with the same settings
+Fechar e abrir de novo com as mesmas configurações
+
+Close it right away (Delete)
+Fechar imediatamente (Delete)
+
+Copy the whole log to the clipboard
+Copiar todo o registro para a área de transferência
+
+Could not load the changelog: {0}
+Não foi possível carregar o registro de alterações: {0}
+
+Could not restart {0}: {1}
+Não foi possível reiniciar {0}: {1}
+
+Deselect everything (Esc)
+Desmarcar tudo (Esc)
+
+Device Manager
+Gerenciador de Dispositivos
+
+Empty the activity log
+Limpar o registro de atividades
+
+Every running program with its CPU and memory use
+Todos os programas em execução com o uso de CPU e memória
+
+Font
+Fonte
+
+Free memory other programs are holding but not using
+Liberar a memória que outros programas reservam, mas não usam
+
+Frees more, but recently used files load a little slower the next time
+Libera mais, mas arquivos usados recentemente carregam um pouco mais devagar na próxima vez
+
+From this version's release on GitHub.
+Da publicação desta versão no GitHub.
+
+Hardware and drivers
+Hardware e drivers
+
+Language, theme, font, startup and updates
+Idioma, tema, fonte, inicialização e atualizações
+
+Let a suspended process run again
+Deixar um processo suspenso rodar de novo
+
+Light UI (Segoe UI Light)
+Interface leve (Segoe UI Light)
+
+Listen on Pixabay
+Ouvir no Pixabay
+
+Loading the changelog.
+Carregando o registro de alterações.
+
+Music
+Música
+
+Open the selected tool
+Abrir a ferramenta selecionada
+
+Pause it completely until you resume it
+Pausar totalmente até você retomar
+
+Paused: it gets no CPU time until it is resumed
+Pausado: não recebe tempo de CPU até ser retomado
+
+Play the trailer in your browser
+Reproduzir o trailer no navegador
+
+Promotional trailer
+Trailer promocional
+
+Restart
+Reiniciar
+
+Restart these tasks?
+Reiniciar estas tarefas?
+
+Restarted {0} of {1} programs.
+{0} de {1} programas reiniciados.
+
+Run chkdsk on this drive with the mode on the left
+Executar o chkdsk nesta unidade com o modo à esquerda
+
+Show only processes whose name contains this text, or one PID
+Mostrar só processos cujo nome contém este texto, ou um PID
+
+Sort by process ID
+Ordenar por ID do processo
+
+Sort by status: suspended and protected first
+Ordenar por status: suspensos e protegidos primeiro
+
+Sort by type: apps first, then background processes
+Ordenar por tipo: aplicativos primeiro, depois processos em segundo plano
+
+System (Segoe UI)
+Sistema (Segoe UI)
+
+The taskbar and open folder windows disappear for a moment
+A barra de tarefas e as janelas de pastas abertas somem por um instante
+
+The typeface used for all text.
+A fonte usada em todo o texto.
+
+They will close and open again. Anything unsaved in them will be lost.
+Eles serão fechados e abertos de novo. Tudo o que não estiver salvo neles será perdido.
+
+Try again
+Tentar novamente
+
+Virus protection, firewall and device security
+Proteção contra vírus, firewall e segurança do dispositivo
+
+Watch the trailer
+Assistir ao trailer
+
+What changed in this version
+O que mudou nesta versão
+
+What's new in RustCleanup {0}
+Novidades do RustCleanup {0}
+
+Who made RustCleanup and what it is built with
+Quem fez o RustCleanup e com o que ele foi feito
+
+Windows Security
+Segurança do Windows
+
+Windows Settings
+Configurações do Windows
+
+Windows will not download any updates until then
+O Windows não vai baixar atualizações até lá
+
+{0}% of your RAM
+{0}% da sua RAM
+
+There is no release of version {0} on GitHub yet.
+Ainda não há uma versão {0} publicada no GitHub.

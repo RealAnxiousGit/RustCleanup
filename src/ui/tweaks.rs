@@ -121,8 +121,9 @@ impl TweaksPanel {
         ui.checkbox(
             &mut self.restart_explorer,
             tr("Restart Explorer so it applies right away"),
-        );
-        ui.separator();
+        )
+        .on_hover_text(tr("The taskbar and open folder windows disappear for a moment"));
+        widgets::divider(ui);
 
         if let Some(disable) = self.row(
             ui,
@@ -133,7 +134,7 @@ impl TweaksPanel {
             self.state.telemetry_disabled = disable;
             jobs.start(Job::Telemetry, move |log| telemetry::set_telemetry_disabled(log, disable));
         }
-        ui.separator();
+        widgets::divider(ui);
 
         if let Some(block) = self.row(
             ui,
@@ -149,7 +150,8 @@ impl TweaksPanel {
         ui.add_enabled(
             !self.state.updates_blocked,
             egui::Checkbox::new(&mut self.pause_updates, pause_label),
-        );
+        )
+        .on_hover_text(tr("Windows will not download any updates until then"));
         if let Some(until) = &self.state.paused_until {
             ui.label(
                 RichText::new(trf(
@@ -159,7 +161,7 @@ impl TweaksPanel {
                 .color(pal.warn),
             );
         }
-        ui.separator();
+        widgets::divider(ui);
 
         if let Some(enable) = self.row(
             ui,
@@ -188,7 +190,10 @@ impl TweaksPanel {
                             .on_hover_text(tr(tool.description));
                     }
                 });
-            if widgets::button(ui, tr("Open"), true).clicked() {
+            if widgets::button(ui, tr("Open"), true)
+                .on_hover_text(tr("Open the selected tool"))
+                .clicked()
+            {
                 let tool = &TOOLS[self.tool_idx];
                 match tool.launch() {
                     Ok(()) => jobs.log.info(trf("Opened {0}.", &[&tr(tool.label)])),

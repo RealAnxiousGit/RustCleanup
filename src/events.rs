@@ -44,6 +44,7 @@ pub enum Job {
     Startup,
     UpdateCheck,
     UpdateInstall,
+    Changelog,
 }
 
 /// Current on/off state of each switch, read from the system.
@@ -144,7 +145,12 @@ impl Jobs {
     pub fn any_visible_busy(&self) -> bool {
         self.busy()
             .iter()
-            .any(|j| !matches!(j, Job::DetectState | Job::UpdateCheck | Job::Startup))
+            .any(|j| {
+                !matches!(
+                    j,
+                    Job::DetectState | Job::UpdateCheck | Job::Startup | Job::Changelog
+                )
+            })
     }
 
     /// Runs `work` on a new thread and reports its result as `JobFinished`.

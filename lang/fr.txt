@@ -829,3 +829,159 @@ utilisés sur {0}
 {0} utilisés, {1} disponibles, {2} au total
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 Les Paramètres sont ouverts sur Stockage, mais {0} n'a pas pu être sélectionné ({1}). Ouvrez Paramètres de stockage avancés, puis Stockage utilisé sur d'autres lecteurs.
+
+"Promo" by {0}
+"Promo" par {0}
+
+Animation
+Animation
+
+Background processes have no window of their own, like services and helpers
+Les processus en arrière-plan n'ont pas de fenêtre propre, comme les services et les programmes auxiliaires
+
+Changelog
+Liste des modifications
+
+Close it and open it again with the same settings
+Le fermer et le rouvrir avec les mêmes paramètres
+
+Close it right away (Delete)
+Le fermer immédiatement (Suppr)
+
+Copy the whole log to the clipboard
+Copier tout le journal dans le Presse-papiers
+
+Could not load the changelog: {0}
+Impossible de charger la liste des modifications : {0}
+
+Could not restart {0}: {1}
+Impossible de redémarrer {0} : {1}
+
+Deselect everything (Esc)
+Tout désélectionner (Échap)
+
+Device Manager
+Gestionnaire de périphériques
+
+Empty the activity log
+Vider le journal d'activité
+
+Every running program with its CPU and memory use
+Tous les programmes en cours d'exécution avec leur utilisation du CPU et de la mémoire
+
+Font
+Police
+
+Free memory other programs are holding but not using
+Libérer la mémoire que d'autres programmes retiennent sans l'utiliser
+
+Frees more, but recently used files load a little slower the next time
+Libère davantage, mais les fichiers récemment utilisés se chargeront un peu plus lentement la prochaine fois
+
+From this version's release on GitHub.
+Issu de la publication de cette version sur GitHub.
+
+Hardware and drivers
+Matériel et pilotes
+
+Language, theme, font, startup and updates
+Langue, thème, police, démarrage et mises à jour
+
+Let a suspended process run again
+Relancer un processus suspendu
+
+Light UI (Segoe UI Light)
+Interface légère (Segoe UI Light)
+
+Listen on Pixabay
+Écouter sur Pixabay
+
+Loading the changelog.
+Chargement de la liste des modifications.
+
+Music
+Musique
+
+Open the selected tool
+Ouvrir l'outil sélectionné
+
+Pause it completely until you resume it
+Le suspendre complètement jusqu'à ce que vous le repreniez
+
+Paused: it gets no CPU time until it is resumed
+En pause : il ne reçoit aucun temps CPU tant qu'il n'est pas repris
+
+Play the trailer in your browser
+Lire la bande-annonce dans votre navigateur
+
+Promotional trailer
+Bande-annonce promotionnelle
+
+Restart
+Redémarrer
+
+Restart these tasks?
+Redémarrer ces tâches ?
+
+Restarted {0} of {1} programs.
+{0} programmes sur {1} redémarrés.
+
+Run chkdsk on this drive with the mode on the left
+Lancer chkdsk sur ce lecteur avec le mode choisi à gauche
+
+Show only processes whose name contains this text, or one PID
+Afficher uniquement les processus dont le nom contient ce texte, ou un PID
+
+Sort by process ID
+Trier par ID de processus
+
+Sort by status: suspended and protected first
+Trier par état : suspendus et protégés d'abord
+
+Sort by type: apps first, then background processes
+Trier par type : applications d'abord, puis processus en arrière-plan
+
+System (Segoe UI)
+Système (Segoe UI)
+
+The taskbar and open folder windows disappear for a moment
+La barre des tâches et les fenêtres de dossiers ouvertes disparaissent un instant
+
+The typeface used for all text.
+La police utilisée pour tout le texte.
+
+They will close and open again. Anything unsaved in them will be lost.
+Ils seront fermés puis rouverts. Tout ce qui n'y est pas enregistré sera perdu.
+
+Try again
+Réessayer
+
+Virus protection, firewall and device security
+Protection contre les virus, pare-feu et sécurité de l'appareil
+
+Watch the trailer
+Regarder la bande-annonce
+
+What changed in this version
+Ce qui a changé dans cette version
+
+What's new in RustCleanup {0}
+Nouveautés de RustCleanup {0}
+
+Who made RustCleanup and what it is built with
+Qui a créé RustCleanup et avec quoi il est conçu
+
+Windows Security
+Sécurité Windows
+
+Windows Settings
+Paramètres Windows
+
+Windows will not download any updates until then
+Windows ne téléchargera aucune mise à jour d'ici là
+
+{0}% of your RAM
+{0} % de votre RAM
+
+There is no release of version {0} on GitHub yet.
+La version {0} n'est pas encore publiée sur GitHub.

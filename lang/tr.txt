@@ -829,3 +829,159 @@ kullanılan, toplam {0}
 Kullanılan: {0}, boş: {1}, toplam: {2}
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 Ayarlar Depolama sayfasında açık, ancak {0} seçilemedi ({1}). Gelişmiş depolama ayarları'nı, ardından Diğer sürücülerde kullanılan depolama alanı'nı açın.
+
+"Promo" by {0}
+{0} imzalı "Promo"
+
+Animation
+Animasyon
+
+Background processes have no window of their own, like services and helpers
+Hizmetler ve yardımcılar gibi arka plan işlemlerinin kendi penceresi yoktur
+
+Changelog
+Değişiklik günlüğü
+
+Close it and open it again with the same settings
+Kapatıp aynı ayarlarla yeniden aç
+
+Close it right away (Delete)
+Hemen kapat (Delete)
+
+Copy the whole log to the clipboard
+Tüm günlüğü panoya kopyala
+
+Could not load the changelog: {0}
+Değişiklik günlüğü yüklenemedi: {0}
+
+Could not restart {0}: {1}
+{0} yeniden başlatılamadı: {1}
+
+Deselect everything (Esc)
+Tüm seçimi kaldır (Esc)
+
+Device Manager
+Aygıt Yöneticisi
+
+Empty the activity log
+Etkinlik günlüğünü temizle
+
+Every running program with its CPU and memory use
+Çalışan tüm programlar ve CPU ile bellek kullanımları
+
+Font
+Yazı tipi
+
+Free memory other programs are holding but not using
+Diğer programların tutup kullanmadığı belleği boşalt
+
+Frees more, but recently used files load a little slower the next time
+Daha fazla boşaltır, ancak son kullanılan dosyalar bir sonraki sefer biraz daha yavaş yüklenir
+
+From this version's release on GitHub.
+Bu sürümün GitHub'daki yayınından.
+
+Hardware and drivers
+Donanım ve sürücüler
+
+Language, theme, font, startup and updates
+Dil, tema, yazı tipi, başlangıç ve güncelleştirmeler
+
+Let a suspended process run again
+Askıya alınmış bir işlemi yeniden çalıştır
+
+Light UI (Segoe UI Light)
+Hafif arayüz (Segoe UI Light)
+
+Listen on Pixabay
+Pixabay'de dinle
+
+Loading the changelog.
+Değişiklik günlüğü yükleniyor.
+
+Music
+Müzik
+
+Open the selected tool
+Seçili aracı aç
+
+Pause it completely until you resume it
+Siz sürdürene kadar tamamen askıya al
+
+Paused: it gets no CPU time until it is resumed
+Duraklatıldı: sürdürülene kadar CPU zamanı almaz
+
+Play the trailer in your browser
+Fragmanı tarayıcınızda oynat
+
+Promotional trailer
+Tanıtım fragmanı
+
+Restart
+Yeniden başlat
+
+Restart these tasks?
+Bu görevler yeniden başlatılsın mı?
+
+Restarted {0} of {1} programs.
+{1} programdan {0} tanesi yeniden başlatıldı.
+
+Run chkdsk on this drive with the mode on the left
+Bu sürücüde soldaki modla chkdsk çalıştır
+
+Show only processes whose name contains this text, or one PID
+Yalnızca adı bu metni içeren işlemleri veya tek bir PID'yi göster
+
+Sort by process ID
+İşlem kimliğine göre sırala
+
+Sort by status: suspended and protected first
+Duruma göre sırala: önce askıdakiler ve korumalılar
+
+Sort by type: apps first, then background processes
+Türe göre sırala: önce uygulamalar, sonra arka plan işlemleri
+
+System (Segoe UI)
+Sistem (Segoe UI)
+
+The taskbar and open folder windows disappear for a moment
+Görev çubuğu ve açık klasör pencereleri kısa bir süre kaybolur
+
+The typeface used for all text.
+Tüm metinlerde kullanılan yazı tipi.
+
+They will close and open again. Anything unsaved in them will be lost.
+Kapatılıp yeniden açılacaklar. İçlerinde kaydedilmemiş her şey kaybolacak.
+
+Try again
+Yeniden dene
+
+Virus protection, firewall and device security
+Virüs koruması, güvenlik duvarı ve cihaz güvenliği
+
+Watch the trailer
+Fragmanı izle
+
+What changed in this version
+Bu sürümde neler değişti
+
+What's new in RustCleanup {0}
+RustCleanup {0} sürümündeki yenilikler
+
+Who made RustCleanup and what it is built with
+RustCleanup'ı kimin yaptığı ve neyle geliştirildiği
+
+Windows Security
+Windows Güvenliği
+
+Windows Settings
+Windows Ayarları
+
+Windows will not download any updates until then
+Windows o zamana kadar hiçbir güncelleştirme indirmeyecek
+
+{0}% of your RAM
+RAM'inizin %{0} kadarı
+
+There is no release of version {0} on GitHub yet.
+GitHub'da henüz {0} sürümünün bir yayını yok.

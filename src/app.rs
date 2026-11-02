@@ -17,11 +17,12 @@ use eframe::egui::{self, Align, Layout, Margin, RichText, ViewportCommand};
 use crate::background;
 use crate::events::{AppEvent, Job, Jobs, Level, LogEntry, Logger};
 use crate::i18n::{self, Lang, tr, trf};
-use crate::settings;
+use crate::settings::{self, FontChoice};
 use crate::sys::privilege::is_elevated;
 use crate::sys::shell::{self, WindowId};
 use crate::sys::tray::{NotifyKind, Tray, TrayCommand};
 use crate::ui::activity::ActivityLog;
+use crate::ui::changelog::Changelog;
 use crate::ui::credits::Credits;
 use crate::ui::disk::DiskPanel;
 use crate::ui::memory::MemoryPanel;
@@ -93,6 +94,7 @@ pub struct RustCleanupApp {
     tweaks: TweaksPanel,
     tasks: TaskList,
     credits: Credits,
+    changelog: Changelog,
     settings: SettingsWindow,
     update: UpdateWindow,
 
@@ -109,6 +111,7 @@ pub struct RustCleanupApp {
     /// Language and size the fonts and zoom were last set up for.
     applied_lang: Lang,
     applied_scale: u16,
+    applied_font: FontChoice,
 }
 
 impl RustCleanupApp {
@@ -116,7 +119,7 @@ impl RustCleanupApp {
         let ctx = &cc.egui_ctx;
         let s = settings::get();
         i18n::set_language(s.language);
-        theme::install_fonts(ctx, s.language);
+        theme::install_fonts(ctx, s.language, s.font);
         ctx.set_zoom_factor(s.ui_scale as f32 / 100.0);
 
         let (tx, rx) = mpsc::channel();
@@ -146,7 +149,17 @@ impl RustCleanupApp {
             log.warn(tr("RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt."));
         }
         TweaksPanel::detect(&jobs);
+        // Read before on_launch deletes the old exe an update leaves behind.
+        let updated = settings::note_version(
+            env!("CARGO_PKG_VERSION"),
+            crate::sys::updater::leftover_exists(),
+        );
         background::on_launch(&jobs);
+        let changelog = Changelog::new(jobs.clone());
+        if updated {
+            // First start of a new version: show what changed, once.
+            changelog.open(ctx);
+        }
 
         Self {
             rx,
@@ -158,6 +171,7 @@ impl RustCleanupApp {
             tweaks: TweaksPanel::new(),
             tasks: TaskList::new(jobs.clone()),
             credits: Credits::new(log),
+            changelog,
             settings: SettingsWindow::new(jobs.clone()),
             update: UpdateWindow::new(jobs.clone()),
             jobs,
@@ -170,6 +184,7 @@ impl RustCleanupApp {
             pending: PendingNotification::default(),
             applied_lang: s.language,
             applied_scale: s.ui_scale,
+            applied_font: s.font,
         }
     }
 
@@ -299,12 +314,13 @@ impl RustCleanupApp {
     /// Picks up changes made in the Settings window.
     fn apply_settings(&mut self, ctx: &egui::Context) {
         let s = settings::get();
-        if s.language != self.applied_lang {
+        if s.language != self.applied_lang || s.font != self.applied_font {
             self.applied_lang = s.language;
+            self.applied_font = s.font;
             i18n::set_language(s.language);
             // Japanese and Chinese share characters but not glyph styles,
             // so the font order follows the language.
-            theme::install_fonts(ctx, s.language);
+            theme::install_fonts(ctx, s.language, s.font);
             views::repaint_windows(ctx);
         }
         if s.ui_scale != self.applied_scale {
@@ -342,17 +358,29 @@ impl RustCleanupApp {
 
     fn footer(&mut self, ui: &mut egui::Ui) {
         let pal = self.theme.palette;
-        // Right to left: the theme button sits at the far right, with
-        // Settings between it and Credits.
+        // Right to left: the theme button sits at the far right, then
+        // Settings, Credits and Changelog.
         ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
             if widgets::theme_button(ui, &pal, self.theme.light).clicked() {
                 self.theme.toggle();
             }
-            if widgets::button(ui, tr("Settings"), true).clicked() {
+            if widgets::button(ui, tr("Settings"), true)
+                .on_hover_text(tr("Language, theme, font, startup and updates"))
+                .clicked()
+            {
                 self.settings.open(ui.ctx());
             }
-            if widgets::button(ui, tr("Credits"), true).clicked() {
+            if widgets::button(ui, tr("Credits"), true)
+                .on_hover_text(tr("Who made RustCleanup and what it is built with"))
+                .clicked()
+            {
                 self.credits.open(ui.ctx());
+            }
+            if widgets::button(ui, tr("Changelog"), true)
+                .on_hover_text(tr("What changed in this version"))
+                .clicked()
+            {
+                self.changelog.open(ui.ctx());
             }
         });
     }
@@ -384,7 +412,7 @@ impl RustCleanupApp {
             .frame(
                 egui::Frame::new()
                     .fill(pal.bg)
-                    .inner_margin(Margin::symmetric(20, 6)),
+                    .inner_margin(Margin::symmetric(20, 10)),
             )
             .show(ui, |ui| self.footer(ui));
 
@@ -480,6 +508,7 @@ impl eframe::App for RustCleanupApp {
         self.tasks.show(&ctx);
         self.settings.show(&ctx);
         self.credits.show(&ctx);
+        self.changelog.show(&ctx);
         self.update.show(&ctx);
     }
 }

@@ -829,3 +829,159 @@ used of {0}
 使用中 {0}、空き {1}、合計 {2}
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 設定のストレージは開きましたが、{0} を選択できませんでした ({1})。[ストレージの詳細設定] を開き、[他のドライブで使用されている記憶域] を選んでください。
+
+"Promo" by {0}
+{0} の「Promo」
+
+Animation
+アニメーション
+
+Background processes have no window of their own, like services and helpers
+バックグラウンド プロセスは、サービスやヘルパーのように自分のウィンドウを持ちません
+
+Changelog
+変更履歴
+
+Close it and open it again with the same settings
+閉じてから同じ設定でもう一度開く
+
+Close it right away (Delete)
+すぐに閉じる (Delete)
+
+Copy the whole log to the clipboard
+ログ全体をクリップボードにコピー
+
+Could not load the changelog: {0}
+変更履歴を読み込めませんでした：{0}
+
+Could not restart {0}: {1}
+{0} を再起動できませんでした：{1}
+
+Deselect everything (Esc)
+すべての選択を解除 (Esc)
+
+Device Manager
+デバイス マネージャー
+
+Empty the activity log
+アクティビティ ログを消去
+
+Every running program with its CPU and memory use
+実行中のすべてのプログラムとその CPU およびメモリ使用量
+
+Font
+フォント
+
+Free memory other programs are holding but not using
+他のプログラムが確保したまま使っていないメモリを解放する
+
+Frees more, but recently used files load a little slower the next time
+より多く解放しますが、最近使ったファイルは次回の読み込みが少し遅くなります
+
+From this version's release on GitHub.
+GitHub にあるこのバージョンのリリースから取得しています。
+
+Hardware and drivers
+ハードウェアとドライバー
+
+Language, theme, font, startup and updates
+言語、テーマ、フォント、スタートアップ、更新
+
+Let a suspended process run again
+中断したプロセスを再び実行する
+
+Light UI (Segoe UI Light)
+ライト UI (Segoe UI Light)
+
+Listen on Pixabay
+Pixabay で聴く
+
+Loading the changelog.
+変更履歴を読み込んでいます。
+
+Music
+音楽
+
+Open the selected tool
+選択したツールを開く
+
+Pause it completely until you resume it
+再開するまで完全に中断する
+
+Paused: it gets no CPU time until it is resumed
+一時停止中：再開されるまで CPU 時間を受け取りません
+
+Play the trailer in your browser
+ブラウザーでトレーラーを再生
+
+Promotional trailer
+プロモーション トレーラー
+
+Restart
+再起動
+
+Restart these tasks?
+これらのタスクを再起動しますか？
+
+Restarted {0} of {1} programs.
+{1} 個中 {0} 個のプログラムを再起動しました。
+
+Run chkdsk on this drive with the mode on the left
+左のモードでこのドライブに chkdsk を実行
+
+Show only processes whose name contains this text, or one PID
+名前にこのテキストを含むプロセス、または 1 つの PID だけを表示
+
+Sort by process ID
+プロセス ID で並べ替え
+
+Sort by status: suspended and protected first
+状態で並べ替え：中断と保護を先に
+
+Sort by type: apps first, then background processes
+種類で並べ替え：アプリを先に、次にバックグラウンド プロセス
+
+System (Segoe UI)
+システム (Segoe UI)
+
+The taskbar and open folder windows disappear for a moment
+タスク バーと開いているフォルダー ウィンドウが一瞬消えます
+
+The typeface used for all text.
+すべてのテキストに使う書体。
+
+They will close and open again. Anything unsaved in them will be lost.
+これらは閉じられてから再び開きます。保存していない内容は失われます。
+
+Try again
+再試行
+
+Virus protection, firewall and device security
+ウイルス対策、ファイアウォール、デバイス セキュリティ
+
+Watch the trailer
+トレーラーを見る
+
+What changed in this version
+このバージョンでの変更点
+
+What's new in RustCleanup {0}
+RustCleanup {0} の新機能
+
+Who made RustCleanup and what it is built with
+RustCleanup の作者と使用している技術
+
+Windows Security
+Windows セキュリティ
+
+Windows Settings
+Windows の設定
+
+Windows will not download any updates until then
+それまで Windows は更新プログラムをダウンロードしません
+
+{0}% of your RAM
+RAM の {0}%
+
+There is no release of version {0} on GitHub yet.
+GitHub にはまだバージョン {0} のリリースがありません。

@@ -8,20 +8,23 @@
 
 ## Features
 
-![RustCleanup 2.0.1 main window in dark mode, showing Physical and Virtual Memory, Scan Disk with storage figures and Manage Storage, the Windows settings switches and System tools](docs/screenshot.png)
+![RustCleanup 3.0.0 main window in dark mode, showing Physical and Virtual Memory, Scan Disk with storage figures and Manage Storage, the Windows settings switches and System tools](docs/screenshot.png)
 
 | Feature | What it does | How to undo |
 |---|---|---|
 | **Clean RAM** | Trims the working set of every process (`EmptyWorkingSet`), flushes the modified page list and, optionally, purges the standby list (file cache) via `NtSetSystemInformation`. Reports how much memory was freed. | Nothing to undo: Windows pages memory back in on demand. |
-| **Physical Memory** | Live RAM in use, out of usable and installed RAM, plus available and cached memory, refreshed every second. | n/a |
-| **Virtual Memory** | Page file size, usage and peak for each page file, plus the commit charge (RAM plus page file). | n/a |
+| **Physical Memory** | Live RAM in use, out of usable and installed RAM, plus available and cached memory, refreshed every second. The bar turns yellow above 75% and red above 90%. | n/a |
+| **Virtual Memory** | Page file size, usage and peak for each page file, plus the commit charge (RAM plus page file). The bar turns yellow above 75% and red above 90%. | n/a |
 | **Scan Disk** | Shows how much of the selected drive is used, how much is available and its total size. **Manage Storage** opens Windows Settings at Storage for the system drive. For any other drive it goes on to Storage used on other drives and opens that drive's own page. Run `chkdsk` on any mounted drive: Output streams live into its own window. Modes: **Read-only check** (`chkdsk X:`) on any drive, or **Online scan** (`chkdsk X: /scan`) on NTFS drives. | Read-only: never modifies the disk. |
 | **Disable Copilot** | Sets `TurnOffWindowsCopilot = 1` under `HKCU` and `HKLM\Software\Policies\Microsoft\Windows\WindowsCopilot`, hides the taskbar button, and can restart Explorer so it applies right away. | Switch off: the values are deleted. |
 | **Disable Telemetry** | Sets `AllowTelemetry = 0` (policy and system keys), disables and stops `DiagTrack` and `dmwappushservice`, and disables the telemetry scheduled tasks through Task Scheduler. Tasks missing on your Windows build are skipped. | Switch off: policies removed, services set back to Automatic/Manual, tasks re-enabled. |
 | **No Forced Updates** | Under `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU`: `NoAutoRebootWithLoggedOnUsers = 1`, `AUOptions = 2` (ask before download and install). Can also pause updates for 35 days, the most Windows allows. | Switch off: all policy and pause values removed. |
-| **Optimize Task** | A live task list (App or Background, CPU %, memory) with filter and sorting, in its own window. For the selected processes: **Optimize** (trim memory and set Below Normal priority), **Suspend**, **Resume**, **End task**. | Resume suspended processes. Anything still suspended is resumed when RustCleanup exits. |
+| **Optimize Task** | A live task list (App or Background, CPU %, memory, status) in its own window, with a filter. Click any column to sort by it, and again to reverse. Select like in File Explorer: click, Ctrl+click, Shift+click, Ctrl+A. Memory turns yellow at 4% and red at 10% of your RAM. For the selected processes: **Optimize** (trim memory and set Below Normal priority), **Suspend**, **Resume**, **Restart** (close and open again with the same command line) and **End task**. | Resume suspended processes. Anything still suspended is resumed when RustCleanup exits. |
 | **Low Power Mode** | Creates and activates a "RustCleanup Low Power" plan: CPU capped at 60% plugged in and 50% on battery, turbo boost off, passive cooling. | Switch off: your previous power plan is restored and the custom plan deleted. |
-| **System Tools** | Opens Power Config, Disk Cleanup, Disk Management, Performance Monitor, Task Manager, Resource Monitor, Command Prompt or Command Prompt [Admin]. | n/a |
+| **System Tools** | Opens Power Config, Disk Cleanup, Disk Management, Performance Monitor, Task Manager, Resource Monitor, Windows Security, Device Manager, Settings, Command Prompt or Command Prompt [Admin]. | n/a |
+
+### Task list
+![The task list sorted by memory, with Optimize, Suspend, Resume, Restart and End task above the Name, PID, Type, CPU, Memory and Status columns](docs/tasks.png)
 
 ### Tray icon and notifications
 - **The tray icon stays** in the notification area while RustCleanup runs. Click it to open the window.
@@ -31,9 +34,9 @@
 - **Only one copy runs.** Opening RustCleanup again brings up the copy that is already running.
 
 ### Settings
-![The Settings window: language, start minimized, open on startup, close to the notification area, theme, interface size, notifications and updates](docs/settings.png)
+![The Settings window: language, start minimized, open on startup, close to the notification area, theme, font, interface size, notifications and updates](docs/settings.png)
 
-The **Settings** button sits between **Credits** and the theme button. Settings are saved in `HKCU\Software\RustCleanup`.
+The **Settings** button sits between **Credits** and the theme button. **Changelog**, next to **Credits**, shows the release notes of the version you are running. It also opens by itself on the first start after an update. Settings are saved in `HKCU\Software\RustCleanup`.
 
 | Setting | What it does |
 |---|---|
@@ -42,8 +45,9 @@ The **Settings** button sits between **Credits** and the theme button. Settings 
 | **Open on startup** | Adds a Task Scheduler logon task with highest privileges, so RustCleanup starts at sign-in without a UAC prompt. (The usual Run key can't be used: Windows skips programs that need admin rights there.) |
 | **Close to the notification area** | On: the close button hides the window. Off: it quits. |
 | **Theme** and **Interface size** | Same as Windows, Light or Dark; 90% to 175%. |
+| **Font** | System (Segoe UI), Arial, Times New Roman, Light UI (Segoe UI Light), Comic Sans MS, Verdana, Georgia, Tahoma, Calibri, Trebuchet MS or Consolas. |
 | **Notifications** | Turns the Windows notifications off or on. |
-| **Automatically check for updates** | On: a new release is downloaded, checked against its published SHA-256, installed and restarted by itself. Off: RustCleanup shows the new version's changelog with **Update Now** and **Never Update** (or close it to decide later). |
+| **Automatically check for updates** | On: a new release is downloaded, checked against its published SHA-256, installed, and RustCleanup restarts on the new version by itself. Off: RustCleanup shows the new version's changelog with **Update Now** and **Never Update** (or close it to decide later). |
 | **Auto-Clean RAM** | Cleans RAM by itself when memory use goes above the amount on the slider (50% to 95%), at most once every 2 minutes. |
 | **Hardware-accelerated UI** | Draws the interface with Direct3D 12 instead of OpenGL. Smoother on some GPUs, but about 335 MB of memory instead of about 100 MB. Needs a restart. |
 
@@ -137,6 +141,7 @@ src/
 │   ├── tasks.rs        Optimize Task and the task list window
 │   ├── tweaks.rs       Windows settings switches and System tools
 │   ├── credits.rs      Credits window
+│   ├── changelog.rs    Changelog window (this version's release notes)
 │   ├── settings.rs     Settings window
 │   ├── update.rs       new-version window with the changelog
 │   ├── flags.rs        flags for the language picker
@@ -152,7 +157,7 @@ src/
     ├── updates.rs      Windows Update policies and pause
     ├── power.rs        Low Power Mode plan via powercfg
     ├── process_monitor.rs  task list sampling (sysinfo)
-    ├── process_actions.rs  optimize, suspend, resume, end
+    ├── process_actions.rs  optimize, suspend, resume, restart, end
     ├── tray.rs         tray icon, menu, notifications (Shell_NotifyIconW)
     ├── tools.rs        System Tools launchers
     ├── updater.rs      GitHub release check, download, SHA-256 check, exe swap

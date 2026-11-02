@@ -829,3 +829,159 @@ used of {0}
 Занято: {0}, доступно: {1}, всего: {2}
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 Параметры открыты в разделе «Память», но не удалось выбрать {0} ({1}). Откройте «Дополнительные параметры хранилища», затем «Память, используемая на других дисках».
+
+"Promo" by {0}
+«Promo», исполнитель {0}
+
+Animation
+Анимация
+
+Background processes have no window of their own, like services and helpers
+У фоновых процессов нет собственного окна, например у служб и вспомогательных программ
+
+Changelog
+Список изменений
+
+Close it and open it again with the same settings
+Закрыть и снова открыть с теми же параметрами
+
+Close it right away (Delete)
+Закрыть сразу (Delete)
+
+Copy the whole log to the clipboard
+Скопировать весь журнал в буфер обмена
+
+Could not load the changelog: {0}
+Не удалось загрузить список изменений: {0}
+
+Could not restart {0}: {1}
+Не удалось перезапустить {0}: {1}
+
+Deselect everything (Esc)
+Снять всё выделение (Esc)
+
+Device Manager
+Диспетчер устройств
+
+Empty the activity log
+Очистить журнал действий
+
+Every running program with its CPU and memory use
+Все запущенные программы с использованием CPU и памяти
+
+Font
+Шрифт
+
+Free memory other programs are holding but not using
+Освободить память, которую другие программы занимают, но не используют
+
+Frees more, but recently used files load a little slower the next time
+Освобождает больше, но недавно использованные файлы в следующий раз загрузятся чуть медленнее
+
+From this version's release on GitHub.
+Из выпуска этой версии на GitHub.
+
+Hardware and drivers
+Оборудование и драйверы
+
+Language, theme, font, startup and updates
+Язык, тема, шрифт, автозапуск и обновления
+
+Let a suspended process run again
+Возобновить работу приостановленного процесса
+
+Light UI (Segoe UI Light)
+Лёгкий интерфейс (Segoe UI Light)
+
+Listen on Pixabay
+Слушать на Pixabay
+
+Loading the changelog.
+Загрузка списка изменений.
+
+Music
+Музыка
+
+Open the selected tool
+Открыть выбранный инструмент
+
+Pause it completely until you resume it
+Полностью приостановить до возобновления
+
+Paused: it gets no CPU time until it is resumed
+Приостановлен: не получает время CPU, пока не будет возобновлён
+
+Play the trailer in your browser
+Воспроизвести трейлер в браузере
+
+Promotional trailer
+Рекламный трейлер
+
+Restart
+Перезапустить
+
+Restart these tasks?
+Перезапустить эти задачи?
+
+Restarted {0} of {1} programs.
+Перезапущено программ: {0} из {1}.
+
+Run chkdsk on this drive with the mode on the left
+Запустить chkdsk на этом диске в режиме, выбранном слева
+
+Show only processes whose name contains this text, or one PID
+Показывать только процессы, имя которых содержит этот текст, или один PID
+
+Sort by process ID
+Сортировать по ИД процесса
+
+Sort by status: suspended and protected first
+Сортировать по состоянию: сначала приостановленные и защищённые
+
+Sort by type: apps first, then background processes
+Сортировать по типу: сначала приложения, затем фоновые процессы
+
+System (Segoe UI)
+Системный (Segoe UI)
+
+The taskbar and open folder windows disappear for a moment
+Панель задач и открытые окна папок ненадолго исчезнут
+
+The typeface used for all text.
+Шрифт для всего текста.
+
+They will close and open again. Anything unsaved in them will be lost.
+Они будут закрыты и открыты снова. Всё несохранённое в них будет потеряно.
+
+Try again
+Повторить
+
+Virus protection, firewall and device security
+Защита от вирусов, брандмауэр и безопасность устройства
+
+Watch the trailer
+Смотреть трейлер
+
+What changed in this version
+Что изменилось в этой версии
+
+What's new in RustCleanup {0}
+Что нового в RustCleanup {0}
+
+Who made RustCleanup and what it is built with
+Кто создал RustCleanup и на чём он построен
+
+Windows Security
+Безопасность Windows
+
+Windows Settings
+Параметры Windows
+
+Windows will not download any updates until then
+До этого момента Windows не будет загружать обновления
+
+{0}% of your RAM
+{0}% вашей RAM
+
+There is no release of version {0} on GitHub yet.
+На GitHub ещё нет выпуска версии {0}.

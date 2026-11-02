@@ -13,8 +13,9 @@ use crate::settings;
 use crate::sys::format::fmt_bytes;
 use crate::sys::memory::{self, MemorySnapshot};
 
-/// Physical memory above this share of RAM is shown in the warning colour.
-const HIGH_USAGE: f32 = 0.85;
+/// Usage bars turn yellow above the first share and red above the second.
+const HIGH_USAGE: f32 = 0.75;
+const VERY_HIGH_USAGE: f32 = 0.90;
 
 pub struct MemoryPanel {
     snap: MemorySnapshot,
@@ -73,6 +74,7 @@ impl MemoryPanel {
                         },
                         !busy,
                     )
+                    .on_hover_text(tr("Free memory other programs are holding but not using"))
                     .clicked()
                     {
                         Self::start_clean(jobs);
@@ -85,6 +87,7 @@ impl MemoryPanel {
                 let mut purge = settings::get().purge_standby;
                 if ui
                     .checkbox(&mut purge, tr("Also purge the standby list (file cache)"))
+                    .on_hover_text(tr("Frees more, but recently used files load a little slower the next time"))
                     .changed()
                 {
                     settings::update(|s| s.purge_standby = purge);
@@ -113,7 +116,12 @@ impl MemoryPanel {
             &trf("in use of {0}", &[&fmt_bytes(p.usable)]),
             Some(fraction),
         );
-        widgets::meter(ui, pal, fraction, fraction >= HIGH_USAGE);
+        widgets::meter(
+            ui,
+            pal,
+            fraction,
+            widgets::usage_level(fraction, HIGH_USAGE, VERY_HIGH_USAGE),
+        );
         let detail = match p.installed {
             Some(installed) => trf(
                 "{0} available, {1} cached, {2} installed",
@@ -159,7 +167,12 @@ impl MemoryPanel {
                 &trf("of {0} page file in use", &[&fmt_bytes(size)]),
                 Some(fraction),
             );
-            widgets::meter(ui, pal, fraction, fraction >= HIGH_USAGE);
+            widgets::meter(
+            ui,
+            pal,
+            fraction,
+            widgets::usage_level(fraction, HIGH_USAGE, VERY_HIGH_USAGE),
+        );
             let files: Vec<String> = v
                 .page_files
                 .iter()

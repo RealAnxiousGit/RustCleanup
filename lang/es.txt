@@ -829,3 +829,159 @@ usados de {0}
 {0} usados, {1} disponibles, {2} en total
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 Configuración está abierta en Almacenamiento, pero no se pudo seleccionar {0} ({1}). Abra Configuración de almacenamiento avanzada y luego Almacenamiento usado en otras unidades.
+
+"Promo" by {0}
+"Promo" de {0}
+
+Animation
+Animación
+
+Background processes have no window of their own, like services and helpers
+Los procesos en segundo plano no tienen ventana propia, como los servicios y los auxiliares
+
+Changelog
+Registro de cambios
+
+Close it and open it again with the same settings
+Cerrarlo y volver a abrirlo con la misma configuración
+
+Close it right away (Delete)
+Cerrarlo de inmediato (Supr)
+
+Copy the whole log to the clipboard
+Copiar todo el registro al portapapeles
+
+Could not load the changelog: {0}
+No se pudo cargar el registro de cambios: {0}
+
+Could not restart {0}: {1}
+No se pudo reiniciar {0}: {1}
+
+Deselect everything (Esc)
+Anular toda la selección (Esc)
+
+Device Manager
+Administrador de dispositivos
+
+Empty the activity log
+Vaciar el registro de actividad
+
+Every running program with its CPU and memory use
+Todos los programas en ejecución con su uso de CPU y memoria
+
+Font
+Fuente
+
+Free memory other programs are holding but not using
+Liberar la memoria que otros programas retienen pero no usan
+
+Frees more, but recently used files load a little slower the next time
+Libera más, pero los archivos usados recientemente tardarán un poco más en cargar la próxima vez
+
+From this version's release on GitHub.
+De la publicación de esta versión en GitHub.
+
+Hardware and drivers
+Hardware y controladores
+
+Language, theme, font, startup and updates
+Idioma, tema, fuente, inicio y actualizaciones
+
+Let a suspended process run again
+Dejar que un proceso suspendido vuelva a ejecutarse
+
+Light UI (Segoe UI Light)
+Interfaz ligera (Segoe UI Light)
+
+Listen on Pixabay
+Escuchar en Pixabay
+
+Loading the changelog.
+Cargando el registro de cambios.
+
+Music
+Música
+
+Open the selected tool
+Abrir la herramienta seleccionada
+
+Pause it completely until you resume it
+Pausarlo por completo hasta que lo reanudes
+
+Paused: it gets no CPU time until it is resumed
+En pausa: no recibe tiempo de CPU hasta que se reanude
+
+Play the trailer in your browser
+Reproducir el tráiler en tu navegador
+
+Promotional trailer
+Tráiler promocional
+
+Restart
+Reiniciar
+
+Restart these tasks?
+¿Reiniciar estas tareas?
+
+Restarted {0} of {1} programs.
+Se reiniciaron {0} de {1} programas.
+
+Run chkdsk on this drive with the mode on the left
+Ejecutar chkdsk en esta unidad con el modo de la izquierda
+
+Show only processes whose name contains this text, or one PID
+Mostrar solo los procesos cuyo nombre contenga este texto, o un PID
+
+Sort by process ID
+Ordenar por ID de proceso
+
+Sort by status: suspended and protected first
+Ordenar por estado: primero los suspendidos y protegidos
+
+Sort by type: apps first, then background processes
+Ordenar por tipo: primero las aplicaciones, luego los procesos en segundo plano
+
+System (Segoe UI)
+Sistema (Segoe UI)
+
+The taskbar and open folder windows disappear for a moment
+La barra de tareas y las ventanas de carpetas abiertas desaparecen un momento
+
+The typeface used for all text.
+El tipo de letra que se usa en todo el texto.
+
+They will close and open again. Anything unsaved in them will be lost.
+Se cerrarán y volverán a abrirse. Se perderá todo lo que no esté guardado en ellos.
+
+Try again
+Volver a intentarlo
+
+Virus protection, firewall and device security
+Protección antivirus, firewall y seguridad del dispositivo
+
+Watch the trailer
+Ver el tráiler
+
+What changed in this version
+Qué cambió en esta versión
+
+What's new in RustCleanup {0}
+Novedades de RustCleanup {0}
+
+Who made RustCleanup and what it is built with
+Quién creó RustCleanup y con qué está hecho
+
+Windows Security
+Seguridad de Windows
+
+Windows Settings
+Configuración de Windows
+
+Windows will not download any updates until then
+Windows no descargará ninguna actualización hasta entonces
+
+{0}% of your RAM
+{0}% de tu RAM
+
+There is no release of version {0} on GitHub yet.
+Todavía no hay ninguna versión {0} publicada en GitHub.

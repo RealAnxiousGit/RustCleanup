@@ -143,7 +143,9 @@ impl DiskPanel {
                     }
                 });
             let can_run = drive.as_ref().is_some_and(|d| self.mode.supports(d)) && !self.running();
-            if widgets::button(ui, tr("Run check"), can_run).clicked()
+            if widgets::button(ui, tr("Run check"), can_run)
+                .on_hover_text(tr("Run chkdsk on this drive with the mode on the left"))
+                .clicked()
                 && let Some(d) = &drive
             {
                 self.start(ui.ctx(), d);
@@ -208,7 +210,7 @@ impl DiskPanel {
             &trf("used of {0}", &[&fmt_bytes(space.total)]),
             Some(fraction),
         );
-        widgets::meter(ui, pal, fraction, fraction >= LOW_SPACE);
+        widgets::meter(ui, pal, fraction, (fraction >= LOW_SPACE) as u8);
         widgets::note(
             ui,
             pal,

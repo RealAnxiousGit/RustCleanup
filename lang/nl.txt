@@ -829,3 +829,159 @@ gebruikt van {0}
 {0} gebruikt, {1} beschikbaar, {2} totaal
 Settings is open at Storage, but {0} could not be selected ({1}). Open Advanced storage settings, then Storage used on other drives.
 Instellingen is geopend bij Opslag, maar {0} kon niet worden geselecteerd ({1}). Open Geavanceerde opslaginstellingen en daarna Opslag die wordt gebruikt op andere stations.
+
+"Promo" by {0}
+"Promo" van {0}
+
+Animation
+Animatie
+
+Background processes have no window of their own, like services and helpers
+Achtergrondprocessen hebben geen eigen venster, zoals services en hulpprogramma's
+
+Changelog
+Wijzigingslogboek
+
+Close it and open it again with the same settings
+Sluiten en opnieuw openen met dezelfde instellingen
+
+Close it right away (Delete)
+Direct sluiten (Delete)
+
+Copy the whole log to the clipboard
+Het hele logboek naar het klembord kopiëren
+
+Could not load the changelog: {0}
+Kan het wijzigingslogboek niet laden: {0}
+
+Could not restart {0}: {1}
+Kan {0} niet opnieuw starten: {1}
+
+Deselect everything (Esc)
+Alles deselecteren (Esc)
+
+Device Manager
+Apparaatbeheer
+
+Empty the activity log
+Het activiteitenlogboek leegmaken
+
+Every running program with its CPU and memory use
+Elk actief programma met het CPU- en geheugengebruik
+
+Font
+Lettertype
+
+Free memory other programs are holding but not using
+Geheugen vrijmaken dat andere programma's vasthouden maar niet gebruiken
+
+Frees more, but recently used files load a little slower the next time
+Maakt meer vrij, maar recent gebruikte bestanden laden de volgende keer iets langzamer
+
+From this version's release on GitHub.
+Uit de release van deze versie op GitHub.
+
+Hardware and drivers
+Hardware en stuurprogramma's
+
+Language, theme, font, startup and updates
+Taal, thema, lettertype, opstarten en updates
+
+Let a suspended process run again
+Een onderbroken proces weer laten draaien
+
+Light UI (Segoe UI Light)
+Lichte interface (Segoe UI Light)
+
+Listen on Pixabay
+Beluisteren op Pixabay
+
+Loading the changelog.
+Wijzigingslogboek laden.
+
+Music
+Muziek
+
+Open the selected tool
+Het geselecteerde hulpprogramma openen
+
+Pause it completely until you resume it
+Volledig onderbreken tot je het hervat
+
+Paused: it gets no CPU time until it is resumed
+Gepauzeerd: krijgt geen CPU-tijd tot het wordt hervat
+
+Play the trailer in your browser
+De trailer in je browser afspelen
+
+Promotional trailer
+Promotietrailer
+
+Restart
+Opnieuw starten
+
+Restart these tasks?
+Deze taken opnieuw starten?
+
+Restarted {0} of {1} programs.
+{0} van {1} programma's opnieuw gestart.
+
+Run chkdsk on this drive with the mode on the left
+chkdsk op dit station uitvoeren met de modus links
+
+Show only processes whose name contains this text, or one PID
+Alleen processen tonen waarvan de naam deze tekst bevat, of één PID
+
+Sort by process ID
+Sorteren op proces-ID
+
+Sort by status: suspended and protected first
+Sorteren op status: onderbroken en beveiligd eerst
+
+Sort by type: apps first, then background processes
+Sorteren op type: eerst apps, dan achtergrondprocessen
+
+System (Segoe UI)
+Systeem (Segoe UI)
+
+The taskbar and open folder windows disappear for a moment
+De taakbalk en geopende mapvensters verdwijnen even
+
+The typeface used for all text.
+Het lettertype voor alle tekst.
+
+They will close and open again. Anything unsaved in them will be lost.
+Ze worden gesloten en opnieuw geopend. Alles wat er niet in is opgeslagen, gaat verloren.
+
+Try again
+Opnieuw proberen
+
+Virus protection, firewall and device security
+Virusbescherming, firewall en apparaatbeveiliging
+
+Watch the trailer
+Trailer bekijken
+
+What changed in this version
+Wat er in deze versie is veranderd
+
+What's new in RustCleanup {0}
+Nieuw in RustCleanup {0}
+
+Who made RustCleanup and what it is built with
+Wie RustCleanup heeft gemaakt en waarmee het is gebouwd
+
+Windows Security
+Windows-beveiliging
+
+Windows Settings
+Windows-instellingen
+
+Windows will not download any updates until then
+Windows downloadt tot dan geen updates
+
+{0}% of your RAM
+{0}% van je RAM
+
+There is no release of version {0} on GitHub yet.
+Er is nog geen release van versie {0} op GitHub.

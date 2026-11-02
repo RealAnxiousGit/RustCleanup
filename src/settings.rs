@@ -37,6 +37,88 @@ impl ThemeMode {
     }
 }
 
+/// The interface font. Each is a font that ships with Windows 11; a missing
+/// file falls back to Segoe UI.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum FontChoice {
+    System,
+    Arial,
+    TimesNewRoman,
+    LightUi,
+    ComicSans,
+    Verdana,
+    Georgia,
+    Tahoma,
+    Calibri,
+    Trebuchet,
+    Consolas,
+}
+
+impl FontChoice {
+    pub const ALL: [FontChoice; 11] = [
+        FontChoice::System,
+        FontChoice::Arial,
+        FontChoice::TimesNewRoman,
+        FontChoice::LightUi,
+        FontChoice::ComicSans,
+        FontChoice::Verdana,
+        FontChoice::Georgia,
+        FontChoice::Tahoma,
+        FontChoice::Calibri,
+        FontChoice::Trebuchet,
+        FontChoice::Consolas,
+    ];
+
+    pub fn label(self) -> &'static str {
+        match self {
+            FontChoice::System => i18n::tr("System (Segoe UI)"),
+            FontChoice::Arial => "Arial",
+            FontChoice::TimesNewRoman => "Times New Roman",
+            FontChoice::LightUi => i18n::tr("Light UI (Segoe UI Light)"),
+            FontChoice::ComicSans => "Comic Sans MS",
+            FontChoice::Verdana => "Verdana",
+            FontChoice::Georgia => "Georgia",
+            FontChoice::Tahoma => "Tahoma",
+            FontChoice::Calibri => "Calibri",
+            FontChoice::Trebuchet => "Trebuchet MS",
+            FontChoice::Consolas => "Consolas",
+        }
+    }
+
+    /// Regular and bold files under `C:\Windows\Fonts`.
+    pub fn files(self) -> (&'static str, &'static str) {
+        match self {
+            FontChoice::System => ("SegUIVar.ttf", "seguisb.ttf"),
+            FontChoice::Arial => ("arial.ttf", "arialbd.ttf"),
+            FontChoice::TimesNewRoman => ("times.ttf", "timesbd.ttf"),
+            FontChoice::LightUi => ("segoeuil.ttf", "segoeui.ttf"),
+            FontChoice::ComicSans => ("comic.ttf", "comicbd.ttf"),
+            FontChoice::Verdana => ("verdana.ttf", "verdanab.ttf"),
+            FontChoice::Georgia => ("georgia.ttf", "georgiab.ttf"),
+            FontChoice::Tahoma => ("tahoma.ttf", "tahomabd.ttf"),
+            FontChoice::Calibri => ("calibri.ttf", "calibrib.ttf"),
+            FontChoice::Trebuchet => ("trebuc.ttf", "trebucbd.ttf"),
+            FontChoice::Consolas => ("consola.ttf", "consolab.ttf"),
+        }
+    }
+
+    fn code(self) -> &'static str {
+        match self {
+            FontChoice::System => "system",
+            FontChoice::Arial => "arial",
+            FontChoice::TimesNewRoman => "times",
+            FontChoice::LightUi => "light",
+            FontChoice::ComicSans => "comic",
+            FontChoice::Verdana => "verdana",
+            FontChoice::Georgia => "georgia",
+            FontChoice::Tahoma => "tahoma",
+            FontChoice::Calibri => "calibri",
+            FontChoice::Trebuchet => "trebuchet",
+            FontChoice::Consolas => "consolas",
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Settings {
     pub language: Lang,
@@ -45,6 +127,7 @@ pub struct Settings {
     pub open_on_startup: bool,
     pub close_to_tray: bool,
     pub theme: ThemeMode,
+    pub font: FontChoice,
     /// Interface size in percent.
     pub ui_scale: u16,
     pub notifications: bool,
@@ -71,6 +154,7 @@ impl Settings {
             open_on_startup: false,
             close_to_tray: true,
             theme: ThemeMode::System,
+            font: FontChoice::System,
             ui_scale: 100,
             notifications: true,
             auto_update: false,
@@ -102,6 +186,9 @@ impl Settings {
                 Some("dark") => ThemeMode::Dark,
                 _ => ThemeMode::System,
             },
+            font: text("Font")
+                .and_then(|c| FontChoice::ALL.into_iter().find(|f| f.code() == c))
+                .unwrap_or(d.font),
             ui_scale: number("UiScale")
                 .map(|v| v as u16)
                 .filter(|v| UI_SCALES.contains(v))
@@ -133,6 +220,9 @@ impl Settings {
         }
         if self.theme != old.theme {
             let _ = registry::set_string(Hive::CurrentUser, KEY, "Theme", self.theme.code());
+        }
+        if self.font != old.font {
+            let _ = registry::set_string(Hive::CurrentUser, KEY, "Font", self.font.code());
         }
         if self.ui_scale != old.ui_scale {
             dword("UiScale", self.ui_scale as u32);
@@ -183,4 +273,18 @@ pub fn reset() -> Settings {
         *s = Settings::defaults();
         s.open_on_startup = startup;
     })
+}
+
+/// Remembers which version ran, and says whether the last launch was an
+/// older one, i.e. RustCleanup was just updated. `updated_hint` covers
+/// versions before 3.0.0, which did not save their version.
+pub fn note_version(current: &str, updated_hint: bool) -> bool {
+    let last = registry::get_string(Hive::CurrentUser, KEY, "LastVersion");
+    if last.as_deref() != Some(current) {
+        let _ = registry::set_string(Hive::CurrentUser, KEY, "LastVersion", current);
+    }
+    match last {
+        Some(last) => crate::sys::updater::is_newer(current, &last),
+        None => updated_hint,
+    }
 }

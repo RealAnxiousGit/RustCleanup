@@ -21,6 +21,7 @@ use crate::i18n::{tr, trf};
 
 const LATEST_RELEASE: &str =
     "https://api.github.com/repos/RealAnxiousGit/RustCleanup/releases/latest";
+const RELEASE_BY_TAG: &str = "https://api.github.com/repos/RealAnxiousGit/RustCleanup/releases/tags/v";
 const ASSET: &str = "RustCleanup.exe";
 /// Test hook: pretend to be this version, to exercise the update flow
 /// against the real releases page.
@@ -52,7 +53,7 @@ fn parse_version(text: &str) -> Vec<u64> {
         .collect()
 }
 
-fn is_newer(candidate: &str, current: &str) -> bool {
+pub fn is_newer(candidate: &str, current: &str) -> bool {
     let (mut a, mut b) = (parse_version(candidate), parse_version(current));
     a.resize(3, 0);
     b.resize(3, 0);
@@ -89,6 +90,27 @@ pub fn check() -> Result<Option<Release>, String> {
         exe_url,
         sha256_url: asset_url(&format!("{ASSET}.sha256")),
     }))
+}
+
+/// The release notes and page of one version, for the Changelog window.
+pub fn notes_for(version: &str) -> Result<(String, String), String> {
+    let body = http_get(&format!("{RELEASE_BY_TAG}{version}"), |_, _| {}).map_err(|e| {
+        // A build that was never released (or a removed release) has no notes.
+        if e == trf("GitHub answered with HTTP status {0}.", &[&404]) {
+            trf("There is no release of version {0} on GitHub yet.", &[&version])
+        } else {
+            e
+        }
+    })?;
+    let json: serde_json::Value = serde_json::from_slice(&body)
+        .map_err(|e| trf("GitHub sent a reply RustCleanup could not read: {0}", &[&e]))?;
+    Ok((
+        json["body"]
+            .as_str()
+            .unwrap_or_default()
+            .replace("\r\n", "\n"),
+        json["html_url"].as_str().unwrap_or_default().to_string(),
+    ))
 }
 
 /// Downloads `release`, checks it, and swaps it in for the running exe.
@@ -165,6 +187,12 @@ fn replace_exe(exe: &Path, bytes: &[u8]) -> Result<(), String> {
         return Err(fail(e));
     }
     Ok(())
+}
+
+/// True while the previous version from an update is still next to the exe,
+/// which means this is the first launch since the update.
+pub fn leftover_exists() -> bool {
+    std::env::current_exe().is_ok_and(|exe| old_path(&exe).exists())
 }
 
 /// Deletes the previous version left behind by an update.

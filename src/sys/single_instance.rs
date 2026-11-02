@@ -31,13 +31,24 @@ impl Drop for InstanceLock {
     }
 }
 
+/// A debug build has its own name, so it can run beside an installed copy.
+#[cfg(not(debug_assertions))]
+const MUTEX_NAME: windows::core::PCWSTR = w!("Local\\RustCleanup.SingleInstance");
+#[cfg(debug_assertions)]
+const MUTEX_NAME: windows::core::PCWSTR = w!("Local\\RustCleanup.SingleInstance.Debug");
+
 fn try_lock() -> Option<InstanceLock> {
     // SAFETY: creating a named mutex; the handle is kept until the process exits.
     unsafe {
-        let handle = CreateMutexW(None, true, w!("Local\\RustCleanup.SingleInstance")).ok()?;
+        let handle = CreateMutexW(None, true, MUTEX_NAME);
+        // Read before anything else can overwrite it.
         let error = GetLastError();
+        let handle = handle.ok()?;
         // ACCESS_DENIED: a copy running with different rights already owns it.
         if error == ERROR_ALREADY_EXISTS || error == ERROR_ACCESS_DENIED {
+            // Kept open, this handle would keep the mutex alive after the
+            // other copy exits, and a restart would wait for it forever.
+            let _ = CloseHandle(handle);
             return None;
         }
         Some(InstanceLock(handle))

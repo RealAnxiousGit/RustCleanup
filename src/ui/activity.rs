@@ -32,10 +32,16 @@ impl ActivityLog {
             ui.label(RichText::new(tr("Activity")).family(semibold()));
             ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                 let any = !self.entries.is_empty();
-                if widgets::button(ui, tr("Clear"), any).clicked() {
+                if widgets::button(ui, tr("Clear"), any)
+                    .on_hover_text(tr("Empty the activity log"))
+                    .clicked()
+                {
                     self.entries.clear();
                 }
-                if widgets::button(ui, tr("Copy"), any).clicked() {
+                if widgets::button(ui, tr("Copy"), any)
+                    .on_hover_text(tr("Copy the whole log to the clipboard"))
+                    .clicked()
+                {
                     let text: String = self
                         .entries
                         .iter()

@@ -18,7 +18,7 @@ pub struct Tool {
     unelevated: bool,
 }
 
-pub const TOOLS: [Tool; 8] = [
+pub const TOOLS: [Tool; 11] = [
     Tool {
         label: n_("Power Config"),
         description: n_("Power Options control panel"),
@@ -61,6 +61,28 @@ pub const TOOLS: [Tool; 8] = [
         args: &[],
         unelevated: false,
     },
+    // Settings pages open by URI, like from the Start menu.
+    Tool {
+        label: n_("Windows Security"),
+        description: n_("Virus protection, firewall and device security"),
+        exe: "windowsdefender:",
+        args: &[],
+        unelevated: true,
+    },
+    Tool {
+        label: n_("Device Manager"),
+        description: n_("Hardware and drivers"),
+        exe: "mmc.exe",
+        args: &["devmgmt.msc"],
+        unelevated: false,
+    },
+    Tool {
+        label: n_("Settings"),
+        description: n_("Windows Settings"),
+        exe: "ms-settings:",
+        args: &[],
+        unelevated: true,
+    },
     Tool {
         label: n_("Command Prompt"),
         description: n_("Standard (non-admin) prompt"),
@@ -82,6 +104,10 @@ impl Tool {
     /// Launches the tool without waiting for it. Both kinds start in the
     /// user's profile folder, like a prompt opened from the Start menu.
     pub fn launch(&self) -> Result<(), String> {
+        if self.exe.ends_with(':') {
+            return shell::open_unelevated(self.exe)
+                .map_err(|e| format!("could not open {}: {e}", self.label));
+        }
         let home = std::env::var("USERPROFILE").unwrap_or_default();
         let exe = system32(self.exe);
         if self.unelevated {
