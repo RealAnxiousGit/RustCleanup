@@ -158,5 +158,6 @@ fn read_only_chkdsk_on_system_drive() {
         started.elapsed().as_secs()
     );
     assert!(lines > 0);
-    assert!((0..=2).contains(&code), "chkdsk exit {code}");
+    // 3 is a real result on a drive with errors: read-only mode stops there.
+    assert!((0..=3).contains(&code), "chkdsk exit {code}");
 }

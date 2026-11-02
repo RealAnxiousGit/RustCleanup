@@ -5,7 +5,7 @@ It ships as one portable `RustCleanup.exe` with nothing to install, in 12 langua
 
 **[Download the latest release](https://github.com/RealAnxiousGit/RustCleanup/releases/latest)**
 
-![RustCleanup 2.0 main window in dark mode, showing Physical and Virtual Memory, Scan Disk, the Windows settings switches and System tools](docs/screenshot.png)
+![RustCleanup 2.0.1 main window in dark mode, showing Physical and Virtual Memory, Scan Disk with storage figures and Manage Storage, the Windows settings switches and System tools](docs/screenshot.png)
 
 > RustCleanup changes system settings (registry policies, services, power plans).
 > Every switch can be turned off again to restore the Windows default, but it's still a
