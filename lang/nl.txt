@@ -417,8 +417,17 @@ Prompt Engineer
 Protected
 Beveiligd
 
-Protected system processes were left out.
-Beveiligde systeemprocessen zijn overgeslagen.
+Some selected system processes do not allow this and were left out.
+Sommige geselecteerde systeemprocessen staan dit niet toe en zijn overgeslagen.
+
+System
+Systeem
+
+Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended
+Onderdeel van Windows: het kan worden beëindigd en Windows start het opnieuw, maar het kan niet worden onderbroken
+
+This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.
+Hieronder vallen onderdelen van Windows. Het scherm, de taakbalk of het geluid kan even wegvallen terwijl Windows ze opnieuw start.
 
 Purging the standby list failed: {0}
 Leegmaken van de stand-bylijst mislukt: {0}
@@ -985,3 +994,90 @@ Windows downloadt tot dan geen updates
 
 There is no release of version {0} on GitHub yet.
 Er is nog geen release van versie {0} op GitHub.
+
+{0} {1}, {2}
+{1} {0} {2}
+
+January
+januari
+
+February
+februari
+
+March
+maart
+
+April
+april
+
+May
+mei
+
+June
+juni
+
+July
+juli
+
+August
+augustus
+
+September
+september
+
+October
+oktober
+
+November
+november
+
+December
+december
+
+Could not download the video: {0}
+De video kon niet worden gedownload: {0}
+
+Could not play the video (error {0}).
+De video kon niet worden afgespeeld (fout {0}).
+
+Could not play the video.
+De video kon niet worden afgespeeld.
+
+Could not play the video: {0}
+De video kon niet worden afgespeeld: {0}
+
+Could not save the video: {0}
+De video kon niet worden opgeslagen: {0}
+
+Downloading the video, {0}%
+Video downloaden, {0}%
+
+Mute
+Dempen
+
+Open the video in your browser
+Video openen in de browser
+
+Opening the video.
+Video openen.
+
+Pause
+Pauzeren
+
+Play
+Afspelen
+
+The video has no picture.
+De video heeft geen beeld.
+
+Unmute
+Dempen opheffen
+
+Watch again
+Opnieuw bekijken
+
+Watch what's new
+Bekijk wat er nieuw is
+
+{0} is not a video RustCleanup can play.
+{0} is geen video die RustCleanup kan afspelen.

@@ -3,6 +3,15 @@
 All notable changes to RustCleanup are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [3.0.1] - 2026-11-02
+
+A quick update: the task list can now handle parts of Windows like Task Manager does, and the Changelog shows its date and a What's New video.
+
+### Added
+- **The task list works on parts of Windows** the way Task Manager does. Windows Explorer can be restarted, which brings back a stuck taskbar, Start menu or desktop. Other Windows components, like the Desktop Window Manager or Service Host, can be ended, and Windows starts them again by itself. They show as System in the Status column and cannot be suspended, and RustCleanup warns before acting on them. The processes Windows cannot run without stay protected.
+- **The Changelog shows the date** each version was published on GitHub, under its title.
+- **What's New video** in the Changelog, above the notes. It plays inside RustCleanup with play, pause, a seek bar and mute, and is downloaded only when you press play, so it is not part of the update.
+
 ## [3.0.0] - 2026-11-02
 
 A rebuilt task list with Restart, a Changelog window, a font picker and a smoother, roomier interface.

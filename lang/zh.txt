@@ -417,8 +417,17 @@ Prompt Engineer
 Protected
 受保护
 
-Protected system processes were left out.
-已排除受保护的系统进程。
+Some selected system processes do not allow this and were left out.
+所选的部分系统进程不允许此操作,已跳过。
+
+System
+系统
+
+Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended
+Windows 的组成部分:可以结束,Windows 会重新启动它,但不能挂起
+
+This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.
+其中包括 Windows 的组成部分。在 Windows 重新启动它们期间,屏幕、任务栏或声音可能会短暂消失。
 
 Purging the standby list failed: {0}
 清除备用列表失败：{0}
@@ -985,3 +994,90 @@ RAM 的 {0}%
 
 There is no release of version {0} on GitHub yet.
 GitHub 上还没有 {0} 版本的发布。
+
+{0} {1}, {2}
+{2}年{0}{1}日
+
+January
+1月
+
+February
+2月
+
+March
+3月
+
+April
+4月
+
+May
+5月
+
+June
+6月
+
+July
+7月
+
+August
+8月
+
+September
+9月
+
+October
+10月
+
+November
+11月
+
+December
+12月
+
+Could not download the video: {0}
+无法下载视频:{0}
+
+Could not play the video (error {0}).
+无法播放视频(错误 {0})。
+
+Could not play the video.
+无法播放视频。
+
+Could not play the video: {0}
+无法播放视频:{0}
+
+Could not save the video: {0}
+无法保存视频:{0}
+
+Downloading the video, {0}%
+正在下载视频,{0}%
+
+Mute
+静音
+
+Open the video in your browser
+在浏览器中打开视频
+
+Opening the video.
+正在打开视频。
+
+Pause
+暂停
+
+Play
+播放
+
+The video has no picture.
+视频没有画面。
+
+Unmute
+取消静音
+
+Watch again
+再看一遍
+
+Watch what's new
+观看新功能
+
+{0} is not a video RustCleanup can play.
+{0} 不是 RustCleanup 可以播放的视频。

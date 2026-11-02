@@ -417,8 +417,17 @@ Prompt Engineer
 Protected
 Geschützt
 
-Protected system processes were left out.
-Geschützte Systemprozesse wurden ausgelassen.
+Some selected system processes do not allow this and were left out.
+Einige ausgewählte Systemprozesse erlauben das nicht und wurden ausgelassen.
+
+System
+System
+
+Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended
+Teil von Windows: kann beendet werden und Windows startet ihn neu, aber er kann nicht angehalten werden
+
+This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.
+Darunter sind Teile von Windows. Bildschirm, Taskleiste oder Ton können kurz ausfallen, bis Windows sie neu startet.
 
 Purging the standby list failed: {0}
 Leeren der Standbyliste fehlgeschlagen: {0}
@@ -985,3 +994,90 @@ Windows lädt bis dahin keine Updates herunter
 
 There is no release of version {0} on GitHub yet.
 Auf GitHub gibt es noch keine Veröffentlichung der Version {0}.
+
+{0} {1}, {2}
+{1}. {0} {2}
+
+January
+Januar
+
+February
+Februar
+
+March
+März
+
+April
+April
+
+May
+Mai
+
+June
+Juni
+
+July
+Juli
+
+August
+August
+
+September
+September
+
+October
+Oktober
+
+November
+November
+
+December
+Dezember
+
+Could not download the video: {0}
+Das Video konnte nicht heruntergeladen werden: {0}
+
+Could not play the video (error {0}).
+Das Video konnte nicht abgespielt werden (Fehler {0}).
+
+Could not play the video.
+Das Video konnte nicht abgespielt werden.
+
+Could not play the video: {0}
+Das Video konnte nicht abgespielt werden: {0}
+
+Could not save the video: {0}
+Das Video konnte nicht gespeichert werden: {0}
+
+Downloading the video, {0}%
+Video wird heruntergeladen, {0}%
+
+Mute
+Ton aus
+
+Open the video in your browser
+Video im Browser öffnen
+
+Opening the video.
+Video wird geöffnet.
+
+Pause
+Pause
+
+Play
+Abspielen
+
+The video has no picture.
+Das Video hat kein Bild.
+
+Unmute
+Ton an
+
+Watch again
+Noch einmal ansehen
+
+Watch what's new
+Neuerungen ansehen
+
+{0} is not a video RustCleanup can play.
+{0} ist kein Video, das RustCleanup abspielen kann.

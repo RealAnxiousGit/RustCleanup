@@ -417,8 +417,17 @@ Prompt Engineer
 Protected
 Korumalı
 
-Protected system processes were left out.
-Korumalı sistem işlemleri dışarıda bırakıldı.
+Some selected system processes do not allow this and were left out.
+Seçilen bazı sistem işlemleri buna izin vermiyor ve atlandı.
+
+System
+Sistem
+
+Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended
+Windows'un bir parçası: sonlandırılabilir ve Windows onu yeniden başlatır, ancak askıya alınamaz
+
+This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.
+Buna Windows'un parçaları da dahil. Windows bunları yeniden başlatırken ekran, görev çubuğu veya ses bir an kaybolabilir.
 
 Purging the standby list failed: {0}
 Bekleme listesi temizlenemedi: {0}
@@ -985,3 +994,90 @@ RAM'inizin %{0} kadarı
 
 There is no release of version {0} on GitHub yet.
 GitHub'da henüz {0} sürümünün bir yayını yok.
+
+{0} {1}, {2}
+{1} {0} {2}
+
+January
+Ocak
+
+February
+Şubat
+
+March
+Mart
+
+April
+Nisan
+
+May
+Mayıs
+
+June
+Haziran
+
+July
+Temmuz
+
+August
+Ağustos
+
+September
+Eylül
+
+October
+Ekim
+
+November
+Kasım
+
+December
+Aralık
+
+Could not download the video: {0}
+Video indirilemedi: {0}
+
+Could not play the video (error {0}).
+Video oynatılamadı (hata {0}).
+
+Could not play the video.
+Video oynatılamadı.
+
+Could not play the video: {0}
+Video oynatılamadı: {0}
+
+Could not save the video: {0}
+Video kaydedilemedi: {0}
+
+Downloading the video, {0}%
+Video indiriliyor, %{0}
+
+Mute
+Sesi kapat
+
+Open the video in your browser
+Videoyu tarayıcıda aç
+
+Opening the video.
+Video açılıyor.
+
+Pause
+Duraklat
+
+Play
+Oynat
+
+The video has no picture.
+Videoda görüntü yok.
+
+Unmute
+Sesi aç
+
+Watch again
+Tekrar izle
+
+Watch what's new
+Yenilikleri izle
+
+{0} is not a video RustCleanup can play.
+{0}, RustCleanup'ın oynatabileceği bir video değil.

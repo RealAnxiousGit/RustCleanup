@@ -417,8 +417,17 @@ Engenheiro de prompts
 Protected
 Protegido
 
-Protected system processes were left out.
-Os processos protegidos do sistema foram ignorados.
+Some selected system processes do not allow this and were left out.
+Alguns processos do sistema selecionados não permitem isso e foram ignorados.
+
+System
+Sistema
+
+Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended
+Parte do Windows: pode ser finalizado e o Windows o inicia novamente, mas não pode ser suspenso
+
+This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.
+Isso inclui partes do Windows. A tela, a barra de tarefas ou o som podem sumir por um momento enquanto o Windows os inicia novamente.
 
 Purging the standby list failed: {0}
 Falha ao limpar a lista de espera: {0}
@@ -985,3 +994,90 @@ O Windows não vai baixar atualizações até lá
 
 There is no release of version {0} on GitHub yet.
 Ainda não há uma versão {0} publicada no GitHub.
+
+{0} {1}, {2}
+{1} de {0} de {2}
+
+January
+janeiro
+
+February
+fevereiro
+
+March
+março
+
+April
+abril
+
+May
+maio
+
+June
+junho
+
+July
+julho
+
+August
+agosto
+
+September
+setembro
+
+October
+outubro
+
+November
+novembro
+
+December
+dezembro
+
+Could not download the video: {0}
+Não foi possível baixar o vídeo: {0}
+
+Could not play the video (error {0}).
+Não foi possível reproduzir o vídeo (erro {0}).
+
+Could not play the video.
+Não foi possível reproduzir o vídeo.
+
+Could not play the video: {0}
+Não foi possível reproduzir o vídeo: {0}
+
+Could not save the video: {0}
+Não foi possível salvar o vídeo: {0}
+
+Downloading the video, {0}%
+Baixando o vídeo, {0}%
+
+Mute
+Silenciar
+
+Open the video in your browser
+Abrir o vídeo no navegador
+
+Opening the video.
+Abrindo o vídeo.
+
+Pause
+Pausar
+
+Play
+Reproduzir
+
+The video has no picture.
+O vídeo não tem imagem.
+
+Unmute
+Ativar som
+
+Watch again
+Assistir de novo
+
+Watch what's new
+Ver as novidades
+
+{0} is not a video RustCleanup can play.
+{0} não é um vídeo que o RustCleanup possa reproduzir.

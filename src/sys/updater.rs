@@ -92,8 +92,17 @@ pub fn check() -> Result<Option<Release>, String> {
     }))
 }
 
-/// The release notes and page of one version, for the Changelog window.
-pub fn notes_for(version: &str) -> Result<(String, String), String> {
+/// One version's release, for the Changelog window.
+#[derive(Clone)]
+pub struct ReleaseNotes {
+    pub markdown: String,
+    pub page: String,
+    /// When it was published, like `November 2nd, 2026`.
+    pub published: Option<String>,
+}
+
+/// The release notes, page and date of one version, for the Changelog window.
+pub fn notes_for(version: &str) -> Result<ReleaseNotes, String> {
     let body = http_get(&format!("{RELEASE_BY_TAG}{version}"), |_, _| {}).map_err(|e| {
         // A build that was never released (or a removed release) has no notes.
         if e == trf("GitHub answered with HTTP status {0}.", &[&404]) {
@@ -104,13 +113,16 @@ pub fn notes_for(version: &str) -> Result<(String, String), String> {
     })?;
     let json: serde_json::Value = serde_json::from_slice(&body)
         .map_err(|e| trf("GitHub sent a reply RustCleanup could not read: {0}", &[&e]))?;
-    Ok((
-        json["body"]
+    Ok(ReleaseNotes {
+        markdown: json["body"]
             .as_str()
             .unwrap_or_default()
             .replace("\r\n", "\n"),
-        json["html_url"].as_str().unwrap_or_default().to_string(),
-    ))
+        page: json["html_url"].as_str().unwrap_or_default().to_string(),
+        published: json["published_at"]
+            .as_str()
+            .and_then(crate::sys::format::long_date),
+    })
 }
 
 /// Downloads `release`, checks it, and swaps it in for the running exe.
@@ -245,6 +257,11 @@ fn open(handle: *mut core::ffi::c_void, what: &str) -> Result<Handle, String> {
     } else {
         Ok(Handle(handle))
     }
+}
+
+/// Downloads any HTTPS file, such as the What's New video.
+pub fn download(url: &str, progress: impl FnMut(u64, Option<u64>)) -> Result<Vec<u8>, String> {
+    http_get(url, progress)
 }
 
 /// HTTPS GET. GitHub's download links redirect to its file servers, which

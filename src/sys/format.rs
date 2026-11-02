@@ -1,5 +1,7 @@
 //! Formatting helpers: byte sizes and timestamps.
 
+use crate::i18n::{Lang, language, tr, trf};
+
 /// Formats a byte count as a short human-readable string.
 pub fn fmt_bytes(bytes: u64) -> String {
     const UNITS: [&str; 5] = ["B", "KB", "MB", "GB", "TB"];
@@ -61,6 +63,66 @@ pub fn friendly_date(iso: &str) -> String {
     }
 }
 
+/// `2026-11-02T18:30:00Z` -> `November 2nd, 2026`, in the local time zone,
+/// for the date a release was published.
+pub fn long_date(iso: &str) -> Option<String> {
+    use windows::Win32::Foundation::SYSTEMTIME;
+    use windows::Win32::System::Time::SystemTimeToTzSpecificLocalTime;
+
+    let num = |range: std::ops::Range<usize>| iso.get(range)?.parse::<u16>().ok();
+    let utc = SYSTEMTIME {
+        wYear: num(0..4)?,
+        wMonth: num(5..7).filter(|m| (1..=12).contains(m))?,
+        wDay: num(8..10).filter(|d| (1..=31).contains(d))?,
+        wHour: num(11..13).unwrap_or(0),
+        wMinute: num(14..16).unwrap_or(0),
+        wSecond: num(17..19).unwrap_or(0),
+        ..Default::default()
+    };
+    let mut local = utc;
+    // SAFETY: both pointers are valid SYSTEMTIMEs; on failure the UTC date stays.
+    if unsafe { SystemTimeToTzSpecificLocalTime(None, &utc, &mut local) }.is_err() {
+        local = utc;
+    }
+    let day = match language() {
+        Lang::En => ordinal(u32::from(local.wDay)),
+        _ => local.wDay.to_string(),
+    };
+    Some(trf(
+        "{0} {1}, {2}",
+        &[&month_name(local.wMonth), &day, &local.wYear],
+    ))
+}
+
+fn month_name(month: u16) -> &'static str {
+    match month {
+        1 => tr("January"),
+        2 => tr("February"),
+        3 => tr("March"),
+        4 => tr("April"),
+        5 => tr("May"),
+        6 => tr("June"),
+        7 => tr("July"),
+        8 => tr("August"),
+        9 => tr("September"),
+        10 => tr("October"),
+        11 => tr("November"),
+        _ => tr("December"),
+    }
+}
+
+/// `2` -> `2nd`, `11` -> `11th`, `23` -> `23rd`.
+fn ordinal(n: u32) -> String {
+    let suffix = match (n % 10, n % 100) {
+        (_, 11..=13) => "th",
+        (1, _) => "st",
+        (2, _) => "nd",
+        (3, _) => "rd",
+        _ => "th",
+    };
+    format!("{n}{suffix}")
+}
+
 /// Days since 1970-01-01 to a (year, month, day) civil date
 /// (Howard Hinnant's algorithm, valid for the whole proleptic Gregorian range).
 fn civil_from_days(z: i64) -> (i64, u32, u32) {
@@ -98,5 +160,16 @@ mod tests {
     fn dates_for_people() {
         assert_eq!(friendly_date("2026-12-06T10:00:00Z"), "6 Dec 2026");
         assert_eq!(friendly_date("garbage"), "garbage");
+        // Midday UTC is the same day in every time zone up to 12 hours away.
+        assert_eq!(
+            long_date("2026-11-02T12:00:00Z").as_deref(),
+            Some("November 2nd, 2026")
+        );
+        assert_eq!(long_date("garbage"), None);
+        let ordinals = [1, 2, 3, 4, 11, 12, 13, 21, 22, 23, 101, 111].map(ordinal);
+        assert_eq!(
+            ordinals.join(" "),
+            "1st 2nd 3rd 4th 11th 12th 13th 21st 22nd 23rd 101st 111th"
+        );
     }
 }

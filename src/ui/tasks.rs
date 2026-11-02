@@ -18,6 +18,7 @@ use crate::i18n::{tr, trf};
 use crate::sys::format::fmt_bytes;
 use crate::sys::memory;
 use crate::sys::process_actions;
+use crate::sys::shell;
 use crate::sys::process_monitor::{ProcInfo, ProcKind, ProcessMonitor};
 
 pub const WINDOW: &str = "task_window";
@@ -129,7 +130,7 @@ struct TaskWindow {
     descending: bool,
     cache: RowCache,
     /// End and Restart ask first.
-    confirm: Option<(Action, Vec<(u32, String)>)>,
+    confirm: Option<(Action, Vec<(u32, String, bool)>)>,
     /// Physical RAM, to judge how heavy each process is.
     ram: u64,
 }
@@ -246,8 +247,10 @@ fn compare(sort: SortBy, a: &ProcInfo, b: &ProcInfo) -> Ordering {
             0
         } else if p.protected {
             1
-        } else {
+        } else if p.system {
             2
+        } else {
+            3
         }
     };
     let kind = |p: &ProcInfo| (p.kind != ProcKind::App) as u8;
@@ -269,7 +272,7 @@ fn window_ui(ui: &mut Ui, state: &mut State, jobs: &Jobs) {
     let pal = theme::palette();
     let mut close = false;
     let mut action: Option<Action> = None;
-    let mut confirmed: Option<(Action, Vec<(u32, String)>)> = None;
+    let mut confirmed: Option<(Action, Vec<(u32, String, bool)>)> = None;
 
     let snap = tw.monitor.latest();
     let key = (
@@ -336,8 +339,9 @@ fn window_ui(ui: &mut Ui, state: &mut State, jobs: &Jobs) {
     let mut can = Can::default();
     for p in tw.cache.rows.iter().filter(|p| tw.selected.contains(&p.pid)) {
         can.any = true;
-        can.unprotected |= !p.protected;
-        can.suspend |= !p.protected && !p.suspended;
+        can.end |= !p.protected;
+        can.restart |= allowed(Action::Restart, p);
+        can.suspend |= allowed(Action::Suspend, p) && !p.suspended;
         can.resume |= p.suspended;
     }
 
@@ -474,8 +478,14 @@ fn window_ui(ui: &mut Ui, state: &mut State, jobs: &Jobs) {
             ui.label(RichText::new(title).family(semibold()).size(16.0));
             ui.add_space(2.0);
             ui.label(detail);
+            if targets.iter().any(|t| t.2) {
+                ui.add_space(6.0);
+                ui.label(RichText::new(tr(
+                    "This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.",
+                )).color(pal.warn));
+            }
             ui.add_space(8.0);
-            for (pid, name) in targets.iter().take(12) {
+            for (pid, name, _) in targets.iter().take(12) {
                 ui.label(trf("{0} (PID {1})", &[name, pid]));
             }
             if targets.len() > 12 {
@@ -501,27 +511,25 @@ fn window_ui(ui: &mut Ui, state: &mut State, jobs: &Jobs) {
     }
 
     if let Some(action) = action {
-        let targets: Vec<(u32, String, bool)> = tw
+        let selected: Vec<&ProcInfo> = tw
             .cache
             .rows
             .iter()
             .filter(|p| tw.selected.contains(&p.pid))
-            .map(|p| (p.pid, p.name.clone(), p.protected))
             .collect();
+        let kept: Vec<&ProcInfo> = selected.iter().copied().filter(|p| allowed(action, p)).collect();
+        if kept.len() < selected.len() {
+            jobs.log.warn(tr(
+                "Some selected system processes do not allow this and were left out.",
+            ));
+        }
         if matches!(action, Action::End | Action::Restart) {
-            let allowed: Vec<(u32, String)> = targets
-                .iter()
-                .filter(|t| !t.2)
-                .map(|t| (t.0, t.1.clone()))
-                .collect();
-            if allowed.len() < targets.len() {
-                jobs.log
-                    .warn(tr("Protected system processes were left out."));
-            }
-            if !allowed.is_empty() {
-                tw.confirm = Some((action, allowed));
+            if !kept.is_empty() {
+                let targets = kept.iter().map(|p| (p.pid, p.name.clone(), p.system)).collect();
+                tw.confirm = Some((action, targets));
             }
         } else {
+            let targets = kept.iter().map(|p| (p.pid, p.name.clone(), p.protected)).collect();
             run(action, targets, suspended, jobs, tw.monitor.waker());
         }
     }
@@ -529,7 +537,7 @@ fn window_ui(ui: &mut Ui, state: &mut State, jobs: &Jobs) {
         tw.selected.clear();
         run(
             action,
-            targets.into_iter().map(|(p, n)| (p, n, false)).collect(),
+            targets.into_iter().map(|(p, n, _)| (p, n, false)).collect(),
             suspended,
             jobs,
             tw.monitor.waker(),
@@ -540,11 +548,31 @@ fn window_ui(ui: &mut Ui, state: &mut State, jobs: &Jobs) {
     }
 }
 
+/// Whether `action` may run on `p`, the way Task Manager allows it.
+///
+/// Critical processes can only be trimmed. Windows components can be ended
+/// because Windows starts them again, but never suspended, and only
+/// Explorer has a safe way to restart.
+fn allowed(action: Action, p: &ProcInfo) -> bool {
+    match action {
+        Action::Optimize | Action::Resume => true,
+        _ if p.protected => false,
+        Action::Suspend => !p.system,
+        Action::Restart => !p.system || is_explorer(&p.name_lower),
+        Action::End => true,
+    }
+}
+
+fn is_explorer(name_lower: &str) -> bool {
+    name_lower == "explorer.exe"
+}
+
 /// What the current selection allows.
 #[derive(Clone, Copy, Default)]
 struct Can {
     any: bool,
-    unprotected: bool,
+    end: bool,
+    restart: bool,
     suspend: bool,
     resume: bool,
 }
@@ -564,9 +592,9 @@ fn action_buttons(ui: &mut Ui, pal: &Palette, can: Can) -> Option<Action> {
             Action::Restart,
             tr("Restart"),
             tr("Close it and open it again with the same settings"),
-            can.unprotected,
+            can.restart,
         ),
-        (Action::End, tr("End task"), tr("Close it right away (Delete)"), can.unprotected),
+        (Action::End, tr("End task"), tr("Close it right away (Delete)"), can.end),
     ];
     for (a, label, tip, enabled) in buttons {
         if widgets::button(ui, label, enabled)
@@ -585,8 +613,8 @@ fn context_menu(ui: &mut Ui, can: Can) -> Option<Action> {
         (Action::Optimize, tr("Optimize"), can.any),
         (Action::Suspend, tr("Suspend"), can.suspend),
         (Action::Resume, tr("Resume"), can.resume),
-        (Action::Restart, tr("Restart"), can.unprotected),
-        (Action::End, tr("End task"), can.unprotected),
+        (Action::Restart, tr("Restart"), can.restart),
+        (Action::End, tr("End task"), can.end),
     ];
     let mut action = None;
     for (a, label, enabled) in items {
@@ -670,8 +698,19 @@ fn run(
     }
     jobs.start(Job::ProcessAction, move |log| {
         if action == Action::Restart {
-            let pids: Vec<u32> = work.iter().map(|w| w.0).collect();
-            let results = process_actions::restart(&pids);
+            // Explorer is the desktop shell: started like an app it would only
+            // open a folder window, so it goes through the shell restart.
+            let (shell, apps): (Vec<_>, Vec<_>) =
+                work.iter().partition(|w| is_explorer(&w.1.to_lowercase()));
+            let pids: Vec<u32> = apps.iter().map(|w| w.0).collect();
+            let mut results = if pids.is_empty() {
+                Vec::new()
+            } else {
+                process_actions::restart(&pids)
+            };
+            if !shell.is_empty() {
+                results.push(("explorer.exe".to_owned(), shell::restart_explorer(log)));
+            }
             let ok = results.iter().filter(|r| r.1.is_ok()).count();
             for (name, result) in &results {
                 if let Err(e) = result {
@@ -922,6 +961,8 @@ fn process_row(
         Some((tr("Suspended"), pal.warn))
     } else if p.protected {
         Some((tr("Protected"), pal.muted))
+    } else if p.system {
+        Some((tr("System"), pal.muted))
     } else {
         None
     };
@@ -939,6 +980,10 @@ fn process_row(
         response.on_hover_text(tr("Paused: it gets no CPU time until it is resumed"))
     } else if over(5) && p.protected {
         response.on_hover_text(tr("System process: can only be trimmed"))
+    } else if over(5) && p.system {
+        response.on_hover_text(tr(
+            "Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended",
+        ))
     } else {
         response
     }

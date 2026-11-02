@@ -18,7 +18,7 @@ use crate::i18n::trf;
 
 /// Processes that keep Windows alive. Suspending or killing any of these can
 /// freeze or crash the machine, so the task list refuses to.
-const CRITICAL: [&str; 19] = [
+const CRITICAL: [&str; 13] = [
     "system",
     "idle",
     "registry",
@@ -31,12 +31,18 @@ const CRITICAL: [&str; 19] = [
     "services.exe",
     "lsass.exe",
     "lsaiso.exe",
-    "svchost.exe",
-    "dwm.exe",
-    "fontdrvhost.exe",
-    "sihost.exe",
-    "explorer.exe",
     "msmpeng.exe",
+];
+
+/// Parts of Windows that can be ended like in Task Manager, because Windows
+/// starts them again, but must never be suspended: a paused shell or
+/// compositor freezes the whole desktop.
+const SYSTEM: [&str; 6] = [
+    "explorer.exe",
+    "dwm.exe",
+    "svchost.exe",
+    "sihost.exe",
+    "fontdrvhost.exe",
     "audiodg.exe",
 ];
 
@@ -60,6 +66,9 @@ pub struct ProcInfo {
     pub kind: ProcKind,
     /// System-critical or RustCleanup itself: only memory trimming is allowed.
     pub protected: bool,
+    /// A Windows component: it can be optimized and ended (with a warning)
+    /// but not suspended, and only Explorer can be restarted.
+    pub system: bool,
     /// Every thread is suspended (by RustCleanup, Windows or another program).
     pub suspended: bool,
 }
@@ -179,6 +188,7 @@ impl ProcessMonitor {
                                 protected: pid == me
                                     || pid <= 4
                                     || CRITICAL.contains(&name_lower.as_str()),
+                                system: SYSTEM.contains(&name_lower.as_str()),
                                 suspended: suspended.contains(&pid),
                                 name,
                                 name_lower,
@@ -261,5 +271,7 @@ mod tests {
                 .any(|p| p.name_lower == "csrss.exe" && p.protected)
         );
         assert!(is_running("explorer.exe"));
+        let explorer = snap.rows.iter().find(|p| p.name_lower == "explorer.exe");
+        assert!(explorer.is_some_and(|p| p.system && !p.protected));
     }
 }

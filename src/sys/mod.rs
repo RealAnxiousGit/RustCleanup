@@ -30,3 +30,4 @@ pub mod tools;
 pub mod tray;
 pub mod updater;
 pub mod updates;
+pub mod video;

@@ -139,7 +139,7 @@ pub fn notes(ui: &mut Ui, pal: &Palette, markdown: &str) {
         let line = line.trim_end();
         if line.trim().is_empty() {
             ui.add_space(4.0);
-        } else if line.trim_start().starts_with("![") {
+        } else if line.trim_start().starts_with("![") || line.trim_start().starts_with("<!--") {
             continue;
         } else if let Some(h) = line.strip_prefix('#') {
             ui.add_space(4.0);

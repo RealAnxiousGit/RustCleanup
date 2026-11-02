@@ -417,8 +417,17 @@ Prompt Engineer
 Protected
 Защищён
 
-Protected system processes were left out.
-Защищённые системные процессы пропущены.
+Some selected system processes do not allow this and were left out.
+Некоторые выбранные системные процессы этого не допускают и были пропущены.
+
+System
+Система
+
+Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended
+Часть Windows: процесс можно завершить, и Windows запустит его снова, но приостановить его нельзя
+
+This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.
+Среди них есть части Windows. Экран, панель задач или звук могут ненадолго пропасть, пока Windows запускает их снова.
 
 Purging the standby list failed: {0}
 Не удалось очистить список ожидания: {0}
@@ -985,3 +994,90 @@ Windows will not download any updates until then
 
 There is no release of version {0} on GitHub yet.
 На GitHub ещё нет выпуска версии {0}.
+
+{0} {1}, {2}
+{1} {0} {2} г.
+
+January
+января
+
+February
+февраля
+
+March
+марта
+
+April
+апреля
+
+May
+мая
+
+June
+июня
+
+July
+июля
+
+August
+августа
+
+September
+сентября
+
+October
+октября
+
+November
+ноября
+
+December
+декабря
+
+Could not download the video: {0}
+Не удалось скачать видео: {0}
+
+Could not play the video (error {0}).
+Не удалось воспроизвести видео (ошибка {0}).
+
+Could not play the video.
+Не удалось воспроизвести видео.
+
+Could not play the video: {0}
+Не удалось воспроизвести видео: {0}
+
+Could not save the video: {0}
+Не удалось сохранить видео: {0}
+
+Downloading the video, {0}%
+Скачивание видео, {0}%
+
+Mute
+Выключить звук
+
+Open the video in your browser
+Открыть видео в браузере
+
+Opening the video.
+Открытие видео.
+
+Pause
+Пауза
+
+Play
+Воспроизвести
+
+The video has no picture.
+В видео нет изображения.
+
+Unmute
+Включить звук
+
+Watch again
+Посмотреть снова
+
+Watch what's new
+Посмотреть, что нового
+
+{0} is not a video RustCleanup can play.
+{0} не является видео, которое может воспроизвести RustCleanup.

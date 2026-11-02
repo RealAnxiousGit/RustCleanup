@@ -417,8 +417,17 @@ Ingénieur prompt
 Protected
 Protégé
 
-Protected system processes were left out.
-Les processus système protégés ont été ignorés.
+Some selected system processes do not allow this and were left out.
+Certains processus système sélectionnés ne le permettent pas et ont été ignorés.
+
+System
+Système
+
+Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended
+Composant de Windows : il peut être arrêté et Windows le relance, mais il ne peut pas être suspendu
+
+This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.
+Cela inclut des composants de Windows. L'écran, la barre des tâches ou le son peuvent disparaître un instant pendant que Windows les relance.
 
 Purging the standby list failed: {0}
 Échec du vidage de la liste de veille : {0}
@@ -985,3 +994,90 @@ Windows ne téléchargera aucune mise à jour d'ici là
 
 There is no release of version {0} on GitHub yet.
 La version {0} n'est pas encore publiée sur GitHub.
+
+{0} {1}, {2}
+{1} {0} {2}
+
+January
+janvier
+
+February
+février
+
+March
+mars
+
+April
+avril
+
+May
+mai
+
+June
+juin
+
+July
+juillet
+
+August
+août
+
+September
+septembre
+
+October
+octobre
+
+November
+novembre
+
+December
+décembre
+
+Could not download the video: {0}
+Impossible de télécharger la vidéo : {0}
+
+Could not play the video (error {0}).
+Impossible de lire la vidéo (erreur {0}).
+
+Could not play the video.
+Impossible de lire la vidéo.
+
+Could not play the video: {0}
+Impossible de lire la vidéo : {0}
+
+Could not save the video: {0}
+Impossible d'enregistrer la vidéo : {0}
+
+Downloading the video, {0}%
+Téléchargement de la vidéo, {0} %
+
+Mute
+Couper le son
+
+Open the video in your browser
+Ouvrir la vidéo dans le navigateur
+
+Opening the video.
+Ouverture de la vidéo.
+
+Pause
+Pause
+
+Play
+Lire
+
+The video has no picture.
+La vidéo n'a pas d'image.
+
+Unmute
+Remettre le son
+
+Watch again
+Revoir
+
+Watch what's new
+Voir les nouveautés
+
+{0} is not a video RustCleanup can play.
+{0} n'est pas une vidéo que RustCleanup peut lire.

@@ -417,8 +417,17 @@ Inżynier promptów
 Protected
 Chroniony
 
-Protected system processes were left out.
-Pominięto chronione procesy systemowe.
+Some selected system processes do not allow this and were left out.
+Niektóre wybrane procesy systemowe na to nie pozwalają i zostały pominięte.
+
+System
+System
+
+Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended
+Część Windows: można go zakończyć, a Windows uruchomi go ponownie, ale nie można go wstrzymać
+
+This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.
+Obejmuje to części Windows. Ekran, pasek zadań lub dźwięk mogą na chwilę zniknąć, zanim Windows uruchomi je ponownie.
 
 Purging the standby list failed: {0}
 Czyszczenie listy rezerwowej nie powiodło się: {0}
@@ -985,3 +994,90 @@ Do tego czasu system Windows nie pobierze żadnych aktualizacji
 
 There is no release of version {0} on GitHub yet.
 Na GitHubie nie ma jeszcze wydania wersji {0}.
+
+{0} {1}, {2}
+{1} {0} {2}
+
+January
+stycznia
+
+February
+lutego
+
+March
+marca
+
+April
+kwietnia
+
+May
+maja
+
+June
+czerwca
+
+July
+lipca
+
+August
+sierpnia
+
+September
+września
+
+October
+października
+
+November
+listopada
+
+December
+grudnia
+
+Could not download the video: {0}
+Nie udało się pobrać filmu: {0}
+
+Could not play the video (error {0}).
+Nie udało się odtworzyć filmu (błąd {0}).
+
+Could not play the video.
+Nie udało się odtworzyć filmu.
+
+Could not play the video: {0}
+Nie udało się odtworzyć filmu: {0}
+
+Could not save the video: {0}
+Nie udało się zapisać filmu: {0}
+
+Downloading the video, {0}%
+Pobieranie filmu, {0}%
+
+Mute
+Wycisz
+
+Open the video in your browser
+Otwórz film w przeglądarce
+
+Opening the video.
+Otwieranie filmu.
+
+Pause
+Wstrzymaj
+
+Play
+Odtwórz
+
+The video has no picture.
+Film nie ma obrazu.
+
+Unmute
+Wyłącz wyciszenie
+
+Watch again
+Obejrzyj ponownie
+
+Watch what's new
+Zobacz nowości
+
+{0} is not a video RustCleanup can play.
+{0} nie jest filmem, który RustCleanup może odtworzyć.
