@@ -18,6 +18,7 @@ pub mod tasks;
 pub mod theme;
 pub mod tweaks;
 pub mod update;
+pub mod video_player;
 pub mod widgets;
 
 use std::sync::{Arc, OnceLock};

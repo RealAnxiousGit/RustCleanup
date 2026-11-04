@@ -3,6 +3,21 @@
 All notable changes to RustCleanup are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [4.0.0] - 2026-11-04
+
+RustCleanup now runs on Linux too, and a new Feedback button sends bug reports and suggestions straight to the project.
+
+<!-- video: https://raw.githubusercontent.com/RealAnxiousGit/RustCleanup/main/docs/whats-new-v4.mp4 | What's New in RustCleanup V4? -->
+
+### Added
+- **RustCleanup for Linux.** The same program now runs on Linux (x86_64, X11 or Wayland), as an AppImage or a plain `.tar.gz`. Clean RAM, Physical and Virtual Memory, Scan Disk, Manage Storage, the task list, Low Power Mode, System tools, the tray icon, notifications, Settings, the Changelog and updates all work there. Copilot, Telemetry and No Forced Updates stay Windows only. It runs as your own user, and **Restart as root** at the bottom (through `pkexec`) unlocks the features that need root, the same way admin rights work on Windows. Settings live in `~/.config/RustCleanup`.
+- **Feedback** button next to Credits, and in the tray icon's menu. It opens a Compose Feedback window: pick **Bug Report** or **Suggestion**, give it a title, and describe it below. Paste screenshots with Ctrl+V or right-click Paste, and they show up under the text. Right-click for Cut, Copy, Paste, Delete and Select All, or **Hyperlink** to turn text into a blue, underlined link (click it to open it). **Send** opens a new GitHub issue with everything filled in, plus a folder with your screenshots to drag into it. No GitHub account? **Send it by email instead** opens an email draft to the developer in your email app. If no email app is set up, email links open in a web browser, or the app does not start, the Activity log and the Feedback window say so and how to fix it.
+
+- **For developers: a Clean RAM stress test** in development builds. It fills a chosen amount of RAM with helper processes, runs Clean RAM against them several times, and reports how much each run freed and how long trimming and purging took, with an optional CSV. Use the Stress test section under Clean RAM, or `scripts/stress-ram.ps1` (Windows) and `scripts/stress-ram.sh` (Linux) from the command line. Release builds do not include it.
+
+### Removed
+- The **Promotional trailer** section in Credits.
+
 ## [3.0.2] - 2026-11-02
 
 A small fix-up: Restart reopens what it closes, scroll bars no longer cover buttons, the Changelog holds every version, and the main window drops its second title.

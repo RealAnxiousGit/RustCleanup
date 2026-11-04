@@ -280,7 +280,9 @@ fn all_pids() -> Result<Vec<u32>, String> {
 }
 
 /// What one Clean RAM pass did and how long each stage took.
+/// The counts and timings are read only by the development stress test.
 #[derive(Clone, Copy, Debug, Default)]
+#[cfg_attr(not(any(debug_assertions, feature = "stress-test")), allow(dead_code))]
 pub struct CleanReport {
     pub trimmed: usize,
     pub skipped: usize,

@@ -101,6 +101,102 @@ pub fn open_unelevated(target: &str) -> Result<(), String> {
         .map_err(|e| format!("could not open {target}: {e}"))
 }
 
+/// One fact about the app Windows opens `mailto:` links with.
+fn assoc_mailto(
+    what: windows::Win32::UI::Shell::ASSOCSTR,
+) -> Result<String, windows::core::HRESULT> {
+    use windows::Win32::UI::Shell::{
+        ASSOCF_INIT_IGNOREUNKNOWN, ASSOCF_IS_PROTOCOL, ASSOCF_NOTRUNCATE, AssocQueryStringW,
+    };
+    use windows::core::w;
+    let flags = ASSOCF_IS_PROTOCOL | ASSOCF_NOTRUNCATE | ASSOCF_INIT_IGNOREUNKNOWN;
+    let mut buf = vec![0u16; 1024];
+    let mut len = buf.len() as u32;
+    // SAFETY: `buf` holds `len` UTF-16 units and outlives the call.
+    let hr = unsafe {
+        AssocQueryStringW(
+            flags,
+            what,
+            w!("mailto"),
+            None,
+            Some(windows::core::PWSTR(buf.as_mut_ptr())),
+            &mut len,
+        )
+    };
+    if hr.is_err() {
+        return Err(hr);
+    }
+    let end = buf.iter().position(|&c| c == 0).unwrap_or(buf.len());
+    Ok(String::from_utf16_lossy(&buf[..end]).trim().to_string())
+}
+
+/// The app Windows opens `mailto:` links with. This is what Windows really
+/// uses, which can differ from Settings > Apps > Default apps when another
+/// program changed the choice behind Windows' back. Explorer accepts a link
+/// even when nothing handles it, so this is how the Feedback window knows
+/// whether a draft can open.
+pub fn mail_handler() -> super::mail::MailHandler {
+    use super::mail::MailHandler;
+    use windows::Win32::Foundation::ERROR_NO_ASSOCIATION;
+    use windows::Win32::UI::Shell::{ASSOCSTR_EXECUTABLE, ASSOCSTR_FRIENDLYAPPNAME};
+    use windows::core::HRESULT;
+
+    let missing = |hr: HRESULT| hr == HRESULT::from_win32(ERROR_NO_ASSOCIATION.0);
+    // Store apps such as the new Outlook have no plain program path, so a
+    // failed program lookup alone is not a problem.
+    match (assoc_mailto(ASSOCSTR_FRIENDLYAPPNAME), assoc_mailto(ASSOCSTR_EXECUTABLE)) {
+        (Ok(name), program) if !name.is_empty() => {
+            MailHandler::app(name, program.as_deref().unwrap_or(""))
+        }
+        (_, Ok(p)) if !p.is_empty() => {
+            let stem = std::path::Path::new(&p)
+                .file_stem()
+                .map_or(p.clone(), |s| s.to_string_lossy().into_owned());
+            MailHandler::app(stem, &p)
+        }
+        (Err(hr), _) | (_, Err(hr)) if missing(hr) => MailHandler::Missing,
+        (Err(hr), _) => MailHandler::Unknown(windows::core::Error::from(hr).message()),
+        _ => MailHandler::Missing,
+    }
+}
+
+/// After an email link was opened: whether the email app is running within
+/// a few seconds. `None` when there is no way to tell which program it is.
+///
+/// A desktop app is matched by its program file, a Store app (such as the
+/// new Outlook) by its package folder under WindowsApps.
+pub fn mail_app_running() -> Option<bool> {
+    use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System, UpdateKind};
+    use windows::Win32::UI::Shell::{ASSOCSTR_APPID, ASSOCSTR_EXECUTABLE};
+
+    let needle = match assoc_mailto(ASSOCSTR_EXECUTABLE) {
+        Ok(p) if !p.is_empty() => std::path::Path::new(&p)
+            .file_name()
+            .map(|f| format!(r"\{}", f.to_string_lossy())),
+        // Microsoft.OutlookForWindows_8wekyb3d8bbwe!App -> the package name.
+        _ => assoc_mailto(ASSOCSTR_APPID)
+            .ok()
+            // Only a Store app id (package_publisher!app) names a package.
+            .filter(|id| id.contains('!') && id.contains('_'))
+            .and_then(|id| id.split('_').next().map(|n| format!(r"\windowsapps\{n}_")))
+    }?
+    .to_lowercase();
+    let mut sys = System::new().ok()?;
+    let kind = ProcessRefreshKind::nothing().with_exe(UpdateKind::OnlyIfNotSet);
+    for _ in 0..16 {
+        sys.refresh_processes_specifics(ProcessesToUpdate::All, true, kind);
+        let found = sys.processes().values().any(|p| {
+            p.exe()
+                .is_some_and(|e| e.to_string_lossy().to_lowercase().contains(&needle))
+        });
+        if found {
+            return Some(true);
+        }
+        std::thread::sleep(Duration::from_millis(500));
+    }
+    Some(false)
+}
+
 /// Starts a program as the signed-in user, without RustCleanup's admin token.
 ///
 /// `open_unelevated` can't be used for programs: explorer.exe treats

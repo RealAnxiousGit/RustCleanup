@@ -11,6 +11,7 @@ pub mod com;
 #[cfg(windows)]
 pub mod command;
 pub mod format;
+pub mod mail;
 #[cfg(windows)]
 pub mod privilege;
 #[cfg(windows)]
@@ -66,3 +67,27 @@ pub use linux::{
     chkdsk, command, disk, memory, power, privilege, process_actions, process_monitor, registry,
     shell, single_instance, startup, storage_page, tools, tray, user, video,
 };
+
+/// The rectangle, in physical pixels, of the monitor nearest to `point`
+/// (also physical pixels).
+#[cfg(windows)]
+pub fn monitor_rect(point: eframe::egui::Pos2) -> Option<eframe::egui::Rect> {
+    use windows::Win32::Foundation::POINT;
+    use windows::Win32::Graphics::Gdi::{
+        GetMonitorInfoW, MONITOR_DEFAULTTONEAREST, MONITORINFO, MonitorFromPoint,
+    };
+    let at = POINT { x: point.x.round() as i32, y: point.y.round() as i32 };
+    // SAFETY: plain Win32 queries; `info` has its size set as required.
+    unsafe {
+        let monitor = MonitorFromPoint(at, MONITOR_DEFAULTTONEAREST);
+        let mut info = MONITORINFO { cbSize: size_of::<MONITORINFO>() as u32, ..Default::default() };
+        if !GetMonitorInfoW(monitor, &mut info).as_bool() {
+            return None;
+        }
+        let r = info.rcMonitor;
+        Some(eframe::egui::Rect::from_min_max(
+            eframe::egui::pos2(r.left as f32, r.top as f32),
+            eframe::egui::pos2(r.right as f32, r.bottom as f32),
+        ))
+    }
+}

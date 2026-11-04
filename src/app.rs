@@ -323,6 +323,7 @@ impl RustCleanupApp {
             // These open as windows of their own; the main window stays where it is.
             TrayCommand::OpenTaskList => self.tasks.open(ctx),
             TrayCommand::Settings => self.settings.open(ctx),
+            TrayCommand::Feedback => self.feedback.open(ctx),
             TrayCommand::Credits => self.credits.open(ctx),
             TrayCommand::Exit => self.exit(),
         }

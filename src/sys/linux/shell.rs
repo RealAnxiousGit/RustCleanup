@@ -44,6 +44,62 @@ pub fn open_unelevated(target: &str) -> Result<(), String> {
     spawn_detached(&mut cmd).map_err(|e| format!("could not open {target}: {e}"))
 }
 
+/// The app the desktop opens `mailto:` links with, from
+/// `xdg-mime query default x-scheme-handler/mailto`, asked as the desktop
+/// user since root has its own (usually empty) defaults.
+pub fn mail_handler() -> crate::sys::mail::MailHandler {
+    use crate::sys::mail::MailHandler;
+    let Some(xdg_mime) = which("xdg-mime") else {
+        return MailHandler::Unknown("xdg-mime is not installed".into());
+    };
+    let out = match user_command(xdg_mime)
+        .args(["query", "default", "x-scheme-handler/mailto"])
+        .current_dir(&user::desktop_user().home)
+        .stdin(Stdio::null())
+        .stderr(Stdio::null())
+        .output()
+    {
+        Ok(out) => out,
+        Err(e) => return MailHandler::Unknown(format!("xdg-mime: {e}")),
+    };
+    let desktop = String::from_utf8_lossy(&out.stdout).trim().to_string();
+    if desktop.is_empty() {
+        return MailHandler::Missing;
+    }
+    let name = desktop_name(&desktop).unwrap_or_else(|| {
+        // org.mozilla.Thunderbird.desktop -> Thunderbird
+        let id = desktop.trim_end_matches(".desktop");
+        id.rsplit('.').next().unwrap_or(id).to_string()
+    });
+    MailHandler::app(name, &desktop)
+}
+
+/// Whether the email app started after a link was opened. The desktop file
+/// does not say which process to look for, so Linux cannot tell.
+pub fn mail_app_running() -> Option<bool> {
+    None
+}
+
+/// The `Name=` line of a desktop file, looked up where desktops keep them.
+fn desktop_name(file: &str) -> Option<String> {
+    let home = user::desktop_user().home.join(".local/share");
+    let data = std::env::var("XDG_DATA_DIRS")
+        .ok()
+        .filter(|d| !d.is_empty())
+        .unwrap_or_else(|| "/usr/local/share:/usr/share".into());
+    let dirs = std::iter::once(home)
+        .chain(data.split(':').map(PathBuf::from))
+        .chain([PathBuf::from("/var/lib/flatpak/exports/share")]);
+    dirs.map(|d| d.join("applications").join(file))
+        .find_map(|p| std::fs::read_to_string(p).ok())
+        .and_then(|text| {
+            text.lines()
+                .find_map(|l| l.strip_prefix("Name="))
+                .map(|n| n.trim().to_string())
+        })
+        .filter(|n| !n.is_empty())
+}
+
 /// Native window lookups are not needed on Linux: winit brings the window
 /// back on its own, so these are stand-ins with the Windows signatures.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

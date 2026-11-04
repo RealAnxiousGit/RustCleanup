@@ -1354,9 +1354,6 @@ Relatório de bug
 Compose Feedback
 Escrever feedback
 
-Could not open your browser or mail program: {0}
-Não foi possível abrir o navegador ou o programa de email: {0}
-
 Could not save the screenshots: {0}
 Não foi possível salvar as capturas de tela: {0}
 
@@ -1368,9 +1365,6 @@ Excluir
 
 Feedback
 Feedback
-
-Feedback opened in your mail program.
-O feedback foi aberto no seu programa de email.
 
 Feedback opened on GitHub in your browser.
 O feedback foi aberto no GitHub no seu navegador.
@@ -1455,3 +1449,48 @@ Suas capturas de tela foram salvas na pasta que abriu. Anexe-as ao email.
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Suas capturas de tela foram salvas na pasta que abriu. Arraste-as para a issue onde está escrito [Imagem 1] e assim por diante.
+
+The email draft could not open
+Não foi possível abrir o rascunho do email
+
+Back to the report
+Voltar ao relatório
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Para corrigir, escolha um aplicativo de email para MAILTO em Configurações > Aplicativos > Aplicativos padrão, ou envie o relatório pelo GitHub.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Para corrigir, escolha um aplicativo de email nas configurações de aplicativos padrão da sua área de trabalho, ou envie o relatório pelo GitHub.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+Nenhum aplicativo de email está configurado para abrir links de email, então o rascunho não pôde ser aberto. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+Links de email abrem no {0}, que é um navegador, então o rascunho do email pode não aparecer. {1}
+
+Could not check which app opens email links: {0}
+Não foi possível verificar qual aplicativo abre links de email: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+Rascunho do email aberto no {0}. Clique em Enviar lá para concluir.
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+O sistema foi solicitado a abrir um rascunho de email. Se nada aparecer, verifique qual aplicativo abre links de email.
+
+Could not open the email draft: {0}
+Não foi possível abrir o rascunho do email: {0}
+
+Could not open GitHub in your browser: {0}
+Não foi possível abrir o GitHub no seu navegador: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+O {0} não iniciou, então nenhum rascunho de email foi aberto. Talvez ele precise ser configurado ou reparado primeiro. {1}
+
+Full screen
+Tela cheia
+
+Exit full screen
+Sair da tela cheia
+
+Volume {0}%
+Volume {0}%

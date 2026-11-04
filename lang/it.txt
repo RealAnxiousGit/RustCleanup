@@ -1354,9 +1354,6 @@ Segnalazione bug
 Compose Feedback
 Scrivi un feedback
 
-Could not open your browser or mail program: {0}
-Impossibile aprire il browser o il programma di posta: {0}
-
 Could not save the screenshots: {0}
 Impossibile salvare gli screenshot: {0}
 
@@ -1368,9 +1365,6 @@ Elimina
 
 Feedback
 Feedback
-
-Feedback opened in your mail program.
-Il feedback è stato aperto nel programma di posta.
 
 Feedback opened on GitHub in your browser.
 Il feedback è stato aperto su GitHub nel browser.
@@ -1455,3 +1449,48 @@ Gli screenshot sono stati salvati nella cartella che si è aperta. Allegali all'
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Gli screenshot sono stati salvati nella cartella che si è aperta. Trascinali nella issue dove c'è scritto [Immagine 1] e così via.
+
+The email draft could not open
+Impossibile aprire la bozza dell'email
+
+Back to the report
+Torna al rapporto
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Per risolvere, scegli un'app di posta per MAILTO in Impostazioni > App > App predefinite, oppure invia il rapporto su GitHub.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Per risolvere, scegli un'app di posta nelle impostazioni delle app predefinite del desktop, oppure invia il rapporto su GitHub.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+Nessuna app di posta è configurata per aprire i link email, quindi la bozza non si è potuta aprire. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+I link email si aprono in {0}, che è un browser web, quindi la bozza potrebbe non comparire. {1}
+
+Could not check which app opens email links: {0}
+Impossibile verificare quale app apre i link email: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+Bozza dell'email aperta in {0}. Premi Invia per finire.
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+È stato chiesto al sistema di aprire una bozza email. Se non compare, controlla quale app apre i link email.
+
+Could not open the email draft: {0}
+Impossibile aprire la bozza dell'email: {0}
+
+Could not open GitHub in your browser: {0}
+Impossibile aprire GitHub nel browser: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} non si è avviato, quindi nessuna bozza email si è aperta. Potrebbe essere necessario configurarlo o ripararlo prima. {1}
+
+Full screen
+Schermo intero
+
+Exit full screen
+Esci da schermo intero
+
+Volume {0}%
+Volume {0}%

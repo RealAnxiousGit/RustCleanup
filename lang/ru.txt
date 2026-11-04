@@ -1354,9 +1354,6 @@ Bug Report
 Compose Feedback
 Написать отзыв
 
-Could not open your browser or mail program: {0}
-Не удалось открыть браузер или почтовую программу: {0}
-
 Could not save the screenshots: {0}
 Не удалось сохранить снимки экрана: {0}
 
@@ -1368,9 +1365,6 @@ Delete
 
 Feedback
 Отзыв
-
-Feedback opened in your mail program.
-Отзыв открыт в почтовой программе.
 
 Feedback opened on GitHub in your browser.
 Отзыв открыт на GitHub в браузере.
@@ -1455,3 +1449,48 @@ Your screenshots were saved to the folder that opened. Attach them to the email.
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Снимки экрана сохранены в открывшейся папке. Перетащите их в issue туда, где написано [Изображение 1] и т. д.
+
+The email draft could not open
+Не удалось открыть черновик письма
+
+Back to the report
+Вернуться к отчёту
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Чтобы исправить это, выберите почтовое приложение для MAILTO в «Параметры > Приложения > Приложения по умолчанию» или отправьте отчёт через GitHub.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Чтобы исправить это, выберите почтовое приложение в настройках приложений по умолчанию вашего рабочего стола или отправьте отчёт через GitHub.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+Не настроено почтовое приложение для открытия почтовых ссылок, поэтому черновик письма не открылся. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+Почтовые ссылки открываются в {0}, а это веб-браузер, поэтому черновик письма может не появиться. {1}
+
+Could not check which app opens email links: {0}
+Не удалось проверить, какое приложение открывает почтовые ссылки: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+Черновик письма открыт в {0}. Нажмите там «Отправить».
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+Системе отправлен запрос открыть черновик письма. Если он не появится, проверьте, какое приложение открывает почтовые ссылки.
+
+Could not open the email draft: {0}
+Не удалось открыть черновик письма: {0}
+
+Could not open GitHub in your browser: {0}
+Не удалось открыть GitHub в браузере: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} не запустилось, поэтому черновик письма не открылся. Возможно, приложение сначала нужно настроить или восстановить. {1}
+
+Full screen
+Во весь экран
+
+Exit full screen
+Выйти из полноэкранного режима
+
+Volume {0}%
+Громкость {0}%

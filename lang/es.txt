@@ -1354,9 +1354,6 @@ Informe de error
 Compose Feedback
 Redactar comentarios
 
-Could not open your browser or mail program: {0}
-No se pudo abrir el navegador ni el programa de correo: {0}
-
 Could not save the screenshots: {0}
 No se pudieron guardar las capturas: {0}
 
@@ -1368,9 +1365,6 @@ Eliminar
 
 Feedback
 Comentarios
-
-Feedback opened in your mail program.
-Los comentarios se abrieron en tu programa de correo.
 
 Feedback opened on GitHub in your browser.
 Los comentarios se abrieron en GitHub en tu navegador.
@@ -1455,3 +1449,48 @@ Tus capturas se guardaron en la carpeta que se abrió. Adjúntalas al correo.
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Tus capturas se guardaron en la carpeta que se abrió. Arrástralas a la incidencia donde pone [Imagen 1], etc.
+
+The email draft could not open
+No se pudo abrir el borrador del correo
+
+Back to the report
+Volver al informe
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Para solucionarlo, elige una aplicación de correo para MAILTO en Configuración > Aplicaciones > Aplicaciones predeterminadas, o envía el informe por GitHub.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Para solucionarlo, elige una aplicación de correo en los ajustes de aplicaciones predeterminadas de tu escritorio, o envía el informe por GitHub.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+No hay ninguna aplicación de correo configurada para abrir enlaces de correo, así que no se pudo abrir el borrador. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+Los enlaces de correo se abren en {0}, que es un navegador web, así que puede que el borrador no aparezca. {1}
+
+Could not check which app opens email links: {0}
+No se pudo comprobar qué aplicación abre los enlaces de correo: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+Borrador de correo abierto en {0}. Pulsa Enviar allí para terminar.
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+Se pidió al sistema que abriera un borrador de correo. Si no aparece, comprueba qué aplicación abre los enlaces de correo.
+
+Could not open the email draft: {0}
+No se pudo abrir el borrador del correo: {0}
+
+Could not open GitHub in your browser: {0}
+No se pudo abrir GitHub en tu navegador: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} no se inició, así que no se abrió ningún borrador de correo. Puede que primero haya que configurarla o repararla. {1}
+
+Full screen
+Pantalla completa
+
+Exit full screen
+Salir de pantalla completa
+
+Volume {0}%
+Volumen {0}%

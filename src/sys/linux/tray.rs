@@ -25,6 +25,7 @@ pub enum TrayCommand {
     CleanRam,
     OpenTaskList,
     Settings,
+    Feedback,
     Credits,
     Exit,
 }
@@ -37,11 +38,12 @@ pub enum NotifyKind {
     Error,
 }
 
-const MENU: [(&str, TrayCommand); 6] = [
+const MENU: [(&str, TrayCommand); 7] = [
     (n_("Open App"), TrayCommand::OpenApp),
     (n_("Clean RAM"), TrayCommand::CleanRam),
     (n_("Open task list"), TrayCommand::OpenTaskList),
     (n_("Settings"), TrayCommand::Settings),
+    (n_("Feedback"), TrayCommand::Feedback),
     (n_("Credits"), TrayCommand::Credits),
     (n_("Exit"), TrayCommand::Exit),
 ];

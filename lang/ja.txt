@@ -1354,9 +1354,6 @@ Bug Report
 Compose Feedback
 フィードバックを作成
 
-Could not open your browser or mail program: {0}
-ブラウザーまたはメールソフトを開けませんでした: {0}
-
 Could not save the screenshots: {0}
 スクリーンショットを保存できませんでした: {0}
 
@@ -1368,9 +1365,6 @@ Delete
 
 Feedback
 フィードバック
-
-Feedback opened in your mail program.
-フィードバックをメールソフトで開きました。
 
 Feedback opened on GitHub in your browser.
 フィードバックをブラウザーの GitHub で開きました。
@@ -1455,3 +1449,48 @@ Your screenshots were saved to the folder that opened. Attach them to the email.
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 スクリーンショットは開いたフォルダーに保存されました。Issue の [画像 1] などの位置にドラッグしてください。
+
+The email draft could not open
+メールの下書きを開けませんでした
+
+Back to the report
+レポートに戻る
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+解決するには、[設定] > [アプリ] > [既定のアプリ] で MAILTO 用のメールアプリを選ぶか、代わりに GitHub でレポートを送信してください。
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+解決するには、デスクトップの既定のアプリ設定でメールアプリを選ぶか、代わりに GitHub でレポートを送信してください。
+
+No email app is set up to open email links, so the email draft could not open. {0}
+メールリンクを開くメールアプリが設定されていないため、メールの下書きを開けませんでした。{0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+メールリンクは Web ブラウザーの {0} で開かれるため、メールの下書きが表示されない場合があります。{1}
+
+Could not check which app opens email links: {0}
+メールリンクを開くアプリを確認できませんでした: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+{0} でメールの下書きを開きました。そこで送信を押して完了してください。
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+メールの下書きを開くようシステムに依頼しました。表示されない場合は、メールリンクを開くアプリを確認してください。
+
+Could not open the email draft: {0}
+メールの下書きを開けませんでした: {0}
+
+Could not open GitHub in your browser: {0}
+ブラウザーで GitHub を開けませんでした: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} が起動しなかったため、メールの下書きは開きませんでした。先にアプリの設定や修復が必要な場合があります。{1}
+
+Full screen
+全画面表示
+
+Exit full screen
+全画面表示を終了
+
+Volume {0}%
+音量 {0}%

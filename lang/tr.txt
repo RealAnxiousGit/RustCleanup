@@ -1354,9 +1354,6 @@ Hata Bildirimi
 Compose Feedback
 Geri Bildirim Yaz
 
-Could not open your browser or mail program: {0}
-Tarayıcı veya e-posta programı açılamadı: {0}
-
 Could not save the screenshots: {0}
 Ekran görüntüleri kaydedilemedi: {0}
 
@@ -1368,9 +1365,6 @@ Sil
 
 Feedback
 Geri Bildirim
-
-Feedback opened in your mail program.
-Geri bildirim e-posta programınızda açıldı.
 
 Feedback opened on GitHub in your browser.
 Geri bildirim tarayıcınızda GitHub'da açıldı.
@@ -1455,3 +1449,48 @@ Ekran görüntüleriniz açılan klasöre kaydedildi. Bunları e-postaya ekleyin
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Ekran görüntüleriniz açılan klasöre kaydedildi. Bunları issue'da [Görsel 1] vb. yazan yerlere sürükleyin.
+
+The email draft could not open
+E-posta taslağı açılamadı
+
+Back to the report
+Rapora dön
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Düzeltmek için Ayarlar > Uygulamalar > Varsayılan uygulamalar bölümünde MAILTO için bir e-posta uygulaması seçin veya raporu GitHub üzerinden gönderin.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Düzeltmek için masaüstünüzün varsayılan uygulama ayarlarında bir e-posta uygulaması seçin veya raporu GitHub üzerinden gönderin.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+E-posta bağlantılarını açacak bir e-posta uygulaması ayarlı değil, bu yüzden e-posta taslağı açılamadı. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+E-posta bağlantıları bir web tarayıcısı olan {0} ile açılıyor, bu yüzden e-posta taslağı görünmeyebilir. {1}
+
+Could not check which app opens email links: {0}
+E-posta bağlantılarını hangi uygulamanın açtığı kontrol edilemedi: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+E-posta taslağı {0} içinde açıldı. Bitirmek için orada Gönder'e basın.
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+Sistemden bir e-posta taslağı açması istendi. Görünmezse, e-posta bağlantılarını hangi uygulamanın açtığını kontrol edin.
+
+Could not open the email draft: {0}
+E-posta taslağı açılamadı: {0}
+
+Could not open GitHub in your browser: {0}
+GitHub tarayıcınızda açılamadı: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} başlamadı, bu yüzden e-posta taslağı açılmadı. Önce kurulması veya onarılması gerekebilir. {1}
+
+Full screen
+Tam ekran
+
+Exit full screen
+Tam ekrandan çık
+
+Volume {0}%
+Ses %{0}

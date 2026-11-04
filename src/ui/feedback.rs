@@ -125,6 +125,17 @@ struct Sent {
     email: bool,
     folder: Option<PathBuf>,
     on_clipboard: bool,
+    /// Why no email draft could open, or a warning that it may not.
+    mail_problem: Option<MailProblem>,
+}
+
+/// What the email app check found before a draft was opened.
+#[derive(Clone)]
+enum MailProblem {
+    /// Nothing opens email links, so no draft was opened.
+    Missing(String),
+    /// Email links open somewhere that may not show a draft.
+    Warning(String),
 }
 
 #[derive(Default)]
@@ -336,14 +347,40 @@ fn compose(ui: &mut Ui, pal: &Palette, log: &Logger, d: &mut Draft, close: &mut 
 /// The confirmation shown after Send.
 fn sent_page(ui: &mut Ui, pal: &Palette, d: &mut Draft, close: &mut bool) {
     let Some(sent) = &d.sent else { return };
+    if let Some(MailProblem::Missing(why)) = &sent.mail_problem {
+        ui.label(RichText::new(tr("The email draft could not open")).family(semibold()).size(20.0));
+        ui.add_space(10.0);
+        ui.label(why.as_str());
+        ui.add_space(12.0);
+        let mut back = false;
+        ui.horizontal(|ui| {
+            if widgets::primary_button(ui, pal, tr("Back to the report"), true).clicked() {
+                back = true;
+            }
+            if widgets::button(ui, tr("Close"), true).clicked() {
+                *close = true;
+            }
+        });
+        if back {
+            d.sent = None;
+        } else if *close {
+            *d = Draft::default();
+        }
+        return;
+    }
     ui.label(RichText::new(tr("Thanks for the feedback")).family(semibold()).size(20.0));
     ui.add_space(10.0);
+    let warning = match &sent.mail_problem {
+        Some(MailProblem::Warning(w)) => Some(w.as_str()),
+        _ => None,
+    };
     let lines = [
         Some(if sent.email {
             tr("Your mail program opened with the report filled in. Press Send there to finish.")
         } else {
             tr("Your browser opened GitHub with the report filled in. Sign in if asked, then press Create to finish.")
         }),
+        warning,
         sent.on_clipboard.then(|| {
             tr("The report was too long for a link, so it was copied to your clipboard. Paste it into the message with Ctrl+V.")
         }),
@@ -874,7 +911,86 @@ fn encode(text: &str) -> String {
     out
 }
 
+/// How to pick an email app on this system, for the Activity log.
+fn mail_fix_hint() -> &'static str {
+    if cfg!(windows) {
+        tr("To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.")
+    } else {
+        tr("To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.")
+    }
+}
+
+/// Looks up the app that opens email links before a draft is opened, and
+/// logs anything that will stop the draft from appearing. Opening a link
+/// cannot tell whether an app took it, so this is the only warning there is.
+///
+/// Returns the app's name when it is known, or the problem found.
+fn check_mail(log: &Logger) -> (Option<String>, Option<MailProblem>) {
+    use crate::sys::mail::MailHandler;
+    match shell::mail_handler() {
+        MailHandler::Missing => {
+            let why = trf(
+                "No email app is set up to open email links, so the email draft could not open. {0}",
+                &[&mail_fix_hint()],
+            );
+            log.error(why.clone());
+            (None, Some(MailProblem::Missing(why)))
+        }
+        MailHandler::App { name, browser: true } => {
+            let why = trf(
+                "Email links open in {0}, which is a web browser, so the email draft may not appear. {1}",
+                &[&name, &mail_fix_hint()],
+            );
+            log.warn(why.clone());
+            (Some(name), Some(MailProblem::Warning(why)))
+        }
+        MailHandler::App { name, browser: false } => (Some(name), None),
+        MailHandler::Unknown(e) => {
+            log.warn(trf("Could not check which app opens email links: {0}", &[&e]));
+            (None, None)
+        }
+    }
+}
+
+/// Opens an email draft and logs where it went, or what went wrong.
+fn open_mail(log: &Logger, url: &str, app: Option<&str>) -> bool {
+    match shell::open_unelevated(url) {
+        Ok(()) => {
+            // Windows and xdg-open hand the link on and return at once, so
+            // the only sign it went nowhere is the app never starting.
+            if let Some(app) = app
+                && shell::mail_app_running() == Some(false)
+            {
+                log.error(trf(
+                    "{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}",
+                    &[&app, &mail_fix_hint()],
+                ));
+                return false;
+            }
+            log.info(match app {
+                Some(app) => trf("Email draft opened in {0}. Press Send there to finish.", &[&app]),
+                None => tr("Asked your system to open an email draft. If none appears, check which app opens email links.").to_string(),
+            });
+            true
+        }
+        Err(e) => {
+            log.error(trf("Could not open the email draft: {0}", &[&e]));
+            false
+        }
+    }
+}
+
 fn send(ctx: &egui::Context, log: &Logger, d: &mut Draft, email: bool) {
+    let (mail_app, mail_problem) = if email { check_mail(log) } else { (None, None) };
+    if let Some(MailProblem::Missing(_)) = mail_problem {
+        d.sent = Some(Sent {
+            email,
+            folder: None,
+            on_clipboard: false,
+            mail_problem,
+        });
+        return;
+    }
     let title = format!("{} {}", d.kind.prefix(), d.title.trim());
     let body = markdown(d);
     let issue = |body: &str| {
@@ -923,19 +1039,20 @@ fn send(ctx: &egui::Context, log: &Logger, d: &mut Draft, email: bool) {
                 Err(e) => log.error(trf("Could not save the screenshots: {0}", &[&e])),
             }
         }
+        if email {
+            open_mail(&log, &url, mail_app.as_deref());
+            return;
+        }
         match shell::open_unelevated(&url) {
-            Ok(()) => log.info(if email {
-                tr("Feedback opened in your mail program.")
-            } else {
-                tr("Feedback opened on GitHub in your browser.")
-            }),
+            Ok(()) => log.info(tr("Feedback opened on GitHub in your browser.")),
             Err(e) => {
-                log.warn(e);
+                log.warn(trf("Could not open GitHub in your browser: {0}", &[&e]));
                 // GitHub can't be reached through the browser: email instead.
-                if let Some(mail) = fallback
-                    && let Err(e) = shell::open_unelevated(&mail)
-                {
-                    log.error(trf("Could not open your browser or mail program: {0}", &[&e]));
+                if let Some(mail) = fallback {
+                    let (app, problem) = check_mail(&log);
+                    if !matches!(problem, Some(MailProblem::Missing(_))) {
+                        open_mail(&log, &mail, app.as_deref());
+                    }
                 }
             }
         }
@@ -944,6 +1061,7 @@ fn send(ctx: &egui::Context, log: &Logger, d: &mut Draft, email: bool) {
         email,
         folder,
         on_clipboard,
+        mail_problem,
     });
 }
 

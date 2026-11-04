@@ -1354,9 +1354,6 @@ Zgłoszenie błędu
 Compose Feedback
 Napisz opinię
 
-Could not open your browser or mail program: {0}
-Nie można otworzyć przeglądarki ani programu pocztowego: {0}
-
 Could not save the screenshots: {0}
 Nie można zapisać zrzutów ekranu: {0}
 
@@ -1368,9 +1365,6 @@ Usuń
 
 Feedback
 Opinia
-
-Feedback opened in your mail program.
-Opinia została otwarta w programie pocztowym.
 
 Feedback opened on GitHub in your browser.
 Opinia została otwarta w serwisie GitHub w przeglądarce.
@@ -1455,3 +1449,48 @@ Zrzuty ekranu zapisano w otwartym folderze. Dołącz je do wiadomości e-mail.
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Zrzuty ekranu zapisano w otwartym folderze. Przeciągnij je do zgłoszenia w miejsca oznaczone [Obraz 1] itd.
+
+The email draft could not open
+Nie udało się otworzyć szkicu wiadomości
+
+Back to the report
+Wróć do raportu
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Aby to naprawić, wybierz aplikację pocztową dla MAILTO w Ustawienia > Aplikacje > Aplikacje domyślne albo wyślij raport przez GitHub.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Aby to naprawić, wybierz aplikację pocztową w ustawieniach aplikacji domyślnych swojego pulpitu albo wyślij raport przez GitHub.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+Żadna aplikacja pocztowa nie jest ustawiona do otwierania linków e-mail, więc nie udało się otworzyć szkicu. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+Linki e-mail otwierają się w {0}, czyli w przeglądarce, więc szkic wiadomości może się nie pojawić. {1}
+
+Could not check which app opens email links: {0}
+Nie udało się sprawdzić, która aplikacja otwiera linki e-mail: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+Szkic wiadomości otwarto w {0}. Kliknij tam Wyślij, aby zakończyć.
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+Poproszono system o otwarcie szkicu wiadomości. Jeśli się nie pojawi, sprawdź, która aplikacja otwiera linki e-mail.
+
+Could not open the email draft: {0}
+Nie udało się otworzyć szkicu wiadomości: {0}
+
+Could not open GitHub in your browser: {0}
+Nie udało się otworzyć serwisu GitHub w przeglądarce: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} nie uruchomił się, więc żaden szkic wiadomości nie został otwarty. Może trzeba go najpierw skonfigurować lub naprawić. {1}
+
+Full screen
+Pełny ekran
+
+Exit full screen
+Zamknij pełny ekran
+
+Volume {0}%
+Głośność {0}%

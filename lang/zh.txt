@@ -1354,9 +1354,6 @@ Bug Report
 Compose Feedback
 撰写反馈
 
-Could not open your browser or mail program: {0}
-无法打开浏览器或邮件程序：{0}
-
 Could not save the screenshots: {0}
 无法保存截图：{0}
 
@@ -1368,9 +1365,6 @@ Delete
 
 Feedback
 反馈
-
-Feedback opened in your mail program.
-已在邮件程序中打开反馈。
 
 Feedback opened on GitHub in your browser.
 已在浏览器中的 GitHub 上打开反馈。
@@ -1455,3 +1449,48 @@ Your screenshots were saved to the folder that opened. Attach them to the email.
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 截图已保存到打开的文件夹中。请将它们拖到 issue 中标有 [图片 1] 等字样的位置。
+
+The email draft could not open
+无法打开邮件草稿
+
+Back to the report
+返回报告
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+要解决此问题，请在“设置 > 应用 > 默认应用”中为 MAILTO 选择一个邮件应用，或改用 GitHub 发送报告。
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+要解决此问题，请在桌面的默认应用设置中选择一个邮件应用，或改用 GitHub 发送报告。
+
+No email app is set up to open email links, so the email draft could not open. {0}
+没有设置用于打开邮件链接的邮件应用，因此无法打开邮件草稿。{0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+邮件链接会在网页浏览器 {0} 中打开，因此邮件草稿可能不会出现。{1}
+
+Could not check which app opens email links: {0}
+无法检查哪个应用会打开邮件链接：{0}
+
+Email draft opened in {0}. Press Send there to finish.
+已在 {0} 中打开邮件草稿。请在其中点击发送完成。
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+已请求系统打开邮件草稿。如果没有出现，请检查哪个应用会打开邮件链接。
+
+Could not open the email draft: {0}
+无法打开邮件草稿：{0}
+
+Could not open GitHub in your browser: {0}
+无法在浏览器中打开 GitHub：{0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} 没有启动，因此没有打开邮件草稿。可能需要先设置或修复该应用。{1}
+
+Full screen
+全屏
+
+Exit full screen
+退出全屏
+
+Volume {0}%
+音量 {0}%

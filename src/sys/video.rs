@@ -56,6 +56,8 @@ pub struct Status {
     pub position: f64,
     pub duration: f64,
     pub muted: bool,
+    /// 0.0 to 1.0.
+    pub volume: f32,
 }
 
 /// One decoded picture, as RGBA.
@@ -69,6 +71,7 @@ enum Command {
     Pause,
     Seek(f64),
     Mute(bool),
+    Volume(f32),
 }
 
 struct Shared {
@@ -99,6 +102,7 @@ impl Player {
                 position: 0.0,
                 duration: 0.0,
                 muted: false,
+                volume: 1.0,
             }),
             frame: Mutex::new(None),
             stop: AtomicBool::new(false),
@@ -141,6 +145,13 @@ impl Player {
     pub fn set_muted(&self, muted: bool) {
         lock(&self.shared.status).muted = muted;
         let _ = self.commands.send(Command::Mute(muted));
+    }
+
+    /// `volume` from 0.0 (silent) to 1.0 (full).
+    pub fn set_volume(&self, volume: f32) {
+        let volume = volume.clamp(0.0, 1.0);
+        lock(&self.shared.status).volume = volume;
+        let _ = self.commands.send(Command::Volume(volume));
     }
 }
 
@@ -288,7 +299,12 @@ unsafe fn run(
         engine
             .SetSource(&BSTR::from(path.to_string_lossy().as_ref()))
             .map_err(fail)?;
-        engine.SetMuted(lock(&shared.status).muted).map_err(fail)?;
+        let (muted, volume) = {
+            let s = lock(&shared.status);
+            (s.muted, s.volume)
+        };
+        engine.SetMuted(muted).map_err(fail)?;
+        engine.SetVolume(f64::from(volume)).map_err(fail)?;
         engine.Play().map_err(fail)?;
 
         let wic: IWICImagingFactory =
@@ -313,6 +329,9 @@ unsafe fn run(
                 }
                 Ok(Command::Mute(m)) => {
                     let _ = engine.SetMuted(m);
+                }
+                Ok(Command::Volume(v)) => {
+                    let _ = engine.SetVolume(f64::from(v));
                 }
                 Err(RecvTimeoutError::Timeout) => {}
                 Err(RecvTimeoutError::Disconnected) => break,
@@ -452,6 +471,7 @@ mod tests {
                 position: 0.0,
                 duration: 0.0,
                 muted: true,
+                volume: 1.0,
             }),
             frame: Mutex::new(None),
             stop: AtomicBool::new(false),

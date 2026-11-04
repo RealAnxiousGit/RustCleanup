@@ -1354,9 +1354,6 @@ Fehlerbericht
 Compose Feedback
 Feedback verfassen
 
-Could not open your browser or mail program: {0}
-Browser oder E-Mail-Programm konnte nicht geöffnet werden: {0}
-
 Could not save the screenshots: {0}
 Die Screenshots konnten nicht gespeichert werden: {0}
 
@@ -1368,9 +1365,6 @@ Löschen
 
 Feedback
 Feedback
-
-Feedback opened in your mail program.
-Das Feedback wurde in Ihrem E-Mail-Programm geöffnet.
 
 Feedback opened on GitHub in your browser.
 Das Feedback wurde auf GitHub in Ihrem Browser geöffnet.
@@ -1455,3 +1449,48 @@ Ihre Screenshots wurden im geöffneten Ordner gespeichert. Hängen Sie sie an di
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Ihre Screenshots wurden im geöffneten Ordner gespeichert. Ziehen Sie sie in das Issue an die Stellen mit [Bild 1] usw.
+
+The email draft could not open
+Der E-Mail-Entwurf konnte nicht geöffnet werden
+
+Back to the report
+Zurück zum Bericht
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Wählen Sie dazu unter Einstellungen > Apps > Standard-Apps eine E-Mail-App für MAILTO aus, oder senden Sie den Bericht stattdessen über GitHub.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Wählen Sie dazu in den Standard-App-Einstellungen Ihres Desktops eine E-Mail-App aus, oder senden Sie den Bericht stattdessen über GitHub.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+Für E-Mail-Links ist keine E-Mail-App eingerichtet, daher konnte der E-Mail-Entwurf nicht geöffnet werden. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+E-Mail-Links werden in {0} geöffnet, einem Webbrowser, daher erscheint der E-Mail-Entwurf möglicherweise nicht. {1}
+
+Could not check which app opens email links: {0}
+Es konnte nicht geprüft werden, welche App E-Mail-Links öffnet: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+Der E-Mail-Entwurf wurde in {0} geöffnet. Klicken Sie dort auf Senden.
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+Das System wurde gebeten, einen E-Mail-Entwurf zu öffnen. Falls keiner erscheint, prüfen Sie, welche App E-Mail-Links öffnet.
+
+Could not open the email draft: {0}
+Der E-Mail-Entwurf konnte nicht geöffnet werden: {0}
+
+Could not open GitHub in your browser: {0}
+GitHub konnte nicht im Browser geöffnet werden: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} wurde nicht gestartet, daher wurde kein E-Mail-Entwurf geöffnet. Die App muss eventuell erst eingerichtet oder repariert werden. {1}
+
+Full screen
+Vollbild
+
+Exit full screen
+Vollbild beenden
+
+Volume {0}%
+Lautstärke {0} %

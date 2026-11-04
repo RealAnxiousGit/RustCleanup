@@ -22,6 +22,7 @@
 | **Optimize Task** | A live task list (App or Background, CPU %, memory, status) in its own window, with a filter. Click any column to sort by it, and again to reverse. Select like in File Explorer: click, Ctrl+click, Shift+click, Ctrl+A. Memory turns yellow at 4% and red at 10% of your RAM. For the selected processes: **Optimize** (trim memory and set Below Normal priority), **Suspend**, **Resume**, **Restart** (close and open again with the same command line) and **End task**. | Resume suspended processes. Anything still suspended is resumed when RustCleanup exits. |
 | **Low Power Mode** | Creates and activates a "RustCleanup Low Power" plan: CPU capped at 60% plugged in and 50% on battery, turbo boost off, passive cooling. | Switch off: your previous power plan is restored and the custom plan deleted. |
 | **System Tools** | Opens Power Config, Disk Cleanup, Disk Management, Performance Monitor, Task Manager, Resource Monitor, Windows Security, Device Manager, Settings, Command Prompt or Command Prompt [Admin]. | n/a |
+| **Feedback** | Opens a Compose Feedback window for a **Bug Report** or **Suggestion**: a title, a body that takes pasted screenshots, a right-click menu with Cut, Copy, Paste, Select All and **Hyperlink**. **Send** opens a filled-in GitHub issue and a folder with the screenshots to drag into it; **Send it by email instead** works without a GitHub account. Nothing is sent until you submit it yourself. | n/a |
 
 ### Task list
 ![The task list sorted by memory, with Optimize, Suspend, Resume, Restart and End task above the Name, PID, Type, CPU, Memory and Status columns](docs/tasks.png)
@@ -138,6 +139,13 @@ sudo apt install build-essential pkg-config libxkbcommon-dev libwayland-dev libx
 cargo build --release
 ```
 The output is `target/release/RustCleanup`, which needs the same or a newer glibc than the machine that built it; [`docs/LINUX.md`](docs/LINUX.md) shows the release build that runs on older distros too. Optional at run time: `pkexec`, `baobab` (Manage Storage), `power-profiles-daemon` (Low Power Mode), `ffmpeg` (the Changelog video) and `fonts-noto-cjk` (Japanese and Chinese). [`docs/LINUX.md`](docs/LINUX.md) explains how the Linux code mirrors the Windows code and how to port each new Windows feature.
+
+### RAM stress test (development builds)
+Debug builds, and release builds made with `--features stress-test`, can stress-test Clean RAM: helper processes fill RAM with data that cannot be compressed, then Clean RAM runs against them several times and reports what each run freed and how long trimming and purging took. Use **Stress test (development build)** under Clean RAM, or the script:
+```powershell
+.\scripts\stress-ram.ps1 -SizeMB 4096 -Hogs 8 -Runs 10 -Purge -Csv stress.csv
+```
+Run it from an **Administrator** terminal to test the real thing; without admin rights only your own processes are trimmed and the standby purge is skipped. The size is capped at 80% of the available RAM. On Linux, `scripts/stress-ram.sh` does the same; run it as root, since freeing other processes' memory and dropping the page cache need root.
 
 ### Adding a language
 Copy `lang/de.txt` to `lang/<code>.txt`, replace each second line with the translation, then add the language to `Lang` in `src/i18n.rs` (including its `include_str!` line) and a flag in `src/ui/flags.rs`.

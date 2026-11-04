@@ -1354,9 +1354,6 @@ Rapport de bug
 Compose Feedback
 Rédiger un avis
 
-Could not open your browser or mail program: {0}
-Impossible d'ouvrir le navigateur ou la messagerie : {0}
-
 Could not save the screenshots: {0}
 Impossible d'enregistrer les captures : {0}
 
@@ -1368,9 +1365,6 @@ Supprimer
 
 Feedback
 Avis
-
-Feedback opened in your mail program.
-L'avis a été ouvert dans votre messagerie.
 
 Feedback opened on GitHub in your browser.
 L'avis a été ouvert sur GitHub dans votre navigateur.
@@ -1455,3 +1449,48 @@ Vos captures ont été enregistrées dans le dossier ouvert. Joignez-les à l'e-
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Vos captures ont été enregistrées dans le dossier ouvert. Faites-les glisser dans le ticket aux endroits marqués [Image 1], etc.
+
+The email draft could not open
+Le brouillon de l'e-mail n'a pas pu s'ouvrir
+
+Back to the report
+Retour au rapport
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Pour corriger cela, choisissez une application de messagerie pour MAILTO dans Paramètres > Applications > Applications par défaut, ou envoyez le rapport sur GitHub.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Pour corriger cela, choisissez une application de messagerie dans les réglages d'applications par défaut de votre bureau, ou envoyez le rapport sur GitHub.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+Aucune application de messagerie n'est configurée pour ouvrir les liens e-mail, le brouillon n'a donc pas pu s'ouvrir. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+Les liens e-mail s'ouvrent dans {0}, qui est un navigateur web, le brouillon risque donc de ne pas apparaître. {1}
+
+Could not check which app opens email links: {0}
+Impossible de vérifier quelle application ouvre les liens e-mail : {0}
+
+Email draft opened in {0}. Press Send there to finish.
+Brouillon de l'e-mail ouvert dans {0}. Cliquez sur Envoyer pour terminer.
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+Le système a été invité à ouvrir un brouillon d'e-mail. S'il n'apparaît pas, vérifiez quelle application ouvre les liens e-mail.
+
+Could not open the email draft: {0}
+Impossible d'ouvrir le brouillon de l'e-mail : {0}
+
+Could not open GitHub in your browser: {0}
+Impossible d'ouvrir GitHub dans votre navigateur : {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} ne s'est pas lancé, aucun brouillon d'e-mail ne s'est donc ouvert. L'application doit peut-être d'abord être configurée ou réparée. {1}
+
+Full screen
+Plein écran
+
+Exit full screen
+Quitter le plein écran
+
+Volume {0}%
+Volume {0} %

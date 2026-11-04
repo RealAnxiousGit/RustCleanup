@@ -41,6 +41,7 @@ pub enum TrayCommand {
     CleanRam,
     OpenTaskList,
     Settings,
+    Feedback,
     Credits,
     Exit,
 }
@@ -65,13 +66,14 @@ const NIN_SELECT: u32 = WM_USER;
 const NIN_KEYSELECT: u32 = WM_USER + 1;
 const NIN_BALLOONUSERCLICK: u32 = WM_USER + 5;
 
-const MENU: [(usize, &str, TrayCommand); 6] = [
+const MENU: [(usize, &str, TrayCommand); 7] = [
     (1, n_("Open App"), TrayCommand::OpenApp),
     (2, n_("Clean RAM"), TrayCommand::CleanRam),
     (3, n_("Open task list"), TrayCommand::OpenTaskList),
     (4, n_("Settings"), TrayCommand::Settings),
-    (5, n_("Credits"), TrayCommand::Credits),
-    (6, n_("Exit"), TrayCommand::Exit),
+    (5, n_("Feedback"), TrayCommand::Feedback),
+    (6, n_("Credits"), TrayCommand::Credits),
+    (7, n_("Exit"), TrayCommand::Exit),
 ];
 
 /// State the window procedure needs. There is only ever one tray icon.

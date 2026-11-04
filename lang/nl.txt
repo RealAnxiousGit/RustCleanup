@@ -1354,9 +1354,6 @@ Foutmelding
 Compose Feedback
 Feedback schrijven
 
-Could not open your browser or mail program: {0}
-Kan je browser of mailprogramma niet openen: {0}
-
 Could not save the screenshots: {0}
 Kan de schermafbeeldingen niet opslaan: {0}
 
@@ -1368,9 +1365,6 @@ Verwijderen
 
 Feedback
 Feedback
-
-Feedback opened in your mail program.
-Feedback geopend in je mailprogramma.
 
 Feedback opened on GitHub in your browser.
 Feedback geopend op GitHub in je browser.
@@ -1455,3 +1449,48 @@ Je schermafbeeldingen staan in de map die geopend is. Voeg ze toe aan de e-mail.
 
 Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
 Je schermafbeeldingen staan in de map die geopend is. Sleep ze in de issue waar [Afbeelding 1] enzovoort staat.
+
+The email draft could not open
+Het e-mailconcept kon niet worden geopend
+
+Back to the report
+Terug naar het rapport
+
+To fix this, pick an email app for MAILTO in Settings > Apps > Default apps, or send the report on GitHub instead.
+Kies om dit op te lossen een e-mailapp voor MAILTO in Instellingen > Apps > Standaard-apps, of stuur het rapport via GitHub.
+
+To fix this, pick an email app in your desktop's default apps settings, or send the report on GitHub instead.
+Kies om dit op te lossen een e-mailapp in de instellingen voor standaardapps van je bureaublad, of stuur het rapport via GitHub.
+
+No email app is set up to open email links, so the email draft could not open. {0}
+Er is geen e-mailapp ingesteld om e-maillinks te openen, dus het e-mailconcept kon niet worden geopend. {0}
+
+Email links open in {0}, which is a web browser, so the email draft may not appear. {1}
+E-maillinks openen in {0}, een webbrowser, dus het e-mailconcept verschijnt misschien niet. {1}
+
+Could not check which app opens email links: {0}
+Kon niet controleren welke app e-maillinks opent: {0}
+
+Email draft opened in {0}. Press Send there to finish.
+E-mailconcept geopend in {0}. Klik daar op Versturen.
+
+Asked your system to open an email draft. If none appears, check which app opens email links.
+Het systeem is gevraagd een e-mailconcept te openen. Verschijnt er niets, controleer dan welke app e-maillinks opent.
+
+Could not open the email draft: {0}
+Kon het e-mailconcept niet openen: {0}
+
+Could not open GitHub in your browser: {0}
+Kon GitHub niet openen in je browser: {0}
+
+{0} did not start, so no email draft opened. It may need to be set up or repaired first. {1}
+{0} is niet gestart, dus er is geen e-mailconcept geopend. De app moet misschien eerst worden ingesteld of hersteld. {1}
+
+Full screen
+Volledig scherm
+
+Exit full screen
+Volledig scherm sluiten
+
+Volume {0}%
+Volume {0}%

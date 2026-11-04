@@ -5,14 +5,14 @@
 
 use std::sync::{Arc, Mutex, MutexGuard};
 
-use eframe::egui::{self, Color32, CornerRadius, Margin, RichText, Sense, Stroke, Ui};
+use eframe::egui::{self, Color32, CornerRadius, Margin, RichText, Sense, Ui};
 
 use super::theme::{self, semibold};
+use super::video_player::View;
 use super::widgets;
 use crate::events::{Job, Jobs};
 use crate::i18n::{tr, trf};
 use crate::sys::updater::{self, ReleaseNotes};
-use crate::sys::video::{self, Phase, Player};
 
 pub const WINDOW: &str = "changelog_window";
 const RELEASES_PAGE: &str = "https://github.com/RealAnxiousGit/RustCleanup/releases";
@@ -26,10 +26,8 @@ struct State {
     menu: bool,
     /// The version (index into `releases`) to scroll to on the next frame.
     jump: Option<usize>,
-    /// The What's New video, once its play button was pressed, and its URL.
-    player: Option<Player>,
-    player_url: String,
-    picture: Option<egui::TextureHandle>,
+    /// The What's New video player.
+    video: View,
 }
 
 /// The video a release links with a hidden line in its notes:
@@ -130,7 +128,18 @@ impl Changelog {
             super::window_builder(tr("Changelog"), [640.0, 660.0], [460.0, 380.0]),
             move |ui, _class| {
                 let pal = theme::palette();
+                // The video's keys first, so Esc in full screen does not close.
+                lock(&state).video.keys(ui.ctx());
                 let mut close = super::close_pressed(ui.ctx());
+                if lock(&state).video.is_fullscreen() {
+                    egui::CentralPanel::default()
+                        .frame(egui::Frame::new().fill(Color32::BLACK))
+                        .show(ui, |ui| lock(&state).video.full(ui, &pal));
+                    if close {
+                        close_window(&state, ui.ctx());
+                    }
+                    return;
+                }
                 let mut retry = false;
                 let releases = lock(&state).releases.clone();
                 let loaded = releases.as_ref().and_then(|r| r.as_ref().ok());
@@ -285,19 +294,21 @@ impl Changelog {
                     refetch.fetch(ui.ctx());
                 }
                 if close {
-                    let mut s = lock(&state);
-                    s.open = false;
-                    s.menu = false;
-                    // Stops the sound and frees the decoder with the window.
-                    s.player = None;
-                    s.player_url.clear();
-                    s.picture = None;
-                    drop(s);
-                    super::closed(ui.ctx());
+                    close_window(&state, ui.ctx());
                 }
             },
         );
     }
+}
+
+fn close_window(state: &Mutex<State>, ctx: &egui::Context) {
+    let mut s = lock(state);
+    s.open = false;
+    s.menu = false;
+    // Stops the sound and frees the decoder with the window.
+    s.video.stop(ctx);
+    drop(s);
+    super::closed(ctx);
 }
 
 /// A version's title, with its release date under it.
@@ -368,7 +379,7 @@ fn version_row(
 }
 
 /// The What's New video: a play button until it is pressed, then the
-/// picture with play, a seek bar, the time and mute under it.
+/// picture with its controls.
 fn video_card(
     ui: &mut Ui,
     pal: &theme::Palette,
@@ -377,174 +388,12 @@ fn video_card(
     url: &str,
     title: &str,
 ) {
-    let width = ui.available_width();
-    let (rect, response) =
-        ui.allocate_exact_size(egui::vec2(width, width * 9.0 / 16.0), Sense::click());
-    let painter = ui.painter_at(rect);
-    let radius = CornerRadius::same(8);
-    painter.rect_filled(rect, radius, Color32::from_rgb(0x10, 0x10, 0x12));
-
     let mut s = lock(state);
-    // Only the card whose video is loaded shows the player.
-    let mine = s.player_url == url;
-    // Newest picture to the GPU.
-    if let Some(frame) = s.player.as_ref().filter(|_| mine).and_then(Player::take_frame) {
-        let image = egui::ColorImage::from_rgba_unmultiplied(frame.size, &frame.rgba);
-        match &mut s.picture {
-            Some(texture) => texture.set(image, egui::TextureOptions::LINEAR),
-            None => {
-                s.picture =
-                    Some(ui.ctx().load_texture("whats_new_video", image, egui::TextureOptions::LINEAR))
-            }
-        }
-    }
-    let status = s.player.as_ref().filter(|_| mine).map(Player::status);
-    if let Some(texture) = s.picture.as_ref().filter(|_| mine) {
-        // Letterboxed to keep the video's shape.
-        let size = texture.size_vec2();
-        let scale = (rect.width() / size.x).min(rect.height() / size.y);
-        let shown = egui::Rect::from_center_size(rect.center(), size * scale);
-        painter.image(
-            texture.id(),
-            shown,
-            egui::Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)),
-            Color32::WHITE,
-        );
-    }
-
-    let phase = status.as_ref().map(|st| st.phase.clone());
-    let center = rect.center();
-    let overlay = |label: Option<String>| {
-        // A round play button, with an optional line under it.
-        let hovered = response.hovered();
-        let fill = if hovered { pal.accent_hover } else { pal.accent };
-        painter.circle_filled(center, 30.0, fill);
-        let r = 12.0;
-        let points = vec![
-            center + egui::vec2(-r * 0.6, -r),
-            center + egui::vec2(-r * 0.6, r),
-            center + egui::vec2(r, 0.0),
-        ];
-        painter.add(egui::Shape::convex_polygon(points, pal.on_accent, Stroke::NONE));
-        if let Some(label) = label {
-            painter.text(
-                center + egui::vec2(0.0, 50.0),
-                egui::Align2::CENTER_CENTER,
-                label,
-                egui::FontId::proportional(14.0),
-                Color32::WHITE,
-            );
-        }
-    };
-    match &phase {
-        None => {
-            overlay(Some(if title.is_empty() {
-                tr("Watch what's new").to_string()
-            } else {
-                title.to_string()
-            }));
-        }
-        Some(Phase::Downloading(p)) => {
-            painter.text(
-                center,
-                egui::Align2::CENTER_CENTER,
-                trf("Downloading the video, {0}%", &[p]),
-                egui::FontId::proportional(14.0),
-                Color32::WHITE,
-            );
-        }
-        Some(Phase::Loading) => {
-            painter.text(
-                center,
-                egui::Align2::CENTER_CENTER,
-                tr("Opening the video."),
-                egui::FontId::proportional(14.0),
-                Color32::WHITE,
-            );
-        }
-        Some(Phase::Paused) => overlay(None),
-        Some(Phase::Ended) => overlay(Some(tr("Watch again").to_string())),
-        Some(Phase::Playing) => {}
-        Some(Phase::Failed(e)) => {
-            painter.text(
-                center,
-                egui::Align2::CENTER_CENTER,
-                e,
-                egui::FontId::proportional(13.0),
-                pal.error,
-            );
-        }
-    }
-    painter.rect_stroke(rect, radius, Stroke::new(1.0, pal.border), egui::StrokeKind::Inside);
-
-    // Clicking the picture plays, pauses or starts over.
-    let toggle = |s: &mut State, ui: &Ui| match s.player.as_ref().filter(|_| mine).map(|p| p.status().phase) {
-        None | Some(Phase::Failed(_)) => {
-            let ctx = ui.ctx().clone();
-            let viewport = super::window_id(WINDOW);
-            s.picture = None;
-            s.player_url = url.to_string();
-            s.player = Some(Player::start(url, move || ctx.request_repaint_of(viewport)));
-        }
-        Some(Phase::Playing) => s.player.as_ref().unwrap().pause(),
-        Some(_) => s.player.as_ref().unwrap().play(),
-    };
-    let response = response.on_hover_cursor(egui::CursorIcon::PointingHand);
-    // Named for screen readers, which cannot see the painted play button.
-    let name = match &phase {
-        Some(Phase::Playing) => tr("Pause"),
-        _ => tr("Play"),
-    };
-    response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, name));
-    if response.clicked() {
-        toggle(&mut s, ui);
-    }
-
-    let Some(status) = status else {
-        return;
-    };
-    ui.add_space(6.0);
-    ui.horizontal(|ui| {
-        let label = match status.phase {
-            Phase::Playing => tr("Pause"),
-            Phase::Ended => tr("Watch again"),
-            _ => tr("Play"),
-        };
-        let ready = !matches!(status.phase, Phase::Downloading(_) | Phase::Loading);
-        if widgets::button(ui, label, ready).clicked() {
-            toggle(&mut s, ui);
-        }
-        let mute = if status.muted { tr("Unmute") } else { tr("Mute") };
-        if widgets::button(ui, mute, ready).clicked()
-            && let Some(player) = &s.player
-        {
-            player.set_muted(!status.muted);
-        }
-        ui.label(
-            RichText::new(format!(
-                "{} / {}",
-                video::clock(status.position),
-                video::clock(status.duration)
-            ))
-            .color(pal.muted),
-        );
-        if status.duration > 0.0 {
-            let mut at = status.position;
-            ui.spacing_mut().slider_width = (ui.available_width() - 8.0).max(60.0);
-            let seek = ui.add(
-                egui::Slider::new(&mut at, 0.0..=status.duration)
-                    .show_value(false)
-                    .trailing_fill(true),
-            );
-            if seek.changed()
-                && let Some(player) = &s.player
-            {
-                player.seek(at);
-            }
-        }
-    });
-    if matches!(status.phase, Phase::Failed(_)) {
-        drop(s);
+    s.video.card(ui, pal, url, title);
+    let failed = s.video.failed(url);
+    drop(s);
+    if failed {
+        ui.add_space(6.0);
         widgets::link(ui, &jobs.log, tr("Open the video in your browser"), url);
     }
 }

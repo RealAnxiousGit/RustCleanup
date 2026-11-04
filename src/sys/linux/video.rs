@@ -5,6 +5,7 @@
 
 use std::io::Read;
 use std::path::{Path, PathBuf};
+use std::os::unix::process::CommandExt;
 use std::process::{Child, Command, Stdio};
 use std::sync::atomic::{AtomicBool, AtomicU8, Ordering};
 use std::sync::mpsc::{Receiver, Sender, channel};
@@ -38,6 +39,8 @@ pub struct Status {
     pub position: f64,
     pub duration: f64,
     pub muted: bool,
+    /// 0.0 to 1.0.
+    pub volume: f32,
 }
 
 /// One decoded picture, as RGBA.
@@ -51,6 +54,7 @@ enum PlayerCommand {
     Pause,
     Seek(f64),
     Mute(bool),
+    Volume,
 }
 
 struct Shared {
@@ -80,6 +84,7 @@ impl Player {
                 position: 0.0,
                 duration: 0.0,
                 muted: false,
+                volume: 1.0,
             }),
             frame: Mutex::new(None),
             stop: AtomicBool::new(false),
@@ -122,6 +127,13 @@ impl Player {
     pub fn set_muted(&self, muted: bool) {
         lock(&self.shared.status).muted = muted;
         let _ = self.commands.send(PlayerCommand::Mute(muted));
+    }
+
+    /// `volume` from 0.0 (silent) to 1.0 (full).
+    pub fn set_volume(&self, volume: f32) {
+        let volume = volume.clamp(0.0, 1.0);
+        lock(&self.shared.status).volume = volume;
+        let _ = self.commands.send(PlayerCommand::Volume);
     }
 }
 
@@ -224,7 +236,7 @@ struct Helpers {
 }
 
 impl Helpers {
-    fn start(path: &Path, info: &Info, pos: f64, muted: bool) -> Result<Self, String> {
+    fn start(path: &Path, info: &Info, pos: f64, muted: bool, volume: f32) -> Result<Self, String> {
         let video = Command::new("ffmpeg")
             .args(["-v", "error", "-nostdin", "-ss", &format!("{pos:.3}"), "-i"])
             .arg(path)
@@ -233,17 +245,20 @@ impl Helpers {
             .stdin(Stdio::null())
             .stdout(Stdio::piped())
             .stderr(Stdio::null())
+            .with_parent_death()
             .spawn()
             .map_err(|e| trf("Could not play the video: {0}", &[&e]))?;
-        let audio = if muted || which("ffplay").is_none() {
+        let audio = if muted || volume <= 0.0 || which("ffplay").is_none() {
             None
         } else {
             Command::new("ffplay")
                 .args(["-v", "quiet", "-nodisp", "-autoexit", "-vn", "-ss", &format!("{pos:.3}")])
+                .args(["-volume", &format!("{}", (volume * 100.0).round() as u32)])
                 .arg(path)
                 .stdin(Stdio::null())
                 .stdout(Stdio::null())
                 .stderr(Stdio::null())
+                .with_parent_death()
                 .spawn()
                 .ok()
         };
@@ -260,6 +275,31 @@ impl Helpers {
         if let Some(mut a) = self.audio.take() {
             let _ = a.kill();
             let _ = a.wait();
+        }
+    }
+}
+
+trait ParentDeath {
+    fn with_parent_death(&mut self) -> &mut Self;
+}
+
+impl ParentDeath for Command {
+    /// The helper is killed when the player's thread ends, even when
+    /// RustCleanup quits without running destructors (tray Exit calls
+    /// `process::exit`) or is killed. Otherwise ffplay kept playing the sound.
+    fn with_parent_death(&mut self) -> &mut Self {
+        // SAFETY: only async-signal-safe calls between fork and exec.
+        unsafe {
+            self.pre_exec(|| {
+                if libc::prctl(libc::PR_SET_PDEATHSIG, libc::SIGKILL) != 0 {
+                    return Err(std::io::Error::last_os_error());
+                }
+                // The parent may have died before prctl took effect.
+                if libc::getppid() == 1 {
+                    libc::_exit(0);
+                }
+                Ok(())
+            })
         }
     }
 }
@@ -289,7 +329,12 @@ fn play(
     let frame_len = info.width * info.height * 4;
     let frame_time = 1.0 / info.fps;
 
-    let mut helpers = Some(Helpers::start(path, &info, 0.0, lock(&shared.status).muted)?);
+    let sound = || {
+        let s = lock(&shared.status);
+        (s.muted, s.volume)
+    };
+    let (muted, volume) = sound();
+    let mut helpers = Some(Helpers::start(path, &info, 0.0, muted, volume)?);
     lock(&shared.status).phase = Phase::Playing;
     let mut playing = true;
     let mut position = 0.0f64;
@@ -320,7 +365,7 @@ fn play(
                     } else {
                         // Show the frame at the new spot while paused.
                         helpers = None;
-                        if let Ok(mut h) = Helpers::start(path, &info, position, true)
+                        if let Ok(mut h) = Helpers::start(path, &info, position, true, 0.0)
                             && let Some(rgba) = read_frame(&mut h.video, frame_len)
                         {
                             *lock(&shared.frame) = Some(Frame {
@@ -345,12 +390,19 @@ fn play(
                         }
                     }
                 }
+                // ffplay takes its volume at start, so the sound restarts.
+                PlayerCommand::Volume => {
+                    if playing && !lock(&shared.status).muted {
+                        restart_at = Some(position);
+                    }
+                }
             }
         }
         if let Some(pos) = restart_at {
             // Stop the old helpers before starting new ones.
             drop(helpers.take());
-            helpers = Some(Helpers::start(path, &info, pos, lock(&shared.status).muted)?);
+            let (muted, volume) = sound();
+            helpers = Some(Helpers::start(path, &info, pos, muted, volume)?);
             position = pos;
             lock(&shared.status).phase = Phase::Playing;
         }
@@ -428,6 +480,7 @@ mod tests {
                 position: 0.0,
                 duration: 0.0,
                 muted: true,
+                volume: 1.0,
             }),
             frame: Mutex::new(None),
             stop: AtomicBool::new(false),

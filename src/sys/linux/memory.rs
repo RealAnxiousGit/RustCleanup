@@ -282,9 +282,10 @@ fn reclaim_cgroup(dir: &std::path::Path) -> Result<(), String> {
     }
 }
 
-/// Runs the full Clean RAM operation, logging progress as it goes.
 /// What one Clean RAM pass did and how long each stage took.
+/// The counts and timings are read only by the development stress test.
 #[derive(Clone, Copy, Debug, Default)]
+#[cfg_attr(not(any(debug_assertions, feature = "stress-test")), allow(dead_code))]
 pub struct CleanReport {
     pub trimmed: usize,
     pub skipped: usize,
