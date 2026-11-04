@@ -24,6 +24,7 @@ use crate::sys::tray::{NotifyKind, Tray, TrayCommand};
 use crate::ui::activity::ActivityLog;
 use crate::ui::changelog::Changelog;
 use crate::ui::credits::Credits;
+use crate::ui::feedback::Feedback;
 use crate::ui::disk::DiskPanel;
 use crate::ui::memory::MemoryPanel;
 use crate::ui::settings::SettingsWindow;
@@ -96,6 +97,7 @@ pub struct RustCleanupApp {
     tweaks: TweaksPanel,
     tasks: TaskList,
     credits: Credits,
+    feedback: Feedback,
     changelog: Changelog,
     settings: SettingsWindow,
     update: UpdateWindow,
@@ -176,7 +178,8 @@ impl RustCleanupApp {
             disk: DiskPanel::new(jobs.clone()),
             tweaks: TweaksPanel::new(),
             tasks: TaskList::new(jobs.clone()),
-            credits: Credits::new(log),
+            credits: Credits::new(log.clone()),
+            feedback: Feedback::new(log),
             changelog,
             settings: SettingsWindow::new(jobs.clone()),
             update: UpdateWindow::new(jobs.clone()),
@@ -416,7 +419,7 @@ impl RustCleanupApp {
     fn footer(&mut self, ui: &mut egui::Ui) {
         let pal = self.theme.palette;
         // Right to left: the theme button sits at the far right, then
-        // Settings, Credits and Changelog. The admin status fills the left.
+        // Settings, Feedback, Credits and Changelog. The admin status fills the left.
         ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
             if widgets::theme_button(ui, &pal, self.theme.light).clicked() {
                 self.theme.toggle();
@@ -426,6 +429,12 @@ impl RustCleanupApp {
                 .clicked()
             {
                 self.settings.open(ui.ctx());
+            }
+            if widgets::button(ui, tr("Feedback"), true)
+                .on_hover_text(tr("Report a bug or suggest a feature"))
+                .clicked()
+            {
+                self.feedback.open(ui.ctx());
             }
             if widgets::button(ui, tr("Credits"), true)
                 .on_hover_text(tr("Who made RustCleanup and what it is built with"))
@@ -611,6 +620,7 @@ impl eframe::App for RustCleanupApp {
         self.tasks.show(&ctx);
         self.settings.show(&ctx);
         self.credits.show(&ctx);
+        self.feedback.show(&ctx);
         self.changelog.show(&ctx);
         self.update.show(&ctx);
     }

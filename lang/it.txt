@@ -1341,3 +1341,117 @@ powerprofilesctl non è riuscito a passare a {0}.
 
 WSL has no login session for polkit, so pkexec cannot ask for your password here. Close RustCleanup and start it from a terminal with sudo instead.
 WSL non ha una sessione di accesso per polkit, quindi pkexec non può chiedere la password qui. Chiudi RustCleanup e avvialo da un terminale con sudo.
+
+(The report is on your clipboard. Paste it here with Ctrl+V.)
+(Il rapporto è negli appunti. Incollalo qui con Ctrl+V.)
+
+Add
+Aggiungi
+
+Bug Report
+Segnalazione bug
+
+Compose Feedback
+Scrivi un feedback
+
+Could not open your browser or mail program: {0}
+Impossibile aprire il browser o il programma di posta: {0}
+
+Could not save the screenshots: {0}
+Impossibile salvare gli screenshot: {0}
+
+Cut
+Taglia
+
+Delete
+Elimina
+
+Feedback
+Feedback
+
+Feedback opened in your mail program.
+Il feedback è stato aperto nel programma di posta.
+
+Feedback opened on GitHub in your browser.
+Il feedback è stato aperto su GitHub nel browser.
+
+Hyperlink
+Collegamento ipertestuale
+
+Image {0}
+Immagine {0}
+
+Link
+Link
+
+Links must be web addresses (http or https).
+I link devono essere indirizzi web (http o https).
+
+No GitHub account?
+Non hai un account GitHub?
+
+Not opening {0}: it is not a web address.
+{0} non viene aperto: non è un indirizzo web.
+
+Opens GitHub in your browser with the report filled in
+Apre GitHub nel browser con il rapporto già compilato
+
+Paste
+Incolla
+
+Remove Hyperlink
+Rimuovi collegamento
+
+Remove this image
+Rimuovi questa immagine
+
+Report a bug or suggest a feature
+Segnala un bug o suggerisci una funzione
+
+Report a bug...
+Segnala un bug...
+
+Select All
+Seleziona tutto
+
+Send
+Invia
+
+Send it by email instead
+Invialo invece per email
+
+Suggest a feature...
+Suggerisci una funzione...
+
+Suggestion
+Suggerimento
+
+Text
+Testo
+
+Thanks for the feedback
+Grazie per il feedback
+
+The report was too long for a link, so it was copied to your clipboard. Paste it into the message with Ctrl+V.
+Il rapporto era troppo lungo per un link, quindi è stato copiato negli appunti. Incollalo nel messaggio con Ctrl+V.
+
+What happened, and what did you expect? Paste screenshots with Ctrl+V.
+Cosa è successo e cosa ti aspettavi? Incolla screenshot con Ctrl+V.
+
+What would you like RustCleanup to do? Paste screenshots with Ctrl+V.
+Cosa vorresti che facesse RustCleanup? Incolla screenshot con Ctrl+V.
+
+Write another
+Scrivine un altro
+
+Your browser opened GitHub with the report filled in. Sign in if asked, then press Create to finish.
+Il browser ha aperto GitHub con il rapporto compilato. Accedi se richiesto, poi premi Create per finire.
+
+Your mail program opened with the report filled in. Press Send there to finish.
+Il programma di posta si è aperto con il rapporto compilato. Premi Invia per finire.
+
+Your screenshots were saved to the folder that opened. Attach them to the email.
+Gli screenshot sono stati salvati nella cartella che si è aperta. Allegali all'email.
+
+Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
+Gli screenshot sono stati salvati nella cartella che si è aperta. Trascinali nella issue dove c'è scritto [Immagine 1] e così via.

@@ -1341,3 +1341,117 @@ powerprofilesctl {0} profiline geçemedi.
 
 WSL has no login session for polkit, so pkexec cannot ask for your password here. Close RustCleanup and start it from a terminal with sudo instead.
 WSL'de polkit için oturum yok, bu yüzden pkexec burada parolanızı soramaz. RustCleanup'ı kapatın ve bunun yerine bir terminalden sudo ile başlatın.
+
+(The report is on your clipboard. Paste it here with Ctrl+V.)
+(Rapor panonuzda. Buraya Ctrl+V ile yapıştırın.)
+
+Add
+Ekle
+
+Bug Report
+Hata Bildirimi
+
+Compose Feedback
+Geri Bildirim Yaz
+
+Could not open your browser or mail program: {0}
+Tarayıcı veya e-posta programı açılamadı: {0}
+
+Could not save the screenshots: {0}
+Ekran görüntüleri kaydedilemedi: {0}
+
+Cut
+Kes
+
+Delete
+Sil
+
+Feedback
+Geri Bildirim
+
+Feedback opened in your mail program.
+Geri bildirim e-posta programınızda açıldı.
+
+Feedback opened on GitHub in your browser.
+Geri bildirim tarayıcınızda GitHub'da açıldı.
+
+Hyperlink
+Köprü
+
+Image {0}
+Görsel {0}
+
+Link
+Bağlantı
+
+Links must be web addresses (http or https).
+Bağlantılar web adresi olmalıdır (http veya https).
+
+No GitHub account?
+GitHub hesabınız yok mu?
+
+Not opening {0}: it is not a web address.
+{0} açılmıyor: bu bir web adresi değil.
+
+Opens GitHub in your browser with the report filled in
+GitHub'ı tarayıcınızda rapor doldurulmuş olarak açar
+
+Paste
+Yapıştır
+
+Remove Hyperlink
+Köprüyü Kaldır
+
+Remove this image
+Bu görseli kaldır
+
+Report a bug or suggest a feature
+Hata bildirin veya özellik önerin
+
+Report a bug...
+Hata bildir...
+
+Select All
+Tümünü Seç
+
+Send
+Gönder
+
+Send it by email instead
+Bunun yerine e-postayla gönder
+
+Suggest a feature...
+Özellik öner...
+
+Suggestion
+Öneri
+
+Text
+Metin
+
+Thanks for the feedback
+Geri bildiriminiz için teşekkürler
+
+The report was too long for a link, so it was copied to your clipboard. Paste it into the message with Ctrl+V.
+Rapor bir bağlantı için fazla uzundu, bu yüzden panonuza kopyalandı. Mesaja Ctrl+V ile yapıştırın.
+
+What happened, and what did you expect? Paste screenshots with Ctrl+V.
+Ne oldu ve ne bekliyordunuz? Ekran görüntülerini Ctrl+V ile yapıştırın.
+
+What would you like RustCleanup to do? Paste screenshots with Ctrl+V.
+RustCleanup'ın ne yapmasını istersiniz? Ekran görüntülerini Ctrl+V ile yapıştırın.
+
+Write another
+Bir tane daha yaz
+
+Your browser opened GitHub with the report filled in. Sign in if asked, then press Create to finish.
+Tarayıcınız GitHub'ı rapor doldurulmuş olarak açtı. İstenirse oturum açın, sonra bitirmek için Create'e basın.
+
+Your mail program opened with the report filled in. Press Send there to finish.
+E-posta programınız rapor doldurulmuş olarak açıldı. Bitirmek için orada Gönder'e basın.
+
+Your screenshots were saved to the folder that opened. Attach them to the email.
+Ekran görüntüleriniz açılan klasöre kaydedildi. Bunları e-postaya ekleyin.
+
+Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
+Ekran görüntüleriniz açılan klasöre kaydedildi. Bunları issue'da [Görsel 1] vb. yazan yerlere sürükleyin.

@@ -22,6 +22,7 @@ eframe = { version = "0.37.0", default-features = false, features = [
     "glow",
     "wgpu_no_default_features",
 ] }
+png = "0.18"
 serde_json = "1.0"
 sha2 = "0.10"
 sysinfo = "0.40.1"
@@ -40,6 +41,7 @@ windows = { version = "0.62.2", features = [
     "Win32_Networking_WinHttp",
     "Win32_Security",
     "Win32_System_Com",
+    "Win32_System_Console",
     "Win32_Storage_FileSystem",
     "Win32_System_LibraryLoader",
     "Win32_System_Memory",
@@ -63,6 +65,11 @@ libc = "0.2"
 # The tray icon (StatusNotifierItem) and notifications, both over D-Bus.
 ksni = { version = "0.3", default-features = false, features = ["blocking", "async-io"] }
 notify-rust = { version = "4", default-features = false, features = ["z"] }
+
+[features]
+# Adds the RAM stress test (`--stress-ram`, and a panel under Clean RAM) to
+# a release build. Debug builds always have it. Never enabled for releases.
+stress-test = []
 
 [build-dependencies]
 embed-resource = "3.0.12"

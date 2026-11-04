@@ -48,6 +48,8 @@ pub enum Job {
     UpdateCheck,
     UpdateInstall,
     Changelog,
+    #[cfg(any(debug_assertions, feature = "stress-test"))]
+    StressTest,
 }
 
 /// Current on/off state of each switch, read from the system.

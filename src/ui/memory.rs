@@ -20,6 +20,8 @@ const VERY_HIGH_USAGE: f32 = 0.90;
 pub struct MemoryPanel {
     snap: MemorySnapshot,
     read_at: Instant,
+    #[cfg(any(debug_assertions, feature = "stress-test"))]
+    stress: crate::sys::stress::Config,
 }
 
 impl MemoryPanel {
@@ -27,6 +29,8 @@ impl MemoryPanel {
         Self {
             snap: memory::snapshot(),
             read_at: Instant::now(),
+            #[cfg(any(debug_assertions, feature = "stress-test"))]
+            stress: Default::default(),
         }
     }
 
@@ -98,6 +102,58 @@ impl MemoryPanel {
                 {
                     settings::update(|s| s.purge_standby = purge);
                 }
+                #[cfg(any(debug_assertions, feature = "stress-test"))]
+                self.stress_test(ui, pal, jobs);
+            });
+    }
+
+    /// Development builds only, so the strings stay English.
+    #[cfg(any(debug_assertions, feature = "stress-test"))]
+    fn stress_test(&mut self, ui: &mut Ui, pal: &Palette, jobs: &Jobs) {
+        use crate::sys::stress;
+        ui.add_space(10.0);
+        egui::CollapsingHeader::new(RichText::new("Stress test (development build)").color(pal.muted))
+            .id_salt("stress_test")
+            .show(ui, |ui| {
+                let cfg = &mut self.stress;
+                ui.horizontal(|ui| {
+                    ui.label("RAM to fill");
+                    ui.add(egui::DragValue::new(&mut cfg.size_mb).range(64..=65_536).speed(64).suffix(" MB"));
+                    ui.label("in");
+                    ui.add(egui::DragValue::new(&mut cfg.hogs).range(1..=64));
+                    ui.label("processes");
+                });
+                ui.horizontal(|ui| {
+                    ui.label("Runs");
+                    ui.add(egui::DragValue::new(&mut cfg.runs).range(1..=100));
+                    ui.checkbox(
+                        &mut cfg.purge_standby,
+                        if cfg!(windows) { "Purge standby list" } else { "Drop page cache (root)" },
+                    );
+                });
+                widgets::note(
+                    ui,
+                    pal,
+                    if cfg!(windows) {
+                        "Fills RAM with helper processes, then times Clean RAM on each run. Results go to the Activity log. Scripted: RustCleanup.exe --stress-ram --size-mb 4096 --runs 5 --csv out.csv"
+                    } else {
+                        "Fills RAM with helper processes, then times Clean RAM on each run. Results go to the Activity log. Scripted: RustCleanup --stress-ram --size-mb 4096 --runs 5 --csv out.csv"
+                    },
+                );
+                let busy = jobs.is_busy(Job::StressTest) || jobs.is_busy(Job::CleanRam);
+                ui.horizontal(|ui| {
+                    if widgets::button(ui, if busy { "Running" } else { "Run stress test" }, !busy).clicked() {
+                        let cfg = cfg.clone();
+                        jobs.start(Job::StressTest, move |log| {
+                            let results = stress::run(&cfg, log, |r| log.success(r.line()))?;
+                            log.success(stress::summary(&results));
+                            Ok(())
+                        });
+                    }
+                    if jobs.is_busy(Job::StressTest) {
+                        ui.add(egui::Spinner::new().color(pal.muted));
+                    }
+                });
             });
     }
 

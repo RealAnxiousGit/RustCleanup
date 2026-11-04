@@ -279,8 +279,42 @@ fn all_pids() -> Result<Vec<u32>, String> {
     }
 }
 
+/// What one Clean RAM pass did and how long each stage took.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct CleanReport {
+    pub trimmed: usize,
+    pub skipped: usize,
+    /// Trimming every working set.
+    pub trim_time: std::time::Duration,
+    /// Flushing the modified list and purging the standby list (zero when off).
+    pub purge_time: std::time::Duration,
+    /// Available RAM before and after (after the settle pause).
+    pub available_before: u64,
+    pub available_after: u64,
+}
+
+impl CleanReport {
+    pub fn freed(&self) -> u64 {
+        self.available_after.saturating_sub(self.available_before)
+    }
+}
+
 /// Runs the full Clean RAM operation, logging progress as it goes.
 pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
+    let report = clean_ram_report(log, purge_standby)?;
+    if report.available_before > 0 && report.available_after > 0 {
+        log.success(trf(
+            "Clean RAM finished. {0} freed, {1} now available.",
+            &[&fmt_bytes(report.freed()), &fmt_bytes(report.available_after)],
+        ));
+    } else {
+        log.success(tr("Clean RAM finished."));
+    }
+    Ok(())
+}
+
+/// Clean RAM without the final summary line, returning its figures instead.
+pub fn clean_ram_report(log: &Logger, purge_standby: bool) -> Result<CleanReport, String> {
     let before = physical(None);
 
     // Needed to open protected/system processes and to call EmptyWorkingSet on them.
@@ -290,6 +324,7 @@ pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
         }
     }
 
+    let started = std::time::Instant::now();
     let mut trimmed = 0usize;
     let mut skipped = 0usize;
     for pid in all_pids()?.into_iter().filter(|&p| p > 4) {
@@ -299,11 +334,13 @@ pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
             Err(_) => skipped += 1,
         }
     }
+    let trim_time = started.elapsed();
     log.info(trf(
         "Trimmed {0} processes. {1} protected processes were skipped.",
         &[&trimmed, &skipped],
     ));
 
+    let started = std::time::Instant::now();
     if purge_standby {
         match enable_privilege("SeProfileSingleProcessPrivilege") {
             Err(e) => log.warn(trf("Standby list not purged: {0}", &[&e])),
@@ -318,20 +355,23 @@ pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
             }
         }
     }
+    let purge_time = if purge_standby {
+        started.elapsed()
+    } else {
+        std::time::Duration::ZERO
+    };
 
     // Give the memory manager a moment to rebalance before measuring.
     std::thread::sleep(std::time::Duration::from_millis(500));
-    match (before, physical(None)) {
-        (Some(b), Some(a)) => log.success(trf(
-            "Clean RAM finished. {0} freed, {1} now available.",
-            &[
-                &fmt_bytes(a.available.saturating_sub(b.available)),
-                &fmt_bytes(a.available),
-            ],
-        )),
-        _ => log.success(tr("Clean RAM finished.")),
-    }
-    Ok(())
+    let after = physical(None);
+    Ok(CleanReport {
+        trimmed,
+        skipped,
+        trim_time,
+        purge_time,
+        available_before: before.map_or(0, |b| b.available),
+        available_after: after.map_or(0, |a| a.available),
+    })
 }
 
 #[cfg(test)]

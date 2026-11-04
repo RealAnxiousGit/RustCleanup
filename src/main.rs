@@ -36,6 +36,12 @@ fn main() -> eframe::Result {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let has = |a: &str| args.iter().any(|x| x == a);
 
+    // Development builds only: the scripted RAM stress test runs headless.
+    #[cfg(any(debug_assertions, feature = "stress-test"))]
+    if let Some(code) = sys::stress::cli(&args) {
+        std::process::exit(code);
+    }
+
     #[cfg(not(windows))]
     let taking_over = has(TAKE_OVER_ARG) && single_instance::ask_running_copy_to_quit();
     #[cfg(windows)]

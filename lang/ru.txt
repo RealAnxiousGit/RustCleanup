@@ -1341,3 +1341,117 @@ powerprofilesctl не удалось переключить на {0}.
 
 WSL has no login session for polkit, so pkexec cannot ask for your password here. Close RustCleanup and start it from a terminal with sudo instead.
 В WSL нет сеанса входа для polkit, поэтому pkexec не может запросить пароль. Закройте RustCleanup и запустите его из терминала через sudo.
+
+(The report is on your clipboard. Paste it here with Ctrl+V.)
+(Отчёт скопирован в буфер обмена. Вставьте его сюда с помощью Ctrl+V.)
+
+Add
+Добавить
+
+Bug Report
+Сообщение об ошибке
+
+Compose Feedback
+Написать отзыв
+
+Could not open your browser or mail program: {0}
+Не удалось открыть браузер или почтовую программу: {0}
+
+Could not save the screenshots: {0}
+Не удалось сохранить снимки экрана: {0}
+
+Cut
+Вырезать
+
+Delete
+Удалить
+
+Feedback
+Отзыв
+
+Feedback opened in your mail program.
+Отзыв открыт в почтовой программе.
+
+Feedback opened on GitHub in your browser.
+Отзыв открыт на GitHub в браузере.
+
+Hyperlink
+Гиперссылка
+
+Image {0}
+Изображение {0}
+
+Link
+Ссылка
+
+Links must be web addresses (http or https).
+Ссылки должны быть веб-адресами (http или https).
+
+No GitHub account?
+Нет аккаунта GitHub?
+
+Not opening {0}: it is not a web address.
+{0} не будет открыт: это не веб-адрес.
+
+Opens GitHub in your browser with the report filled in
+Открывает GitHub в браузере с заполненным отчётом
+
+Paste
+Вставить
+
+Remove Hyperlink
+Удалить гиперссылку
+
+Remove this image
+Убрать это изображение
+
+Report a bug or suggest a feature
+Сообщить об ошибке или предложить функцию
+
+Report a bug...
+Сообщить об ошибке...
+
+Select All
+Выделить всё
+
+Send
+Отправить
+
+Send it by email instead
+Отправить по почте
+
+Suggest a feature...
+Предложить функцию...
+
+Suggestion
+Предложение
+
+Text
+Текст
+
+Thanks for the feedback
+Спасибо за отзыв
+
+The report was too long for a link, so it was copied to your clipboard. Paste it into the message with Ctrl+V.
+Отчёт слишком длинный для ссылки, поэтому он скопирован в буфер обмена. Вставьте его в сообщение с помощью Ctrl+V.
+
+What happened, and what did you expect? Paste screenshots with Ctrl+V.
+Что произошло и чего вы ожидали? Вставляйте снимки экрана с помощью Ctrl+V.
+
+What would you like RustCleanup to do? Paste screenshots with Ctrl+V.
+Что бы вы хотели, чтобы делал RustCleanup? Вставляйте снимки экрана с помощью Ctrl+V.
+
+Write another
+Написать ещё
+
+Your browser opened GitHub with the report filled in. Sign in if asked, then press Create to finish.
+Браузер открыл GitHub с заполненным отчётом. Войдите, если потребуется, и нажмите Create.
+
+Your mail program opened with the report filled in. Press Send there to finish.
+Почтовая программа открылась с заполненным отчётом. Нажмите там «Отправить».
+
+Your screenshots were saved to the folder that opened. Attach them to the email.
+Снимки экрана сохранены в открывшейся папке. Приложите их к письму.
+
+Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
+Снимки экрана сохранены в открывшейся папке. Перетащите их в issue туда, где написано [Изображение 1] и т. д.

@@ -1341,3 +1341,117 @@ powerprofilesctl kon niet overschakelen naar {0}.
 
 WSL has no login session for polkit, so pkexec cannot ask for your password here. Close RustCleanup and start it from a terminal with sudo instead.
 WSL heeft geen aanmeldsessie voor polkit, dus pkexec kan hier niet om je wachtwoord vragen. Sluit RustCleanup en start het in plaats daarvan vanuit een terminal met sudo.
+
+(The report is on your clipboard. Paste it here with Ctrl+V.)
+(Het rapport staat op je klembord. Plak het hier met Ctrl+V.)
+
+Add
+Toevoegen
+
+Bug Report
+Foutmelding
+
+Compose Feedback
+Feedback schrijven
+
+Could not open your browser or mail program: {0}
+Kan je browser of mailprogramma niet openen: {0}
+
+Could not save the screenshots: {0}
+Kan de schermafbeeldingen niet opslaan: {0}
+
+Cut
+Knippen
+
+Delete
+Verwijderen
+
+Feedback
+Feedback
+
+Feedback opened in your mail program.
+Feedback geopend in je mailprogramma.
+
+Feedback opened on GitHub in your browser.
+Feedback geopend op GitHub in je browser.
+
+Hyperlink
+Hyperlink
+
+Image {0}
+Afbeelding {0}
+
+Link
+Link
+
+Links must be web addresses (http or https).
+Links moeten webadressen zijn (http of https).
+
+No GitHub account?
+Geen GitHub-account?
+
+Not opening {0}: it is not a web address.
+{0} wordt niet geopend: het is geen webadres.
+
+Opens GitHub in your browser with the report filled in
+Opent GitHub in je browser met het rapport al ingevuld
+
+Paste
+Plakken
+
+Remove Hyperlink
+Hyperlink verwijderen
+
+Remove this image
+Deze afbeelding verwijderen
+
+Report a bug or suggest a feature
+Een fout melden of een functie voorstellen
+
+Report a bug...
+Een fout melden...
+
+Select All
+Alles selecteren
+
+Send
+Versturen
+
+Send it by email instead
+Liever per e-mail versturen
+
+Suggest a feature...
+Een functie voorstellen...
+
+Suggestion
+Suggestie
+
+Text
+Tekst
+
+Thanks for the feedback
+Bedankt voor je feedback
+
+The report was too long for a link, so it was copied to your clipboard. Paste it into the message with Ctrl+V.
+Het rapport was te lang voor een link, dus het is naar je klembord gekopieerd. Plak het in het bericht met Ctrl+V.
+
+What happened, and what did you expect? Paste screenshots with Ctrl+V.
+Wat gebeurde er, en wat verwachtte je? Plak schermafbeeldingen met Ctrl+V.
+
+What would you like RustCleanup to do? Paste screenshots with Ctrl+V.
+Wat zou je willen dat RustCleanup doet? Plak schermafbeeldingen met Ctrl+V.
+
+Write another
+Nog een schrijven
+
+Your browser opened GitHub with the report filled in. Sign in if asked, then press Create to finish.
+Je browser heeft GitHub geopend met het rapport ingevuld. Meld je aan als dat gevraagd wordt en klik dan op Create.
+
+Your mail program opened with the report filled in. Press Send there to finish.
+Je mailprogramma is geopend met het rapport ingevuld. Klik daar op Versturen.
+
+Your screenshots were saved to the folder that opened. Attach them to the email.
+Je schermafbeeldingen staan in de map die geopend is. Voeg ze toe aan de e-mail.
+
+Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
+Je schermafbeeldingen staan in de map die geopend is. Sleep ze in de issue waar [Afbeelding 1] enzovoort staat.

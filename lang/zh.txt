@@ -1341,3 +1341,117 @@ powerprofilesctl 无法切换到 {0}。
 
 WSL has no login session for polkit, so pkexec cannot ask for your password here. Close RustCleanup and start it from a terminal with sudo instead.
 WSL 没有供 polkit 使用的登录会话，因此 pkexec 无法在此询问密码。请关闭 RustCleanup，改为在终端中用 sudo 启动它。
+
+(The report is on your clipboard. Paste it here with Ctrl+V.)
+(报告已在剪贴板中。请按 Ctrl+V 粘贴到这里。)
+
+Add
+添加
+
+Bug Report
+错误报告
+
+Compose Feedback
+撰写反馈
+
+Could not open your browser or mail program: {0}
+无法打开浏览器或邮件程序：{0}
+
+Could not save the screenshots: {0}
+无法保存截图：{0}
+
+Cut
+剪切
+
+Delete
+删除
+
+Feedback
+反馈
+
+Feedback opened in your mail program.
+已在邮件程序中打开反馈。
+
+Feedback opened on GitHub in your browser.
+已在浏览器中的 GitHub 上打开反馈。
+
+Hyperlink
+超链接
+
+Image {0}
+图片 {0}
+
+Link
+链接
+
+Links must be web addresses (http or https).
+链接必须是网址（http 或 https）。
+
+No GitHub account?
+没有 GitHub 帐户？
+
+Not opening {0}: it is not a web address.
+不打开 {0}：它不是网址。
+
+Opens GitHub in your browser with the report filled in
+在浏览器中打开已填好报告的 GitHub 页面
+
+Paste
+粘贴
+
+Remove Hyperlink
+删除超链接
+
+Remove this image
+移除此图片
+
+Report a bug or suggest a feature
+报告错误或建议新功能
+
+Report a bug...
+报告错误...
+
+Select All
+全选
+
+Send
+发送
+
+Send it by email instead
+改用电子邮件发送
+
+Suggest a feature...
+建议新功能...
+
+Suggestion
+建议
+
+Text
+文本
+
+Thanks for the feedback
+感谢你的反馈
+
+The report was too long for a link, so it was copied to your clipboard. Paste it into the message with Ctrl+V.
+报告太长，无法放入链接，已复制到剪贴板。请按 Ctrl+V 粘贴到消息中。
+
+What happened, and what did you expect? Paste screenshots with Ctrl+V.
+发生了什么？你原本期望怎样？可按 Ctrl+V 粘贴截图。
+
+What would you like RustCleanup to do? Paste screenshots with Ctrl+V.
+你希望 RustCleanup 做什么？可按 Ctrl+V 粘贴截图。
+
+Write another
+再写一条
+
+Your browser opened GitHub with the report filled in. Sign in if asked, then press Create to finish.
+浏览器已打开填好报告的 GitHub 页面。如有提示请登录，然后点击 Create 完成。
+
+Your mail program opened with the report filled in. Press Send there to finish.
+邮件程序已打开并填好报告。请在其中点击发送完成。
+
+Your screenshots were saved to the folder that opened. Attach them to the email.
+截图已保存到打开的文件夹中。请将它们添加为邮件附件。
+
+Your screenshots were saved to the folder that opened. Drag them into the issue where it says [Image 1] and so on.
+截图已保存到打开的文件夹中。请将它们拖到 issue 中标有 [图片 1] 等字样的位置。

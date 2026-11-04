@@ -41,6 +41,8 @@ pub mod process_monitor;
 pub mod single_instance;
 #[cfg(windows)]
 pub mod startup;
+#[cfg(any(debug_assertions, feature = "stress-test"))]
+pub mod stress;
 #[cfg(windows)]
 pub mod storage_page;
 #[cfg(windows)]

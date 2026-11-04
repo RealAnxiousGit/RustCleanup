@@ -283,13 +283,49 @@ fn reclaim_cgroup(dir: &std::path::Path) -> Result<(), String> {
 }
 
 /// Runs the full Clean RAM operation, logging progress as it goes.
+/// What one Clean RAM pass did and how long each stage took.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct CleanReport {
+    pub trimmed: usize,
+    pub skipped: usize,
+    /// Paging out every process, plus the session cgroup reclaim.
+    pub trim_time: std::time::Duration,
+    /// Dropping the page cache and compacting memory (zero when off).
+    pub purge_time: std::time::Duration,
+    /// Available RAM before and after (after the settle pause).
+    pub available_before: u64,
+    pub available_after: u64,
+}
+
+impl CleanReport {
+    pub fn freed(&self) -> u64 {
+        self.available_after.saturating_sub(self.available_before)
+    }
+}
+
+/// Runs the full Clean RAM operation, logging progress as it goes.
 pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
+    let report = clean_ram_report(log, purge_standby)?;
+    if report.available_before > 0 && report.available_after > 0 {
+        log.success(trf(
+            "Clean RAM finished. {0} freed, {1} now available.",
+            &[&fmt_bytes(report.freed()), &fmt_bytes(report.available_after)],
+        ));
+    } else {
+        log.success(tr("Clean RAM finished."));
+    }
+    Ok(())
+}
+
+/// Clean RAM without the final summary line, returning its figures instead.
+pub fn clean_ram_report(log: &Logger, purge_standby: bool) -> Result<CleanReport, String> {
     let before = physical();
     let root = is_elevated();
 
     // SAFETY: no arguments; flushes dirty pages so they can be reclaimed.
     unsafe { libc::sync() };
 
+    let started = std::time::Instant::now();
     let mut trimmed = 0usize;
     let mut skipped = 0usize;
     for pid in all_pids()? {
@@ -303,15 +339,17 @@ pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
         &[&trimmed, &skipped],
     ));
 
-    if !root || trimmed == 0 {
-        if let Some(dir) = own_cgroup() {
-            match reclaim_cgroup(&dir) {
-                Ok(()) => log.info(tr("Asked the kernel to reclaim memory from your session.")),
-                Err(e) => log.warn(trf("Reclaiming memory from your session failed: {0}", &[&e])),
-            }
+    if (!root || trimmed == 0)
+        && let Some(dir) = own_cgroup()
+    {
+        match reclaim_cgroup(&dir) {
+            Ok(()) => log.info(tr("Asked the kernel to reclaim memory from your session.")),
+            Err(e) => log.warn(trf("Reclaiming memory from your session failed: {0}", &[&e])),
         }
     }
+    let trim_time = started.elapsed();
 
+    let started = std::time::Instant::now();
     if purge_standby {
         if root {
             match fs::write("/proc/sys/vm/drop_caches", "3") {
@@ -323,19 +361,22 @@ pub fn clean_ram(log: &Logger, purge_standby: bool) -> Result<(), String> {
             log.warn(tr("The file cache can only be dropped as root."));
         }
     }
+    let purge_time = if purge_standby {
+        started.elapsed()
+    } else {
+        std::time::Duration::ZERO
+    };
 
     std::thread::sleep(std::time::Duration::from_millis(500));
-    match (before, physical()) {
-        (Some(b), Some(a)) => log.success(trf(
-            "Clean RAM finished. {0} freed, {1} now available.",
-            &[
-                &fmt_bytes(a.available.saturating_sub(b.available)),
-                &fmt_bytes(a.available),
-            ],
-        )),
-        _ => log.success(tr("Clean RAM finished.")),
-    }
-    Ok(())
+    let after = physical();
+    Ok(CleanReport {
+        trimmed,
+        skipped,
+        trim_time,
+        purge_time,
+        available_before: before.map_or(0, |b| b.available),
+        available_after: after.map_or(0, |a| a.available),
+    })
 }
 
 #[cfg(test)]

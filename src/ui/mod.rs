@@ -10,6 +10,7 @@ pub mod activity;
 pub mod changelog;
 pub mod credits;
 pub mod disk;
+pub mod feedback;
 pub mod flags;
 pub mod memory;
 pub mod settings;
@@ -36,11 +37,12 @@ pub fn app_icon() -> Arc<IconData> {
 }
 
 /// Every detached window, by viewport name.
-pub const WINDOWS: [&str; 6] = [
+pub const WINDOWS: [&str; 7] = [
     disk::WINDOW,
     tasks::WINDOW,
     settings::WINDOW,
     credits::WINDOW,
+    feedback::WINDOW,
     update::WINDOW,
     changelog::WINDOW,
 ];

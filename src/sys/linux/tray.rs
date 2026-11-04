@@ -105,7 +105,7 @@ fn icon_pixmap() -> Vec<ksni::Icon> {
     match eframe::icon_data::from_png_bytes(ICON_PNG) {
         Ok(icon) => {
             let mut data = icon.rgba;
-            for px in data.chunks_exact_mut(4) {
+            for px in data.as_chunks_mut::<4>().0 {
                 px.rotate_right(1);
             }
             vec![ksni::Icon {

@@ -12,7 +12,6 @@ use crate::i18n::{n_, tr, trf};
 
 pub const WINDOW: &str = "credits_window";
 const REPO: &str = "https://github.com/RealAnxiousGit/RustCleanup";
-const TRAILER_MUSIC: &str = "https://pixabay.com/music/beats-promo-promo-music-560479/";
 
 /// (name, what it was used for, link)
 const TOOLKITS: [(&str, &str, &str); 2] = [
@@ -109,19 +108,6 @@ impl Credits {
 
                                 Self::person(ui, &pal, tr("Programming"), "Claude Opus 5.5");
                                 Self::person(ui, &pal, tr("Prompt Engineer"), "Nicholas Slaughter");
-
-                                widgets::divider(ui);
-                                widgets::heading(ui, tr("Promotional trailer"));
-                                ui.add_space(6.0);
-                                Self::person(ui, &pal, tr("Animation"), "Claude Opus 5.5");
-                                ui.label(RichText::new(tr("Music")).size(12.5).color(pal.muted));
-                                ui.label(
-                                    RichText::new(trf("\"Promo\" by {0}", &[&"BombinSound"]))
-                                        .family(semibold())
-                                        .size(16.0),
-                                );
-                                widgets::link(ui, &log, tr("Listen on Pixabay"), TRAILER_MUSIC);
-                                ui.add_space(4.0);
 
                                 widgets::divider(ui);
                                 widgets::heading(ui, tr("Toolkits"));
