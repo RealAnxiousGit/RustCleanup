@@ -281,6 +281,9 @@ impl RustCleanupApp {
             Ok(status) if status.success() => {}
             Ok(status) if matches!(status.code(), Some(126 | 127)) => {
                 log.warn(tr("Root access was not granted, so RustCleanup keeps running without it."));
+                if crate::sys::privilege::in_wsl() {
+                    log.info(tr("WSL has no login session for polkit, so pkexec cannot ask for your password here. Close RustCleanup and start it from a terminal with sudo instead."));
+                }
             }
             Ok(status) => log.error(trf(
                 "Could not restart RustCleanup: {0}. Close it and open it again.",

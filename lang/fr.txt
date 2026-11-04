@@ -1338,3 +1338,6 @@ sur {0} de swap utilisés
 
 powerprofilesctl could not switch to {0}.
 powerprofilesctl n'a pas pu passer à {0}.
+
+WSL has no login session for polkit, so pkexec cannot ask for your password here. Close RustCleanup and start it from a terminal with sudo instead.
+WSL n'a pas de session de connexion pour polkit, donc pkexec ne peut pas demander votre mot de passe ici. Fermez RustCleanup et lancez-le plutôt depuis un terminal avec sudo.
