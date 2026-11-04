@@ -9,11 +9,13 @@ use eframe::egui::{self, CornerRadius, Margin, RichText, Ui, ViewportId};
 use super::theme::{self, Palette};
 use super::widgets;
 use crate::events::{Jobs, Logger};
-use crate::i18n::{tr, trf};
+use crate::i18n::{n_, os, tr, trf};
 use crate::sys::chkdsk::{self, ScanEvent, ScanMode};
 use crate::sys::disk::{self, Drive, Space};
 use crate::sys::format::fmt_bytes;
-use crate::sys::{process_actions, shell, storage_page};
+#[cfg(windows)]
+use crate::sys::shell;
+use crate::sys::{process_actions, storage_page};
 
 pub const WINDOW: &str = "scan_window";
 const MAX_SCAN_LINES: usize = 10_000;
@@ -50,10 +52,19 @@ pub struct DiskPanel {
     space: Option<(String, Option<Space>, Instant)>,
 }
 
+/// The drive the system runs from: `C:` on Windows, `/` on Linux.
+fn system_drive() -> String {
+    if cfg!(windows) {
+        std::env::var("SystemDrive").unwrap_or_else(|_| "C:".into())
+    } else {
+        "/".into()
+    }
+}
+
 impl DiskPanel {
     pub fn new(jobs: Jobs) -> Self {
         let drives = disk::list_drives();
-        let system = std::env::var("SystemDrive").unwrap_or_else(|_| "C:".into());
+        let system = system_drive();
         let drive_idx = drives
             .iter()
             .position(|d| d.volume().eq_ignore_ascii_case(&system))
@@ -84,7 +95,10 @@ impl DiskPanel {
         widgets::note(
             ui,
             pal,
-            tr("Runs chkdsk on the drive you pick and shows its output live."),
+            tr(os(
+                n_("Runs chkdsk on the drive you pick and shows its output live."),
+                n_("Checks the file system on the drive you pick and shows the output live."),
+            )),
         );
         ui.add_space(6.0);
 
@@ -144,14 +158,20 @@ impl DiskPanel {
                 });
             let can_run = drive.as_ref().is_some_and(|d| self.mode.supports(d)) && !self.running();
             if widgets::button(ui, tr("Run check"), can_run)
-                .on_hover_text(tr("Run chkdsk on this drive with the mode on the left"))
+                .on_hover_text(tr(os(
+                    n_("Run chkdsk on this drive with the mode on the left"),
+                    n_("Check this drive with the mode on the left"),
+                )))
                 .clicked()
                 && let Some(d) = &drive
             {
                 self.start(ui.ctx(), d);
             }
             if widgets::button(ui, tr("Manage Storage"), drive.is_some())
-                .on_hover_text(tr("Open Storage in Windows Settings for this drive"))
+                .on_hover_text(tr(os(
+                    n_("Open Storage in Windows Settings for this drive"),
+                    n_("See what fills this drive in the disk usage viewer"),
+                )))
                 .clicked()
                 && let Some(d) = &drive
             {
@@ -163,7 +183,10 @@ impl DiskPanel {
                 widgets::note(
                     ui,
                     pal,
-                    trf("chkdsk can't check {0} drives.", &[&tr(d.kind)]),
+                    trf(
+                        os(n_("chkdsk can't check {0} drives."), n_("RustCleanup can't check {0} drives.")),
+                        &[&tr(d.kind)],
+                    ),
                 );
             } else if !d.is_ntfs() {
                 widgets::note(
@@ -196,7 +219,10 @@ impl DiskPanel {
                 ui,
                 pal,
                 trf(
-                    "Windows did not report how much space {0} has.",
+                    os(
+                        n_("Windows did not report how much space {0} has."),
+                        n_("Linux did not report how much space {0} has."),
+                    ),
                     &[&drive.volume()],
                 ),
             );
@@ -225,8 +251,19 @@ impl DiskPanel {
         );
     }
 
+    /// Linux: the drive in the desktop's disk usage viewer, as the user.
+    #[cfg(not(windows))]
+    fn manage_storage(&self, drive: &Drive) {
+        let volume = drive.volume().to_string();
+        match storage_page::open_drive(&volume) {
+            Ok(()) => self.jobs.log.info(trf("Opened the disk usage viewer for {0}.", &[&volume])),
+            Err(e) => self.jobs.log.error(e),
+        }
+    }
+
     /// System drive: Settings > Storage. Other drives: that drive's page
     /// under Storage used on other drives, found in the background.
+    #[cfg(windows)]
     fn manage_storage(&self, drive: &Drive) {
         let system = std::env::var("SystemDrive").unwrap_or_else(|_| "C:".into());
         let volume = drive.volume().to_string();
@@ -263,7 +300,7 @@ impl DiskPanel {
             Ok(handle) => {
                 let title = trf("Scan Disk: {0} {1}", &[&drive.volume(), &self.mode.short()]);
                 self.jobs.log.info(trf(
-                    "Started chkdsk on {0} ({1}).",
+                    os(n_("Started chkdsk on {0} ({1})."), n_("Started the disk check on {0} ({1}).")),
                     &[&drive.volume(), &self.mode.short()],
                 ));
                 *lock(&self.scan) = Some(ScanSession {
@@ -319,7 +356,7 @@ fn cancel(scan: &Option<ScanSession>, log: &Logger) {
     {
         match process_actions::terminate(scan.pid) {
             Ok(()) => log.warn(tr("Disk check cancelled.")),
-            Err(e) => log.error(trf("Could not stop chkdsk: {0}", &[&e])),
+            Err(e) => log.error(trf(os(n_("Could not stop chkdsk: {0}"), n_("Could not stop the disk check: {0}")), &[&e])),
         }
     }
 }
@@ -391,7 +428,7 @@ fn window_ui(ui: &mut Ui, scan: &mut ScanSession) -> bool {
                 }
                 Some((Err(e), _)) => {
                     ui.label(
-                        RichText::new(trf("chkdsk could not run: {0}", &[e])).color(pal.error),
+                        RichText::new(trf(os(n_("chkdsk could not run: {0}"), n_("The disk check could not run: {0}")), &[e])).color(pal.error),
                     );
                 }
             });
@@ -449,7 +486,7 @@ fn window_ui(ui: &mut Ui, scan: &mut ScanSession) -> bool {
                                 && scan.progress.is_none()
                                 && scan.finished.is_none()
                             {
-                                ui.label(text(tr("Waiting for chkdsk to start.")));
+                                ui.label(text(tr(os(n_("Waiting for chkdsk to start."), n_("Waiting for the disk check to start.")))));
                             }
                         });
                 });

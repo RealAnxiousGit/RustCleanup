@@ -14,6 +14,7 @@ use std::fmt::Display;
 use std::sync::OnceLock;
 use std::sync::atomic::{AtomicU8, Ordering};
 
+#[cfg(windows)]
 use windows::Win32::Globalization::GetUserDefaultUILanguage;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -89,6 +90,30 @@ impl Lang {
     }
 
     /// The Windows display language, if RustCleanup has it; otherwise English.
+    #[cfg(target_os = "linux")]
+    pub fn system_default() -> Lang {
+        // The first of these that is set wins, as in gettext.
+        let locale = ["LC_ALL", "LC_MESSAGES", "LANG"]
+            .into_iter()
+            .find_map(|v| std::env::var(v).ok().filter(|l| !l.is_empty()))
+            .unwrap_or_default();
+        match locale.get(..2).unwrap_or("") {
+            "es" => Lang::Es,
+            "pt" => Lang::Pt,
+            "fr" => Lang::Fr,
+            "de" => Lang::De,
+            "it" => Lang::It,
+            "nl" => Lang::Nl,
+            "pl" => Lang::Pl,
+            "tr" => Lang::Tr,
+            "ru" => Lang::Ru,
+            "ja" => Lang::Ja,
+            "zh" => Lang::Zh,
+            _ => Lang::En,
+        }
+    }
+
+    #[cfg(windows)]
     pub fn system_default() -> Lang {
         // SAFETY: no parameters, no failure mode.
         let primary = unsafe { GetUserDefaultUILanguage() } & 0x3FF;
@@ -189,6 +214,18 @@ pub fn trf(key: &'static str, args: &[&dyn Display]) -> String {
 /// Marks a string for translation without translating it yet.
 pub const fn n_(key: &'static str) -> &'static str {
     key
+}
+
+/// Picks the Windows or the Linux wording of a string. Both are marked with
+/// `n_` at the call site so the translation test sees them:
+/// `tr(os(n_(WINDOWS_TEXT), n_(LINUX_TEXT)))`, with string literals in place
+/// of the two names.
+#[allow(unused_variables)]
+pub const fn os(windows: &'static str, linux: &'static str) -> &'static str {
+    #[cfg(windows)]
+    return windows;
+    #[cfg(not(windows))]
+    return linux;
 }
 
 #[cfg(test)]

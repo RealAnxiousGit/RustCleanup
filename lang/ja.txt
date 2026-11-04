@@ -1105,3 +1105,236 @@ Standard Privileges
 
 Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
 管理者権限がないと、一部の機能は動作しません。RustCleanup を閉じて再度開き、UAC の確認で [はい] を選んでください。
+
+# Linux (4.0.0)
+
+Also drop the page cache (file cache, needs root)
+ページ キャッシュも破棄する (ファイル キャッシュ、root が必要)
+
+Asked the kernel to reclaim memory from your session.
+セッションのメモリを回収するようカーネルに要求しました。
+
+Asking for your password to restart RustCleanup as root.
+RustCleanup を root で再起動するためにパスワードを要求しています。
+
+Asks for your password, then opens RustCleanup again as root
+パスワードを求めてから、RustCleanup を root で開き直します
+
+Check this drive with the mode on the left
+左のモードでこのドライブをチェックします
+
+Checking a disk needs root. Restart RustCleanup as root first.
+ディスクのチェックには root が必要です。先に RustCleanup を root で再起動してください。
+
+Checking for root...
+root を確認しています...
+
+Checks the file system on the drive you pick and shows the output live.
+選んだドライブのファイル システムをチェックし、出力をリアルタイムで表示します。
+
+Committed {0} of {1} (RAM plus swap)
+{1} のうち {0} をコミット済み (RAM とスワップ)
+
+Could not stop the disk check: {0}
+ディスク チェックを停止できませんでした: {0}
+
+Desktop settings
+デスクトップの設定
+
+Disk Usage Analyzer
+ディスク使用量アナライザー
+
+Disks
+ディスク
+
+Draws the interface with Vulkan instead of OpenGL. It can be smoother on some graphics drivers, but uses more memory.
+OpenGL の代わりに Vulkan でインターフェイスを描画します。一部のグラフィックス ドライバーでは滑らかになりますが、メモリを多く使います。
+
+Drives, partitions and SMART health
+ドライブ、パーティション、SMART の状態
+
+Dropping the file cache failed: {0}
+ファイル キャッシュの破棄に失敗しました: {0}
+
+Errors were found. Repair them from a live USB while the drive is not mounted.
+エラーが見つかりました。ドライブをマウントしていない状態で、ライブ USB から修復してください。
+
+File cache dropped.
+ファイル キャッシュを破棄しました。
+
+Hardware Information
+ハードウェア情報
+
+Install updates and apps
+更新プログラムとアプリをインストール
+
+Light UI (light sans-serif)
+ライト UI (細いサンセリフ)
+
+Linux did not report how much space {0} has.
+Linux から {0} の容量が報告されませんでした。
+
+Linux did not report physical memory figures. They will appear here once it does.
+Linux から物理メモリの値が報告されませんでした。報告されるとここに表示されます。
+
+Linux did not report swap figures.
+Linux からスワップの値が報告されませんでした。
+
+Low Power Mode needs power-profiles-daemon, or RustCleanup running as root.
+低電力モードには power-profiles-daemon か、root で実行中の RustCleanup が必要です。
+
+Low Power Mode on: power saver profile.
+低電力モード オン: 省電力プロファイル。
+
+Low Power Mode on: power saver, CPU capped at 60%, turbo boost off.
+低電力モード オン: 省電力、CPU を 60% に制限、ターボ ブースト オフ。
+
+No swap is configured, so Linux is running on physical memory only. You can add a swap file or zram with your distribution's tools.
+スワップが構成されていないため、Linux は物理メモリだけで動作しています。ディストリビューションのツールでスワップ ファイルや zram を追加できます。
+
+Not all features will work without root. Choose Restart as root, or start RustCleanup with pkexec or sudo.
+root なしでは一部の機能が動作しません。[root で再起動] を選ぶか、pkexec または sudo で RustCleanup を起動してください。
+
+Not running as root
+root で実行されていません
+
+Online scan (Btrfs and XFS only)
+オンライン スキャン (Btrfs と XFS のみ)
+
+Open RustCleanup when you sign in, as your own user.
+サインイン時に自分のユーザーとして RustCleanup を開きます。
+
+Opened the disk usage viewer for {0}.
+{0} のディスク使用量ビューアーを開きました。
+
+Opens the desktop app you pick.
+選んだデスクトップ アプリを開きます。
+
+Part of the desktop: it can be ended and it starts again, but it cannot be suspended
+デスクトップの一部: 終了すると再び起動しますが、一時停止はできません
+
+Power
+電源
+
+Power Settings
+電源の設定
+
+Power profiles, battery and sleep
+電源プロファイル、バッテリー、スリープ
+
+Processes, performance and resources
+プロセス、パフォーマンス、リソース
+
+Reading the current settings.
+現在の設定を読み込んでいます。
+
+Reclaiming memory from your session failed: {0}
+セッションのメモリ回収に失敗しました: {0}
+
+Restart as root
+root で再起動
+
+Restored power profile {0}.
+電源プロファイル {0} を元に戻しました。
+
+Root Privileges
+root 権限
+
+Root access was not granted, so RustCleanup keeps running without it.
+root アクセスが許可されなかったため、RustCleanup はそのまま実行を続けます。
+
+Root terminal
+root ターミナル
+
+Running as root
+root で実行中
+
+RustCleanup can't check {0} drives.
+RustCleanup は {0} ドライブをチェックできません。
+
+RustCleanup is not running as root, so dropping caches, CPU limits and changes to other users' processes will fail. Use Restart as root at the bottom.
+RustCleanup は root で実行されていないため、キャッシュの破棄、CPU の制限、他のユーザーのプロセスの変更は失敗します。下部の [root で再起動] を使ってください。
+
+RustCleanup is still running in the system tray. Click its icon to open it, or right-click it and choose Exit to quit.
+RustCleanup はシステム トレイで実行中です。アイコンをクリックすると開き、右クリックして [終了] を選ぶと終了します。
+
+RustCleanup will open when you sign in.
+サインイン時に RustCleanup が開きます。
+
+Same as system
+システムと同じ
+
+See what fills each drive
+各ドライブの使用内容を表示
+
+See what fills this drive in the disk usage viewer
+ディスク使用量ビューアーでこのドライブの使用内容を表示
+
+Software Updates
+ソフトウェアの更新
+
+Standard (non-root) terminal
+標準 (root 以外) のターミナル
+
+Started the disk check on {0} ({1}).
+{0} のディスク チェックを開始しました ({1})。
+
+Switches to the power saver profile. As root it also caps the CPU at 60% and turns off turbo boost. Off restores your previous profile.
+省電力プロファイルに切り替えます。root では CPU を 60% に制限し、ターボ ブーストもオフにします。オフにすると以前のプロファイルに戻ります。
+
+System (sans-serif)
+システム (サンセリフ)
+
+System Logs
+システム ログ
+
+System Monitor
+システム モニター
+
+Terminal
+ターミナル
+
+Terminal [Root]
+ターミナル [Root]
+
+The CPU limits can only be restored as root.
+CPU の制限は root でのみ元に戻せます。
+
+The check could not run on this drive.
+このドライブではチェックを実行できませんでした。
+
+The check ended with an unexpected exit code.
+チェックが予期しない終了コードで終了しました。
+
+The disk check could not run: {0}
+ディスク チェックを実行できませんでした: {0}
+
+The download is not a valid RustCleanup for Linux, so nothing was changed.
+ダウンロードしたファイルは有効な Linux 版 RustCleanup ではないため、何も変更していません。
+
+The file cache can only be dropped as root.
+ファイル キャッシュは root でのみ破棄できます。
+
+The filesystem is mounted, so the check is read-only and may report changes that are still being written.
+ファイル システムがマウントされているため、チェックは読み取り専用で、書き込み中の変更を報告することがあります。
+
+The system journal
+システム ジャーナル
+
+The video needs FFmpeg. Install the ffmpeg package and try again.
+動画の再生には FFmpeg が必要です。ffmpeg パッケージをインストールしてもう一度お試しください。
+
+This includes parts of the desktop. The screen, panel or sound may blank out for a moment while they start again.
+デスクトップの一部が含まれます。再起動の間、画面、パネル、サウンドが一瞬消えることがあります。
+
+Waiting for the disk check to start.
+ディスク チェックの開始を待っています。
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a desktop notification.
+RustCleanup が最小化されているか通知領域にある間、記録した内容はすべてデスクトップ通知にも表示されます。
+
+of {0} swap in use
+{0} のスワップを使用中
+
+powerprofilesctl could not switch to {0}.
+powerprofilesctl で {0} に切り替えられませんでした。

@@ -35,8 +35,11 @@ pub struct LogEntry {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Job {
     CleanRam,
+    #[cfg_attr(not(windows), allow(dead_code))]
     Copilot,
+    #[cfg_attr(not(windows), allow(dead_code))]
     Telemetry,
+    #[cfg_attr(not(windows), allow(dead_code))]
     Updates,
     LowPower,
     DetectState,
@@ -49,6 +52,7 @@ pub enum Job {
 
 /// Current on/off state of each switch, read from the system.
 #[derive(Clone, Debug, Default)]
+#[cfg_attr(not(windows), allow(dead_code))]
 pub struct TweakState {
     pub copilot_disabled: bool,
     pub telemetry_disabled: bool,

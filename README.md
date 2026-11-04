@@ -122,6 +122,23 @@ cargo test -- --ignored --test-threads=1
 ```
 `cargo test desktop_ -- --ignored --test-threads=1`, also from an Administrator terminal, opens every System Tool and the Settings page for each non-system drive, so you can check them by eye.
 
+### Linux
+RustCleanup also runs on Linux (x86_64, X11 or Wayland). Download `RustCleanup-x86_64.AppImage` from the release, then:
+```bash
+chmod +x RustCleanup-x86_64.AppImage
+./RustCleanup-x86_64.AppImage
+```
+It works on Ubuntu 20.04 or newer, Linux Mint 20+, Debian 11+, Fedora 32+, openSUSE Leap 15.3+, Arch and other distros from the same years, and it does not need `libfuse2`. The tray icon needs a panel with system tray (StatusNotifierItem) support: KDE, Cinnamon, Xfce, MATE and Ubuntu's GNOME have it, while plain GNOME (Fedora, Arch) needs the AppIndicator extension. Without one, RustCleanup still runs, and closing the window quits it.
+
+The `.tar.gz` holds the same program as a plain binary. It runs as your own user; choose **Restart as root** at the bottom (it asks for your password through `pkexec`) for the features that need root, such as dropping the file cache, CPU limits and checking disks. Settings live in `~/.config/RustCleanup`.
+
+To build it (Debian or Ubuntu package names):
+```bash
+sudo apt install build-essential pkg-config libxkbcommon-dev libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev libdbus-1-dev fontconfig
+cargo build --release
+```
+The output is `target/release/RustCleanup`, which needs the same or a newer glibc than the machine that built it; [`docs/LINUX.md`](docs/LINUX.md) shows the release build that runs on older distros too. Optional at run time: `pkexec`, `baobab` (Manage Storage), `power-profiles-daemon` (Low Power Mode), `ffmpeg` (the Changelog video) and `fonts-noto-cjk` (Japanese and Chinese). [`docs/LINUX.md`](docs/LINUX.md) explains how the Linux code mirrors the Windows code and how to port each new Windows feature.
+
 ### Adding a language
 Copy `lang/de.txt` to `lang/<code>.txt`, replace each second line with the translation, then add the language to `Lang` in `src/i18n.rs` (including its `include_str!` line) and a flag in `src/ui/flags.rs`.
 

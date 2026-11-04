@@ -8,7 +8,7 @@ use eframe::egui::{self, CornerRadius, Margin, RichText, Stroke, Ui};
 use super::theme::{Palette, semibold};
 use super::widgets;
 use crate::events::{Job, Jobs};
-use crate::i18n::{tr, trf};
+use crate::i18n::{n_, os, tr, trf};
 use crate::settings;
 use crate::sys::format::fmt_bytes;
 use crate::sys::memory::{self, MemorySnapshot};
@@ -86,7 +86,13 @@ impl MemoryPanel {
                 ui.add_space(4.0);
                 let mut purge = settings::get().purge_standby;
                 if ui
-                    .checkbox(&mut purge, tr("Also purge the standby list (file cache)"))
+                    .checkbox(
+                        &mut purge,
+                        tr(os(
+                            n_("Also purge the standby list (file cache)"),
+                            n_("Also drop the page cache (file cache, needs root)"),
+                        )),
+                    )
                     .on_hover_text(tr("Frees more, but recently used files load a little slower the next time"))
                     .changed()
                 {
@@ -102,9 +108,10 @@ impl MemoryPanel {
             widgets::note(
                 ui,
                 pal,
-                tr(
-                    "Windows did not report physical memory figures. They will appear here once it does.",
-                ),
+                tr(os(
+                    n_("Windows did not report physical memory figures. They will appear here once it does."),
+                    n_("Linux did not report physical memory figures. They will appear here once it does."),
+                )),
             );
             return;
         };
@@ -145,7 +152,10 @@ impl MemoryPanel {
             widgets::note(
                 ui,
                 pal,
-                tr("Windows did not report virtual memory figures."),
+                tr(os(
+                    n_("Windows did not report virtual memory figures."),
+                    n_("Linux did not report swap figures."),
+                )),
             );
             return;
         };
@@ -153,9 +163,10 @@ impl MemoryPanel {
             widgets::note(
                 ui,
                 pal,
-                tr(
-                    "No page file is configured, so Windows is running on physical memory only. You can add one in System Properties, Advanced, Performance settings.",
-                ),
+                tr(os(
+                    n_("No page file is configured, so Windows is running on physical memory only. You can add one in System Properties, Advanced, Performance settings."),
+                    n_("No swap is configured, so Linux is running on physical memory only. You can add a swap file or zram with your distribution's tools."),
+                )),
             );
         } else {
             let (used, size) = (v.page_file_in_use(), v.page_file_size());
@@ -164,7 +175,7 @@ impl MemoryPanel {
                 ui,
                 pal,
                 &fmt_bytes(used),
-                &trf("of {0} page file in use", &[&fmt_bytes(size)]),
+                &trf(os(n_("of {0} page file in use"), n_("of {0} swap in use")), &[&fmt_bytes(size)]),
                 Some(fraction),
             );
             widgets::meter(
@@ -185,7 +196,7 @@ impl MemoryPanel {
                 ui,
                 pal,
                 trf(
-                    "Committed {0} of {1} (RAM plus page file)",
+                    os(n_("Committed {0} of {1} (RAM plus page file)"), n_("Committed {0} of {1} (RAM plus swap)")),
                     &[&fmt_bytes(v.committed), &fmt_bytes(v.commit_limit)],
                 ),
             );

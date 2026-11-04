@@ -83,6 +83,12 @@ pub fn restart_explorer(log: &Logger) -> Result<(), String> {
     Ok(())
 }
 
+/// The program file to restart or register. On Windows that is simply the
+/// running exe; on Linux an AppImage needs the image, not its mount.
+pub fn app_exe() -> std::io::Result<std::path::PathBuf> {
+    std::env::current_exe()
+}
+
 /// Opens a URL or program through Explorer so it runs as the signed-in user.
 ///
 /// RustCleanup runs elevated. Launching a browser directly would hand it our

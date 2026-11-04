@@ -1,19 +1,21 @@
 //! Update checks against the GitHub releases of RealAnxiousGit/RustCleanup,
 //! and replacing the running exe with a newer release.
 //!
-//! Requests go through WinHTTP, so Windows' own TLS stack and proxy settings
-//! are used. A download is only installed if its SHA-256 matches the
-//! `RustCleanup.exe.sha256` file published with the release.
+//! On Windows requests go through WinHTTP, so Windows' own TLS stack and
+//! proxy settings are used; on Linux they go through curl. A download is only
+//! installed if its SHA-256 matches the `.sha256` file published with it.
 
 use std::path::{Path, PathBuf};
 
 use sha2::{Digest, Sha256};
+#[cfg(windows)]
 use windows::Win32::Networking::WinHttp::{
     INTERNET_DEFAULT_HTTPS_PORT, WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_FLAG_SECURE,
     WINHTTP_QUERY_FLAG_NUMBER, WINHTTP_QUERY_STATUS_CODE, WinHttpCloseHandle, WinHttpConnect,
     WinHttpOpen, WinHttpOpenRequest, WinHttpQueryHeaders, WinHttpReadData, WinHttpReceiveResponse,
     WinHttpSendRequest, WinHttpSetTimeouts,
 };
+#[cfg(windows)]
 use windows::core::HSTRING;
 
 use crate::events::Logger;
@@ -23,7 +25,22 @@ const LATEST_RELEASE: &str =
     "https://api.github.com/repos/RealAnxiousGit/RustCleanup/releases/latest";
 const ALL_RELEASES: &str =
     "https://api.github.com/repos/RealAnxiousGit/RustCleanup/releases?per_page=100";
-const ASSET: &str = "RustCleanup.exe";
+/// The file this platform downloads from a release.
+#[cfg(windows)]
+fn asset() -> &'static str {
+    "RustCleanup.exe"
+}
+
+/// The file this platform downloads from a release: the AppImage when
+/// running from one, else the plain Linux binary.
+#[cfg(target_os = "linux")]
+fn asset() -> &'static str {
+    if std::env::var_os("APPIMAGE").is_some_and(|p| !p.is_empty()) {
+        "RustCleanup-x86_64.AppImage"
+    } else {
+        "RustCleanup-linux-x86_64"
+    }
+}
 /// Test hook: pretend to be this version, to exercise the update flow
 /// against the real releases page.
 const VERSION_OVERRIDE: &str = "RUSTCLEANUP_PRETEND_VERSION";
@@ -79,8 +96,8 @@ pub fn check() -> Result<Option<Release>, String> {
                 .map(str::to_string)
         })
     };
-    let exe_url = asset_url(ASSET)
-        .ok_or_else(|| trf("Release {0} has no {1} to download.", &[&tag, &ASSET]))?;
+    let exe_url = asset_url(asset())
+        .ok_or_else(|| trf("Release {0} has no {1} to download.", &[&tag, &asset()]))?;
     Ok(Some(Release {
         version: tag.trim_start_matches(['v', 'V']).to_string(),
         notes: json["body"]
@@ -89,7 +106,7 @@ pub fn check() -> Result<Option<Release>, String> {
             .replace("\r\n", "\n"),
         page: json["html_url"].as_str().unwrap_or_default().to_string(),
         exe_url,
-        sha256_url: asset_url(&format!("{ASSET}.sha256")),
+        sha256_url: asset_url(&format!("{}.sha256", asset())),
     }))
 }
 
@@ -157,7 +174,7 @@ pub fn all_notes() -> Result<Vec<ReleaseNotes>, String> {
 /// Returns the path to start afterwards. The running copy keeps working
 /// until it exits, and its old file is deleted on the next launch.
 pub fn install(release: &Release, log: &Logger) -> Result<PathBuf, String> {
-    let exe = std::env::current_exe().map_err(|e| e.to_string())?;
+    let exe = own_file().map_err(|e| e.to_string())?;
     log.info(trf("Downloading RustCleanup {0}.", &[&release.version]));
 
     let mut last_tenth = 0;
@@ -170,10 +187,13 @@ pub fn install(release: &Release, log: &Logger) -> Result<PathBuf, String> {
             }
         }
     })?;
-    if bytes.len() < 1024 * 1024 || !bytes.starts_with(b"MZ") {
-        return Err(
-            tr("The download is not a valid RustCleanup.exe, so nothing was changed.").into(),
-        );
+    if bytes.len() < 1024 * 1024 || !bytes.starts_with(EXE_MAGIC) {
+        return Err(if cfg!(windows) {
+            tr("The download is not a valid RustCleanup.exe, so nothing was changed.")
+        } else {
+            tr("The download is not a valid RustCleanup for Linux, so nothing was changed.")
+        }
+        .into());
     }
 
     match &release.sha256_url {
@@ -205,17 +225,49 @@ pub fn install(release: &Release, log: &Logger) -> Result<PathBuf, String> {
     Ok(exe)
 }
 
+/// How a program file starts: `MZ` on Windows, ELF on Linux.
+#[cfg(windows)]
+const EXE_MAGIC: &[u8] = b"MZ";
+#[cfg(target_os = "linux")]
+const EXE_MAGIC: &[u8] = b"\x7fELF";
+
+/// The file an update replaces: the exe, or on Linux the AppImage when
+/// running from one.
+fn own_file() -> std::io::Result<PathBuf> {
+    #[cfg(windows)]
+    return std::env::current_exe();
+    #[cfg(target_os = "linux")]
+    return super::shell::app_exe();
+}
+
+/// `RustCleanup.exe` -> `RustCleanup.exe.old`.
+fn with_suffix(exe: &Path, suffix: &str) -> PathBuf {
+    let mut name = exe.as_os_str().to_os_string();
+    name.push(suffix);
+    PathBuf::from(name)
+}
+
 fn old_path(exe: &Path) -> PathBuf {
-    exe.with_extension("exe.old")
+    with_suffix(exe, ".old")
 }
 
 /// Windows can't overwrite a running exe, but it can rename it. The new
 /// file is written next to it first, so a failure leaves the old one in place.
 fn replace_exe(exe: &Path, bytes: &[u8]) -> Result<(), String> {
-    let new = exe.with_extension("exe.new");
+    let new = with_suffix(exe, ".new");
     let old = old_path(exe);
     let fail = |e: std::io::Error| trf("Could not install the update: {0}", &[&e]);
     std::fs::write(&new, bytes).map_err(fail)?;
+    #[cfg(target_os = "linux")]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        let mode = std::fs::metadata(exe).map(|m| m.permissions().mode()).unwrap_or(0o755);
+        if let Err(e) = std::fs::set_permissions(&new, std::fs::Permissions::from_mode(mode | 0o111)) {
+            let _ = std::fs::remove_file(&new);
+            return Err(fail(e));
+        }
+        super::user::give_to_user(&new);
+    }
     let _ = std::fs::remove_file(&old);
     if let Err(e) = std::fs::rename(exe, &old) {
         let _ = std::fs::remove_file(&new);
@@ -232,7 +284,7 @@ fn replace_exe(exe: &Path, bytes: &[u8]) -> Result<(), String> {
 /// True while the previous version from an update is still next to the exe,
 /// which means this is the first launch since the update.
 pub fn leftover_exists() -> bool {
-    std::env::current_exe().is_ok_and(|exe| old_path(&exe).exists())
+    own_file().is_ok_and(|exe| old_path(&exe).exists())
 }
 
 /// Deletes the previous version left behind by an update.
@@ -240,10 +292,10 @@ pub fn leftover_exists() -> bool {
 /// Right after an update the old copy may still be exiting, and Windows keeps
 /// its file locked until it is gone, so this keeps trying for a few seconds.
 pub fn remove_leftovers() {
-    let Ok(exe) = std::env::current_exe() else {
+    let Ok(exe) = own_file() else {
         return;
     };
-    let leftovers = [old_path(&exe), exe.with_extension("exe.new")];
+    let leftovers = [old_path(&exe), with_suffix(&exe, ".new")];
     if !leftovers.iter().any(|p| p.exists()) {
         return;
     }
@@ -263,8 +315,10 @@ pub fn remove_leftovers() {
 }
 
 /// Closes a WinHTTP handle when dropped.
+#[cfg(windows)]
 struct Handle(*mut core::ffi::c_void);
 
+#[cfg(windows)]
 impl Drop for Handle {
     fn drop(&mut self) {
         if !self.0.is_null() {
@@ -276,6 +330,7 @@ impl Drop for Handle {
     }
 }
 
+#[cfg(windows)]
 fn open(handle: *mut core::ffi::c_void, what: &str) -> Result<Handle, String> {
     if handle.is_null() {
         Err(trf(
@@ -294,6 +349,7 @@ pub fn download(url: &str, progress: impl FnMut(u64, Option<u64>)) -> Result<Vec
 
 /// HTTPS GET. GitHub's download links redirect to its file servers, which
 /// WinHTTP follows on its own. `progress` gets (bytes so far, total if known).
+#[cfg(windows)]
 fn http_get(url: &str, mut progress: impl FnMut(u64, Option<u64>)) -> Result<Vec<u8>, String> {
     let rest = url
         .strip_prefix("https://")
@@ -383,6 +439,83 @@ fn http_get(url: &str, mut progress: impl FnMut(u64, Option<u64>)) -> Result<Vec
         }
         Ok(body)
     }
+}
+
+/// HTTPS GET through curl, following GitHub's redirects. `progress` gets
+/// (bytes so far, total if known).
+#[cfg(target_os = "linux")]
+fn http_get(url: &str, mut progress: impl FnMut(u64, Option<u64>)) -> Result<Vec<u8>, String> {
+    use std::io::{BufRead, BufReader, Read};
+    use std::process::{Command, Stdio};
+    use std::sync::Arc;
+    use std::sync::atomic::{AtomicU64, Ordering};
+
+    if !url.starts_with("https://") {
+        return Err(format!("not an https URL: {url}"));
+    }
+    let curl = super::command::which("curl")
+        .ok_or_else(|| trf("Could not reach GitHub: {0}", &[&"curl is not installed"]))?;
+    let agent = format!("RustCleanup/{}", env!("CARGO_PKG_VERSION"));
+    let mut child = Command::new(curl)
+        .args(["-sSL", "--proto", "=https", "--proto-redir", "=https"])
+        .args(["--connect-timeout", "15", "--speed-time", "30", "--speed-limit", "1"])
+        .args(["-A", &agent])
+        .args(["-H", "Accept: application/vnd.github+json, application/octet-stream"])
+        // Headers go to stderr, for the status and the length.
+        .args(["-D", "/dev/stderr", "--", url])
+        .env("LC_ALL", "C")
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .map_err(|e| trf("Could not reach GitHub: {0}", &[&e]))?;
+
+    let total = Arc::new(AtomicU64::new(0));
+    let stderr = child.stderr.take();
+    let header_total = total.clone();
+    let headers = std::thread::spawn(move || {
+        let (mut status, mut errors) = (0u64, String::new());
+        for line in BufReader::new(stderr?).lines().map_while(Result::ok) {
+            let line = line.trim_end();
+            let lower = line.to_ascii_lowercase();
+            if lower.starts_with("http/") {
+                status = line.split_whitespace().nth(1).and_then(|c| c.parse().ok()).unwrap_or(0);
+                header_total.store(0, Ordering::Relaxed);
+            } else if let Some(len) = lower.strip_prefix("content-length:") {
+                header_total.store(len.trim().parse().unwrap_or(0), Ordering::Relaxed);
+            } else if let Some(e) = line.strip_prefix("curl: ") {
+                errors = e.to_string();
+            }
+        }
+        Some((status, errors))
+    });
+
+    let mut body = Vec::new();
+    let mut buf = vec![0u8; 64 * 1024];
+    if let Some(mut out) = child.stdout.take() {
+        loop {
+            match out.read(&mut buf) {
+                Ok(0) => break,
+                Ok(n) => {
+                    body.extend_from_slice(&buf[..n]);
+                    let t = total.load(Ordering::Relaxed);
+                    progress(body.len() as u64, (t > 0).then_some(t));
+                }
+                Err(e) if e.kind() == std::io::ErrorKind::Interrupted => {}
+                Err(e) => return Err(trf("Could not reach GitHub: {0}", &[&e])),
+            }
+        }
+    }
+    let exit = child.wait().map_err(|e| trf("Could not reach GitHub: {0}", &[&e]))?;
+    let (status, errors) = headers.join().ok().flatten().unwrap_or_default();
+    if !exit.success() {
+        let why = if errors.is_empty() { exit.to_string() } else { errors };
+        return Err(trf("Could not reach GitHub: {0}", &[&why]));
+    }
+    if status != 200 {
+        return Err(trf("GitHub answered with HTTP status {0}.", &[&status]));
+    }
+    Ok(body)
 }
 
 #[cfg(test)]

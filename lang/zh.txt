@@ -1105,3 +1105,236 @@ Standard Privileges
 
 Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
 没有管理员权限，部分功能将无法使用。请关闭 RustCleanup，重新打开，并在 UAC 提示中选择“是”。
+
+# Linux (4.0.0)
+
+Also drop the page cache (file cache, needs root)
+同时清除页面缓存（文件缓存，需要 root）
+
+Asked the kernel to reclaim memory from your session.
+已请求内核回收你的会话所占用的内存。
+
+Asking for your password to restart RustCleanup as root.
+正在请求密码，以 root 身份重启 RustCleanup。
+
+Asks for your password, then opens RustCleanup again as root
+请求密码，然后以 root 身份重新打开 RustCleanup
+
+Check this drive with the mode on the left
+使用左侧的模式检查此驱动器
+
+Checking a disk needs root. Restart RustCleanup as root first.
+检查磁盘需要 root。请先以 root 身份重启 RustCleanup。
+
+Checking for root...
+正在检查 root...
+
+Checks the file system on the drive you pick and shows the output live.
+检查所选驱动器上的文件系统，并实时显示输出。
+
+Committed {0} of {1} (RAM plus swap)
+已提交 {0} / {1}（内存加交换空间）
+
+Could not stop the disk check: {0}
+无法停止磁盘检查：{0}
+
+Desktop settings
+桌面设置
+
+Disk Usage Analyzer
+磁盘使用情况分析器
+
+Disks
+磁盘
+
+Draws the interface with Vulkan instead of OpenGL. It can be smoother on some graphics drivers, but uses more memory.
+使用 Vulkan 而不是 OpenGL 绘制界面。在某些显卡驱动上会更流畅，但占用更多内存。
+
+Drives, partitions and SMART health
+驱动器、分区和 SMART 健康状况
+
+Dropping the file cache failed: {0}
+清除文件缓存失败：{0}
+
+Errors were found. Repair them from a live USB while the drive is not mounted.
+发现错误。请在驱动器未挂载时，从 Live USB 中修复。
+
+File cache dropped.
+已清除文件缓存。
+
+Hardware Information
+硬件信息
+
+Install updates and apps
+安装更新和应用
+
+Light UI (light sans-serif)
+轻量界面（细无衬线）
+
+Linux did not report how much space {0} has.
+Linux 未报告 {0} 的空间大小。
+
+Linux did not report physical memory figures. They will appear here once it does.
+Linux 未报告物理内存数据。报告后将显示在这里。
+
+Linux did not report swap figures.
+Linux 未报告交换空间数据。
+
+Low Power Mode needs power-profiles-daemon, or RustCleanup running as root.
+低功耗模式需要 power-profiles-daemon，或以 root 身份运行 RustCleanup。
+
+Low Power Mode on: power saver profile.
+低功耗模式已开启：节能配置。
+
+Low Power Mode on: power saver, CPU capped at 60%, turbo boost off.
+低功耗模式已开启：节能，CPU 限制为 60%，睿频关闭。
+
+No swap is configured, so Linux is running on physical memory only. You can add a swap file or zram with your distribution's tools.
+未配置交换空间，因此 Linux 只使用物理内存。你可以用发行版自带的工具添加交换文件或 zram。
+
+Not all features will work without root. Choose Restart as root, or start RustCleanup with pkexec or sudo.
+没有 root 权限时并非所有功能都可用。请选择“以 root 身份重启”，或用 pkexec 或 sudo 启动 RustCleanup。
+
+Not running as root
+未以 root 身份运行
+
+Online scan (Btrfs and XFS only)
+联机扫描（仅限 Btrfs 和 XFS）
+
+Open RustCleanup when you sign in, as your own user.
+登录时以你自己的用户身份打开 RustCleanup。
+
+Opened the disk usage viewer for {0}.
+已打开 {0} 的磁盘使用情况查看器。
+
+Opens the desktop app you pick.
+打开你选择的桌面应用。
+
+Part of the desktop: it can be ended and it starts again, but it cannot be suspended
+桌面的一部分：可以结束并会重新启动，但不能挂起
+
+Power
+电源
+
+Power Settings
+电源设置
+
+Power profiles, battery and sleep
+电源配置、电池和睡眠
+
+Processes, performance and resources
+进程、性能和资源
+
+Reading the current settings.
+正在读取当前设置。
+
+Reclaiming memory from your session failed: {0}
+回收你的会话内存失败：{0}
+
+Restart as root
+以 root 身份重启
+
+Restored power profile {0}.
+已恢复电源配置 {0}。
+
+Root Privileges
+Root 权限
+
+Root access was not granted, so RustCleanup keeps running without it.
+未获得 root 权限，RustCleanup 将继续在没有它的情况下运行。
+
+Root terminal
+Root 终端
+
+Running as root
+正在以 root 身份运行
+
+RustCleanup can't check {0} drives.
+RustCleanup 无法检查{0}驱动器。
+
+RustCleanup is not running as root, so dropping caches, CPU limits and changes to other users' processes will fail. Use Restart as root at the bottom.
+RustCleanup 未以 root 身份运行，因此清除缓存、限制 CPU 和更改其他用户的进程都会失败。请使用底部的“以 root 身份重启”。
+
+RustCleanup is still running in the system tray. Click its icon to open it, or right-click it and choose Exit to quit.
+RustCleanup 仍在系统托盘中运行。单击其图标可打开，右键单击并选择“退出”可退出。
+
+RustCleanup will open when you sign in.
+登录时将打开 RustCleanup。
+
+Same as system
+与系统相同
+
+See what fills each drive
+查看每个驱动器被什么占用
+
+See what fills this drive in the disk usage viewer
+在磁盘使用情况查看器中查看此驱动器被什么占用
+
+Software Updates
+软件更新
+
+Standard (non-root) terminal
+标准（非 root）终端
+
+Started the disk check on {0} ({1}).
+已在 {0} 上开始磁盘检查（{1}）。
+
+Switches to the power saver profile. As root it also caps the CPU at 60% and turns off turbo boost. Off restores your previous profile.
+切换到节能配置。以 root 身份运行时还会将 CPU 限制为 60% 并关闭睿频。关闭后恢复之前的配置。
+
+System (sans-serif)
+系统（无衬线）
+
+System Logs
+系统日志
+
+System Monitor
+系统监视器
+
+Terminal
+终端
+
+Terminal [Root]
+终端 [Root]
+
+The CPU limits can only be restored as root.
+只有以 root 身份才能恢复 CPU 限制。
+
+The check could not run on this drive.
+无法在此驱动器上运行检查。
+
+The check ended with an unexpected exit code.
+检查以意外的退出代码结束。
+
+The disk check could not run: {0}
+无法运行磁盘检查：{0}
+
+The download is not a valid RustCleanup for Linux, so nothing was changed.
+下载的文件不是有效的 Linux 版 RustCleanup，因此未做任何更改。
+
+The file cache can only be dropped as root.
+只有以 root 身份才能清除文件缓存。
+
+The filesystem is mounted, so the check is read-only and may report changes that are still being written.
+文件系统已挂载，因此检查为只读，可能会报告仍在写入的更改。
+
+The system journal
+系统日志
+
+The video needs FFmpeg. Install the ffmpeg package and try again.
+视频需要 FFmpeg。请安装 ffmpeg 软件包后重试。
+
+This includes parts of the desktop. The screen, panel or sound may blank out for a moment while they start again.
+这包括桌面的部分组件。它们重新启动时，屏幕、面板或声音可能会短暂消失。
+
+Waiting for the disk check to start.
+正在等待磁盘检查开始。
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a desktop notification.
+当 RustCleanup 最小化或位于通知区域时，它记录的所有内容也会显示为桌面通知。
+
+of {0} swap in use
+共 {0} 交换空间已使用
+
+powerprofilesctl could not switch to {0}.
+powerprofilesctl 无法切换到 {0}。

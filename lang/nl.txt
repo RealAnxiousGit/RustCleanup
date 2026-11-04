@@ -1105,3 +1105,236 @@ Standaardrechten
 
 Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
 Zonder beheerdersrechten werken niet alle functies. Sluit RustCleanup, open het opnieuw en kies Ja bij de UAC-vraag.
+
+# Linux (4.0.0)
+
+Also drop the page cache (file cache, needs root)
+Ook de paginacache legen (bestandscache, vereist root)
+
+Asked the kernel to reclaim memory from your session.
+De kernel is gevraagd geheugen uit je sessie terug te winnen.
+
+Asking for your password to restart RustCleanup as root.
+Je wachtwoord wordt gevraagd om RustCleanup als root te herstarten.
+
+Asks for your password, then opens RustCleanup again as root
+Vraagt je wachtwoord en opent RustCleanup daarna opnieuw als root
+
+Check this drive with the mode on the left
+Dit station controleren met de modus links
+
+Checking a disk needs root. Restart RustCleanup as root first.
+Een schijf controleren vereist root. Herstart RustCleanup eerst als root.
+
+Checking for root...
+Controleren op root...
+
+Checks the file system on the drive you pick and shows the output live.
+Controleert het bestandssysteem op het gekozen station en toont de uitvoer live.
+
+Committed {0} of {1} (RAM plus swap)
+{0} van {1} toegewezen (RAM plus swap)
+
+Could not stop the disk check: {0}
+Kan de schijfcontrole niet stoppen: {0}
+
+Desktop settings
+Bureaubladinstellingen
+
+Disk Usage Analyzer
+Schijfgebruik-analyse
+
+Disks
+Schijven
+
+Draws the interface with Vulkan instead of OpenGL. It can be smoother on some graphics drivers, but uses more memory.
+Tekent de interface met Vulkan in plaats van OpenGL. Met sommige grafische stuurprogramma's is dat vloeiender, maar het gebruikt meer geheugen.
+
+Drives, partitions and SMART health
+Stations, partities en SMART-status
+
+Dropping the file cache failed: {0}
+Legen van de bestandscache mislukt: {0}
+
+Errors were found. Repair them from a live USB while the drive is not mounted.
+Er zijn fouten gevonden. Herstel ze vanaf een live-USB terwijl het station niet is aangekoppeld.
+
+File cache dropped.
+Bestandscache geleegd.
+
+Hardware Information
+Hardware-informatie
+
+Install updates and apps
+Updates en apps installeren
+
+Light UI (light sans-serif)
+Lichte interface (dunne schreefloze)
+
+Linux did not report how much space {0} has.
+Linux heeft niet gemeld hoeveel ruimte {0} heeft.
+
+Linux did not report physical memory figures. They will appear here once it does.
+Linux heeft geen cijfers over fysiek geheugen gemeld. Ze verschijnen hier zodra dat gebeurt.
+
+Linux did not report swap figures.
+Linux heeft geen swapcijfers gemeld.
+
+Low Power Mode needs power-profiles-daemon, or RustCleanup running as root.
+De energiebesparingsmodus vereist power-profiles-daemon of RustCleanup als root.
+
+Low Power Mode on: power saver profile.
+Energiebesparingsmodus aan: energiebesparend profiel.
+
+Low Power Mode on: power saver, CPU capped at 60%, turbo boost off.
+Energiebesparingsmodus aan: energiebesparing, CPU begrensd op 60%, turbo boost uit.
+
+No swap is configured, so Linux is running on physical memory only. You can add a swap file or zram with your distribution's tools.
+Er is geen swap ingesteld, dus Linux draait alleen op fysiek geheugen. Je kunt een swapbestand of zram toevoegen met de hulpmiddelen van je distributie.
+
+Not all features will work without root. Choose Restart as root, or start RustCleanup with pkexec or sudo.
+Zonder root werken niet alle functies. Kies Herstarten als root, of start RustCleanup met pkexec of sudo.
+
+Not running as root
+Draait niet als root
+
+Online scan (Btrfs and XFS only)
+Onlinescan (alleen Btrfs en XFS)
+
+Open RustCleanup when you sign in, as your own user.
+RustCleanup openen wanneer je je aanmeldt, als je eigen gebruiker.
+
+Opened the disk usage viewer for {0}.
+Schijfgebruikweergave geopend voor {0}.
+
+Opens the desktop app you pick.
+Opent de gekozen bureaublad-app.
+
+Part of the desktop: it can be ended and it starts again, but it cannot be suspended
+Onderdeel van het bureaublad: kan worden beëindigd en start opnieuw, maar kan niet worden onderbroken
+
+Power
+Energie
+
+Power Settings
+Energie-instellingen
+
+Power profiles, battery and sleep
+Energieprofielen, accu en slaapstand
+
+Processes, performance and resources
+Processen, prestaties en bronnen
+
+Reading the current settings.
+Huidige instellingen worden gelezen.
+
+Reclaiming memory from your session failed: {0}
+Geheugen terugwinnen uit je sessie mislukt: {0}
+
+Restart as root
+Herstarten als root
+
+Restored power profile {0}.
+Energieprofiel {0} hersteld.
+
+Root Privileges
+Rootrechten
+
+Root access was not granted, so RustCleanup keeps running without it.
+Roottoegang is niet verleend, dus RustCleanup blijft zonder draaien.
+
+Root terminal
+Rootterminal
+
+Running as root
+Draait als root
+
+RustCleanup can't check {0} drives.
+RustCleanup kan {0}-stations niet controleren.
+
+RustCleanup is not running as root, so dropping caches, CPU limits and changes to other users' processes will fail. Use Restart as root at the bottom.
+RustCleanup draait niet als root, dus caches legen, CPU-limieten en wijzigingen aan processen van andere gebruikers mislukken. Gebruik onderaan Herstarten als root.
+
+RustCleanup is still running in the system tray. Click its icon to open it, or right-click it and choose Exit to quit.
+RustCleanup draait nog in het systeemvak. Klik op het pictogram om het te openen, of klik met rechts en kies Afsluiten.
+
+RustCleanup will open when you sign in.
+RustCleanup wordt geopend wanneer je je aanmeldt.
+
+Same as system
+Zelfde als systeem
+
+See what fills each drive
+Zien wat elk station vult
+
+See what fills this drive in the disk usage viewer
+In de schijfgebruikweergave zien wat dit station vult
+
+Software Updates
+Software-updates
+
+Standard (non-root) terminal
+Standaardterminal (zonder root)
+
+Started the disk check on {0} ({1}).
+Schijfcontrole gestart op {0} ({1}).
+
+Switches to the power saver profile. As root it also caps the CPU at 60% and turns off turbo boost. Off restores your previous profile.
+Schakelt over naar het energiebesparende profiel. Als root begrenst het ook de CPU op 60% en zet het turbo boost uit. Uit herstelt je vorige profiel.
+
+System (sans-serif)
+Systeem (schreefloos)
+
+System Logs
+Systeemlogboeken
+
+System Monitor
+Systeemmonitor
+
+Terminal
+Terminal
+
+Terminal [Root]
+Terminal [Root]
+
+The CPU limits can only be restored as root.
+De CPU-limieten kunnen alleen als root worden hersteld.
+
+The check could not run on this drive.
+De controle kon niet worden uitgevoerd op dit station.
+
+The check ended with an unexpected exit code.
+De controle eindigde met een onverwachte afsluitcode.
+
+The disk check could not run: {0}
+De schijfcontrole kon niet worden uitgevoerd: {0}
+
+The download is not a valid RustCleanup for Linux, so nothing was changed.
+De download is geen geldige RustCleanup voor Linux, dus er is niets gewijzigd.
+
+The file cache can only be dropped as root.
+De bestandscache kan alleen als root worden geleegd.
+
+The filesystem is mounted, so the check is read-only and may report changes that are still being written.
+Het bestandssysteem is aangekoppeld, dus de controle is alleen-lezen en kan wijzigingen melden die nog worden geschreven.
+
+The system journal
+Het systeemjournaal
+
+The video needs FFmpeg. Install the ffmpeg package and try again.
+De video heeft FFmpeg nodig. Installeer het pakket ffmpeg en probeer het opnieuw.
+
+This includes parts of the desktop. The screen, panel or sound may blank out for a moment while they start again.
+Dit omvat onderdelen van het bureaublad. Het scherm, paneel of geluid kan even wegvallen terwijl ze opnieuw starten.
+
+Waiting for the disk check to start.
+Wachten tot de schijfcontrole start.
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a desktop notification.
+Zolang RustCleanup geminimaliseerd is of in het systeemvak staat, verschijnt alles wat het logt ook als bureaubladmelding.
+
+of {0} swap in use
+van {0} swap in gebruik
+
+powerprofilesctl could not switch to {0}.
+powerprofilesctl kon niet overschakelen naar {0}.

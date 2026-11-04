@@ -14,7 +14,7 @@ use super::theme::{self, Palette, semibold};
 use super::widgets;
 use crate::background;
 use crate::events::{AppEvent, Job, Jobs};
-use crate::i18n::{self, Lang, tr, trf};
+use crate::i18n::{self, Lang, n_, os, tr, trf};
 use crate::settings::{self, AUTO_CLEAN_RANGE, FontChoice, Settings, ThemeMode, UI_SCALES};
 use crate::sys::format::fmt_bytes;
 use crate::sys::{memory, startup, updater};
@@ -129,7 +129,10 @@ fn body(ui: &mut Ui, pal: &Palette, jobs: &Jobs, s: Settings, launched_hw: bool)
         ui,
         pal,
         tr("Open on startup"),
-        tr("Open RustCleanup when you sign in to Windows, without a UAC prompt."),
+        tr(os(
+            n_("Open RustCleanup when you sign in to Windows, without a UAC prompt."),
+            n_("Open RustCleanup when you sign in, as your own user."),
+        )),
         s.open_on_startup,
         !startup_busy,
     ) {
@@ -208,9 +211,10 @@ fn body(ui: &mut Ui, pal: &Palette, jobs: &Jobs, s: Settings, launched_hw: bool)
         ui,
         pal,
         tr("Notifications"),
-        tr(
-            "While RustCleanup is minimized or in the notification area, everything it logs also appears as a Windows notification.",
-        ),
+        tr(os(
+            n_("While RustCleanup is minimized or in the notification area, everything it logs also appears as a Windows notification."),
+            n_("While RustCleanup is minimized or in the notification area, everything it logs also appears as a desktop notification."),
+        )),
         s.notifications,
         true,
     ) {
@@ -300,7 +304,13 @@ fn body(ui: &mut Ui, pal: &Palette, jobs: &Jobs, s: Settings, launched_hw: bool)
     );
     let mut purge = s.purge_standby;
     if ui
-        .checkbox(&mut purge, tr("Also purge the standby list (file cache)"))
+        .checkbox(
+            &mut purge,
+            tr(os(
+                n_("Also purge the standby list (file cache)"),
+                n_("Also drop the page cache (file cache, needs root)"),
+            )),
+        )
         .changed()
     {
         settings::update(|s| s.purge_standby = purge);
@@ -311,9 +321,10 @@ fn body(ui: &mut Ui, pal: &Palette, jobs: &Jobs, s: Settings, launched_hw: bool)
         ui,
         pal,
         tr("Hardware-accelerated UI"),
-        tr(
-            "Draws the interface with Direct3D 12 instead of OpenGL. It can be smoother on older or integrated graphics, but uses about three times as much memory.",
-        ),
+        tr(os(
+            n_("Draws the interface with Direct3D 12 instead of OpenGL. It can be smoother on older or integrated graphics, but uses about three times as much memory."),
+            n_("Draws the interface with Vulkan instead of OpenGL. It can be smoother on some graphics drivers, but uses more memory."),
+        )),
         s.hardware_ui,
         true,
     ) {
@@ -323,7 +334,7 @@ fn body(ui: &mut Ui, pal: &Palette, jobs: &Jobs, s: Settings, launched_hw: bool)
         ui.horizontal(|ui| {
             ui.label(RichText::new(tr("Restart RustCleanup to apply this.")).color(pal.warn));
             if widgets::button(ui, tr("Restart now"), true).clicked()
-                && let Ok(exe) = std::env::current_exe()
+                && let Ok(exe) = crate::sys::shell::app_exe()
             {
                 jobs.log.send(AppEvent::Restart(exe));
             }

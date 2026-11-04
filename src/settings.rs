@@ -1,11 +1,12 @@
-//! User preferences, kept in `HKCU\Software\RustCleanup`.
+//! User preferences, kept in `HKCU\Software\RustCleanup` on Windows and in
+//! `~/.config/RustCleanup` on Linux.
 //!
 //! One process-wide copy behind a lock: every window and worker thread reads
 //! the same values, and `update` writes changes straight back to the registry.
 
 use std::sync::{LazyLock, RwLock};
 
-use crate::i18n::{self, Lang};
+use crate::i18n::{self, Lang, n_, os};
 use crate::sys::registry::{self, Hive};
 
 pub const KEY: &str = r"Software\RustCleanup";
@@ -22,7 +23,7 @@ impl ThemeMode {
 
     pub fn label(self) -> &'static str {
         match self {
-            ThemeMode::System => i18n::tr("Same as Windows"),
+            ThemeMode::System => i18n::tr(os(n_("Same as Windows"), n_("Same as system"))),
             ThemeMode::Light => i18n::tr("Light"),
             ThemeMode::Dark => i18n::tr("Dark"),
         }
@@ -71,10 +72,12 @@ impl FontChoice {
 
     pub fn label(self) -> &'static str {
         match self {
-            FontChoice::System => i18n::tr("System (Segoe UI)"),
+            FontChoice::System => i18n::tr(os(n_("System (Segoe UI)"), n_("System (sans-serif)"))),
             FontChoice::Arial => "Arial",
             FontChoice::TimesNewRoman => "Times New Roman",
-            FontChoice::LightUi => i18n::tr("Light UI (Segoe UI Light)"),
+            FontChoice::LightUi => {
+                i18n::tr(os(n_("Light UI (Segoe UI Light)"), n_("Light UI (light sans-serif)")))
+            }
             FontChoice::ComicSans => "Comic Sans MS",
             FontChoice::Verdana => "Verdana",
             FontChoice::Georgia => "Georgia",
@@ -85,7 +88,27 @@ impl FontChoice {
         }
     }
 
+    /// Linux: regular and bold fontconfig patterns. Fontconfig picks the
+    /// closest installed face, so a missing font still gets a look-alike.
+    #[cfg(not(windows))]
+    pub fn files(self) -> (&'static str, &'static str) {
+        match self {
+            FontChoice::System => ("sans-serif", "sans-serif:bold"),
+            FontChoice::Arial => ("Liberation Sans", "Liberation Sans:bold"),
+            FontChoice::TimesNewRoman => ("Liberation Serif", "Liberation Serif:bold"),
+            FontChoice::LightUi => ("sans-serif:light", "sans-serif"),
+            FontChoice::ComicSans => ("Comic Neue,Comic Sans MS", "Comic Neue,Comic Sans MS:bold"),
+            FontChoice::Verdana => ("DejaVu Sans,Verdana", "DejaVu Sans,Verdana:bold"),
+            FontChoice::Georgia => ("Gelasio,Georgia,serif", "Gelasio,Georgia,serif:bold"),
+            FontChoice::Tahoma => ("DejaVu Sans Condensed,Tahoma", "DejaVu Sans Condensed,Tahoma:bold"),
+            FontChoice::Calibri => ("Carlito,Calibri", "Carlito,Calibri:bold"),
+            FontChoice::Trebuchet => ("Ubuntu,Trebuchet MS,sans-serif", "Ubuntu,Trebuchet MS,sans-serif:bold"),
+            FontChoice::Consolas => ("monospace", "monospace:bold"),
+        }
+    }
+
     /// Regular and bold files under `C:\Windows\Fonts`.
+    #[cfg(windows)]
     pub fn files(self) -> (&'static str, &'static str) {
         match self {
             FontChoice::System => ("SegUIVar.ttf", "seguisb.ttf"),

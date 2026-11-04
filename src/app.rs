@@ -16,7 +16,7 @@ use eframe::egui::{self, Align, Layout, Margin, RichText, ViewportCommand};
 
 use crate::background;
 use crate::events::{AppEvent, Job, Jobs, Level, LogEntry, Logger};
-use crate::i18n::{self, Lang, tr, trf};
+use crate::i18n::{self, Lang, n_, os, tr, trf};
 use crate::settings::{self, FontChoice};
 use crate::sys::privilege::is_elevated;
 use crate::sys::shell::{self, WindowId};
@@ -215,7 +215,10 @@ impl RustCleanupApp {
         if !self.tray_hint_shown {
             self.tray_hint_shown = true;
             // Shown as a notification too, since the window is now hidden.
-            self.jobs.log.info(tr("RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit."));
+            self.jobs.log.info(tr(os(
+                n_("RustCleanup is still running in the notification area. Right-click its icon for options, or choose Exit to quit."),
+                n_("RustCleanup is still running in the system tray. Click its icon to open it, or right-click it and choose Exit to quit."),
+            )));
         }
     }
 
@@ -232,6 +235,62 @@ impl RustCleanupApp {
             tray.remove();
         }
         std::process::exit(0);
+    }
+
+    /// Linux: asks for root through polkit and starts a root copy, which
+    /// tells this one to quit once it is running. A cancelled or refused
+    /// password prompt leaves this copy as it was.
+    #[cfg(not(windows))]
+    fn restart_as_root(&self) {
+        let exe = match shell::app_exe() {
+            Ok(exe) => exe,
+            Err(e) => {
+                self.jobs.log.error(trf("Could not restart RustCleanup: {0}. Close it and open it again.", &[&e]));
+                return;
+            }
+        };
+        // pkexec clears the environment; pass on what the root copy needs
+        // to reach this desktop.
+        let mut cmd = std::process::Command::new("pkexec");
+        cmd.arg("/usr/bin/env");
+        for name in [
+            "DISPLAY",
+            "XAUTHORITY",
+            "WAYLAND_DISPLAY",
+            "XDG_RUNTIME_DIR",
+            "XDG_CURRENT_DESKTOP",
+            "DBUS_SESSION_BUS_ADDRESS",
+            "LANG",
+            "LC_ALL",
+            "LC_MESSAGES",
+        ] {
+            if let Some(value) = std::env::var_os(name) {
+                let mut pair = std::ffi::OsString::from(format!("{name}="));
+                pair.push(value);
+                cmd.arg(pair);
+            }
+        }
+        cmd.arg(exe).arg(crate::TAKE_OVER_ARG);
+        if self.in_tray {
+            cmd.arg(crate::HIDDEN_ARG);
+        }
+        let log = self.jobs.log.clone();
+        log.info(tr("Asking for your password to restart RustCleanup as root."));
+        std::thread::spawn(move || match cmd.status() {
+            // On success this copy has already been told to quit.
+            Ok(status) if status.success() => {}
+            Ok(status) if matches!(status.code(), Some(126 | 127)) => {
+                log.warn(tr("Root access was not granted, so RustCleanup keeps running without it."));
+            }
+            Ok(status) => log.error(trf(
+                "Could not restart RustCleanup: {0}. Close it and open it again.",
+                &[&status],
+            )),
+            Err(e) => log.error(trf(
+                "Could not restart RustCleanup: {0}. Close it and open it again.",
+                &[&e],
+            )),
+        });
     }
 
     /// Starts `exe` (a new version, or this one again) and quits. The new
@@ -271,7 +330,10 @@ impl RustCleanupApp {
             self.elevation = None;
             self.elevated = Some(elevated);
             if !elevated {
-                self.jobs.log.warn(tr("RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt."));
+                self.jobs.log.warn(tr(os(
+                    n_("RustCleanup is not running as Administrator, so most changes will fail. Restart it and choose Yes on the UAC prompt."),
+                    n_("RustCleanup is not running as root, so dropping caches, CPU limits and changes to other users' processes will fail. Use Restart as root at the bottom."),
+                )));
             }
         }
         while let Ok(event) = self.rx.try_recv() {
@@ -380,31 +442,43 @@ impl RustCleanupApp {
         });
     }
 
-    /// A macOS-style dot: green with admin rights, yellow while checking,
-    /// red (plus a warning sign) without them.
+    /// A macOS-style dot: green with admin rights (root on Linux), yellow
+    /// while checking, red (plus a warning sign) without them.
     fn admin_status(&mut self, ui: &mut egui::Ui) {
         let pal = self.theme.palette;
         match self.elevated {
             Some(true) => {
-                widgets::status_dot(ui, pal.ok, tr("Admin Privileges"));
-                widgets::note(ui, &pal, tr("Running as Administrator"));
+                widgets::status_dot(ui, pal.ok, tr(os(n_("Admin Privileges"), n_("Root Privileges"))));
+                widgets::note(ui, &pal, tr(os(n_("Running as Administrator"), n_("Running as root"))));
             }
             None => {
-                widgets::status_dot(ui, pal.warn, tr("Checking for Admin..."));
-                widgets::note(ui, &pal, tr("Checking for Admin..."));
+                let checking = tr(os(n_("Checking for Admin..."), n_("Checking for root...")));
+                widgets::status_dot(ui, pal.warn, checking);
+                widgets::note(ui, &pal, checking);
             }
             Some(false) => {
                 widgets::status_dot(ui, pal.error, tr("Standard Privileges"));
                 widgets::warning_sign(
                     ui,
                     pal.error,
-                    tr("Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt."),
+                    tr(os(
+                        n_("Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt."),
+                        n_("Not all features will work without root. Choose Restart as root, or start RustCleanup with pkexec or sudo."),
+                    )),
                 );
                 ui.label(
-                    RichText::new(tr("Not running as Administrator"))
+                    RichText::new(tr(os(n_("Not running as Administrator"), n_("Not running as root"))))
                         .size(12.5)
                         .color(pal.error),
                 );
+                #[cfg(not(windows))]
+                if crate::sys::privilege::pkexec_available()
+                    && widgets::button(ui, tr("Restart as root"), true)
+                        .on_hover_text(tr("Asks for your password, then opens RustCleanup again as root"))
+                        .clicked()
+                {
+                    self.restart_as_root();
+                }
             }
         }
         if self.jobs.any_visible_busy() {
@@ -460,8 +534,12 @@ impl RustCleanupApp {
                                     ui.spacing_mut().item_spacing.x = 8.0;
                                     self.memory.ui(ui, &pal, &self.jobs);
                                     ui.add_space(22.0);
-                                    self.disk.ui(ui, &pal);
-                                    ui.add_space(22.0);
+                                    // Linux has one switch on the right, so
+                                    // Scan Disk moves over there to balance it.
+                                    if cfg!(windows) {
+                                        self.disk.ui(ui, &pal);
+                                        ui.add_space(22.0);
+                                    }
                                     self.tasks.section_ui(ui, &pal);
                                 },
                             );
@@ -473,6 +551,10 @@ impl RustCleanupApp {
                                     ui.spacing_mut().item_spacing.x = 8.0;
                                     self.tweaks.settings_ui(ui, &pal, &self.jobs);
                                     ui.add_space(22.0);
+                                    if !cfg!(windows) {
+                                        self.disk.ui(ui, &pal);
+                                        ui.add_space(22.0);
+                                    }
                                     self.tweaks.tools_ui(ui, &pal, &self.jobs);
                                 },
                             );

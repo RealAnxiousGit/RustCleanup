@@ -1,14 +1,20 @@
 //! Windows settings (the four reversible switches) and the System Tools picker.
+//! On Linux only Low Power Mode applies, so that is the one switch shown.
 
 use eframe::egui::{self, RichText, Ui};
 
 use super::theme::{Palette, semibold};
 use super::widgets;
 use crate::events::{AppEvent, Job, Jobs, TweakState};
-use crate::i18n::{tr, trf};
+#[cfg(windows)]
+use crate::i18n::trf;
+use crate::i18n::tr;
+#[cfg(windows)]
 use crate::sys::format::friendly_date;
+use crate::sys::power;
 use crate::sys::tools::TOOLS;
-use crate::sys::{copilot, power, telemetry, updates};
+#[cfg(windows)]
+use crate::sys::{copilot, telemetry, updates};
 
 /// What one switch row shows.
 struct Row {
@@ -23,7 +29,9 @@ pub struct TweaksPanel {
     /// False until the first read of the real system state arrives; the
     /// switches stay disabled until then so they never show a guess.
     pub loaded: bool,
+    #[cfg_attr(not(windows), allow(dead_code))]
     restart_explorer: bool,
+    #[cfg_attr(not(windows), allow(dead_code))]
     pause_updates: bool,
     tool_idx: usize,
 }
@@ -42,13 +50,20 @@ impl TweaksPanel {
     /// Re-reads every switch's real state from the system, in the background.
     pub fn detect(jobs: &Jobs) {
         jobs.start(Job::DetectState, |log| {
-            log.send(AppEvent::State(TweakState {
+            #[cfg(windows)]
+            let state = TweakState {
                 copilot_disabled: copilot::copilot_disabled(),
                 telemetry_disabled: telemetry::telemetry_disabled(),
                 updates_blocked: updates::forced_updates_blocked(),
                 paused_until: updates::paused_until(),
                 low_power: power::low_power_active(),
-            }));
+            };
+            #[cfg(not(windows))]
+            let state = TweakState {
+                low_power: power::low_power_active(),
+                ..Default::default()
+            };
+            log.send(AppEvent::State(state));
             Ok(())
         });
     }
@@ -83,6 +98,40 @@ impl TweaksPanel {
         result
     }
 
+    /// The Linux version: Low Power Mode only.
+    #[cfg(not(windows))]
+    pub fn settings_ui(&mut self, ui: &mut Ui, pal: &Palette, jobs: &Jobs) {
+        widgets::heading(ui, tr("Power"));
+        if !self.loaded {
+            ui.horizontal(|ui| {
+                ui.add(egui::Spinner::new().size(14.0).color(pal.muted));
+                widgets::note(ui, pal, tr("Reading the current settings."));
+            });
+        }
+        ui.add_space(8.0);
+        self.low_power_row(ui, pal, jobs);
+    }
+
+    fn low_power_row(&mut self, ui: &mut Ui, pal: &Palette, jobs: &Jobs) {
+        let detail = if cfg!(windows) {
+            tr("Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan.")
+        } else {
+            tr("Switches to the power saver profile. As root it also caps the CPU at 60% and turns off turbo boost. Off restores your previous profile.")
+        };
+        if let Some(enable) = self.row(
+            ui,
+            pal,
+            jobs,
+            Row { job: Job::LowPower, title: tr("Low Power Mode"), detail, on: self.state.low_power },
+        ) {
+            self.state.low_power = enable;
+            jobs.start(Job::LowPower, move |log| {
+                if enable { power::enable_low_power(log) } else { power::disable_low_power(log) }
+            });
+        }
+    }
+
+    #[cfg(windows)]
     pub fn settings_ui(&mut self, ui: &mut Ui, pal: &Palette, jobs: &Jobs) {
         widgets::heading(ui, tr("Windows settings"));
         if !self.loaded {
@@ -163,22 +212,20 @@ impl TweaksPanel {
         }
         widgets::divider(ui);
 
-        if let Some(enable) = self.row(
-            ui,
-            pal,
-            jobs,
-            Row { job: Job::LowPower, title: tr("Low Power Mode"), detail: tr("Caps the CPU at 60% plugged in and 50% on battery, and turns off turbo boost. Off restores your previous power plan."), on: self.state.low_power },
-        ) {
-            self.state.low_power = enable;
-            jobs.start(Job::LowPower, move |log| {
-                if enable { power::enable_low_power(log) } else { power::disable_low_power(log) }
-            });
-        }
+        self.low_power_row(ui, pal, jobs);
     }
 
     pub fn tools_ui(&mut self, ui: &mut Ui, pal: &Palette, jobs: &Jobs) {
         widgets::heading(ui, tr("System tools"));
-        widgets::note(ui, pal, tr("Opens the built-in Windows tool you pick."));
+        widgets::note(
+            ui,
+            pal,
+            if cfg!(windows) {
+                tr("Opens the built-in Windows tool you pick.")
+            } else {
+                tr("Opens the desktop app you pick.")
+            },
+        );
         ui.add_space(4.0);
         ui.horizontal(|ui| {
             egui::ComboBox::from_id_salt("tools")
@@ -196,7 +243,7 @@ impl TweaksPanel {
             {
                 let tool = &TOOLS[self.tool_idx];
                 match tool.launch() {
-                    Ok(()) => jobs.log.info(trf("Opened {0}.", &[&tr(tool.label)])),
+                    Ok(()) => jobs.log.info(crate::i18n::trf("Opened {0}.", &[&tr(tool.label)])),
                     Err(e) => jobs.log.error(e),
                 }
             }

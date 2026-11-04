@@ -419,8 +419,8 @@ pub fn warning_sign(ui: &mut Ui, color: Color32, label: &str) -> Response {
     response.on_hover_text(label)
 }
 
-/// A hyperlink that opens through Explorer so the browser does not inherit
-/// RustCleanup's admin rights.
+/// A hyperlink that opens as the signed-in user (through Explorer on
+/// Windows, xdg-open on Linux) so the browser never gets admin or root.
 pub fn link(ui: &mut Ui, log: &Logger, text: &str, url: &str) {
     let response = ui.link(text).on_hover_text(url);
     if response.clicked()

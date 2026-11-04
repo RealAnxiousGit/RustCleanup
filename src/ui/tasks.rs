@@ -14,10 +14,11 @@ use eframe::egui::{
 use super::theme::{self, Palette, semibold};
 use super::widgets;
 use crate::events::{Job, Jobs};
-use crate::i18n::{tr, trf};
+use crate::i18n::{n_, os, tr, trf};
 use crate::sys::format::fmt_bytes;
 use crate::sys::memory;
 use crate::sys::process_actions;
+#[cfg(windows)]
 use crate::sys::shell;
 use crate::sys::process_monitor::{ProcInfo, ProcKind, ProcessMonitor};
 
@@ -480,9 +481,10 @@ fn window_ui(ui: &mut Ui, state: &mut State, jobs: &Jobs) {
             ui.label(detail);
             if targets.iter().any(|t| t.2) {
                 ui.add_space(6.0);
-                ui.label(RichText::new(tr(
-                    "This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again.",
-                )).color(pal.warn));
+                ui.label(RichText::new(tr(os(
+                    n_("This includes parts of Windows. The screen, taskbar or sound may blank out for a moment while Windows starts them again."),
+                    n_("This includes parts of the desktop. The screen, panel or sound may blank out for a moment while they start again."),
+                ))).color(pal.warn));
             }
             ui.add_space(8.0);
             for (pid, name, _) in targets.iter().take(12) {
@@ -563,8 +565,9 @@ fn allowed(action: Action, p: &ProcInfo) -> bool {
     }
 }
 
+/// Explorer has its own restart. Linux has no such shell process.
 fn is_explorer(name_lower: &str) -> bool {
-    name_lower == "explorer.exe"
+    cfg!(windows) && name_lower == "explorer.exe"
 }
 
 /// What the current selection allows.
@@ -703,14 +706,18 @@ fn run(
             let (shell, apps): (Vec<_>, Vec<_>) =
                 work.iter().partition(|w| is_explorer(&w.1.to_lowercase()));
             let pids: Vec<u32> = apps.iter().map(|w| w.0).collect();
+            #[cfg_attr(not(windows), allow(unused_mut))]
             let mut results = if pids.is_empty() {
                 Vec::new()
             } else {
                 process_actions::restart(&pids)
             };
+            #[cfg(windows)]
             if !shell.is_empty() {
                 results.push(("explorer.exe".to_owned(), shell::restart_explorer(log)));
             }
+            #[cfg(not(windows))]
+            let _ = (&shell, &log);
             let ok = results.iter().filter(|r| r.1.is_ok()).count();
             for (name, result) in &results {
                 if let Err(e) = result {
@@ -981,9 +988,10 @@ fn process_row(
     } else if over(5) && p.protected {
         response.on_hover_text(tr("System process: can only be trimmed"))
     } else if over(5) && p.system {
-        response.on_hover_text(tr(
-            "Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended",
-        ))
+        response.on_hover_text(tr(os(
+            n_("Part of Windows: it can be ended and Windows starts it again, but it cannot be suspended"),
+            n_("Part of the desktop: it can be ended and it starts again, but it cannot be suspended"),
+        )))
     } else {
         response
     }

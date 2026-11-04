@@ -3,6 +3,8 @@
 The anti-slop rules (https://github.com/miqdadbadjuber/anti-slop) are applied as a filter. This file is the
 direction they filter. Every decision below has its one-line reason (rule R-31).
 
+The Linux build shares this UI; [`docs/LINUX.md`](docs/LINUX.md) lists how each Windows change is carried over to it.
+
 **Design Read:** a Windows 11 system utility for people tuning their own PC, in a quiet native-desktop
 style, dial **ENERGY 1 / RHYTHM 2 / MOTION 1**.
 

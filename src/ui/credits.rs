@@ -28,6 +28,7 @@ const TOOLKITS: [(&str, &str, &str); 2] = [
     ),
 ];
 
+#[cfg(windows)]
 const LIBRARIES: [(&str, &str); 5] = [
     ("egui and eframe", "https://github.com/emilk/egui"),
     ("sysinfo", "https://github.com/GuillaumeGomez/sysinfo"),
@@ -37,6 +38,15 @@ const LIBRARIES: [(&str, &str); 5] = [
         "embed-resource",
         "https://github.com/nabijaczleweli/rust-embed-resource",
     ),
+];
+
+#[cfg(not(windows))]
+const LIBRARIES: [(&str, &str); 5] = [
+    ("egui and eframe", "https://github.com/emilk/egui"),
+    ("sysinfo", "https://github.com/GuillaumeGomez/sysinfo"),
+    ("libc", "https://github.com/rust-lang/libc"),
+    ("ksni", "https://github.com/iovxw/ksni"),
+    ("notify-rust", "https://github.com/hoodie/notify-rust"),
 ];
 
 pub struct Credits {

@@ -1105,3 +1105,236 @@ Privilegi standard
 
 Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
 Senza diritti di amministratore non tutte le funzioni funzioneranno. Chiudi RustCleanup, riaprilo e scegli Sì nella richiesta UAC.
+
+# Linux (4.0.0)
+
+Also drop the page cache (file cache, needs root)
+Svuota anche la cache delle pagine (cache dei file, richiede root)
+
+Asked the kernel to reclaim memory from your session.
+È stato chiesto al kernel di recuperare memoria dalla tua sessione.
+
+Asking for your password to restart RustCleanup as root.
+Richiesta della password per riavviare RustCleanup come root.
+
+Asks for your password, then opens RustCleanup again as root
+Chiede la password, poi riapre RustCleanup come root
+
+Check this drive with the mode on the left
+Controlla questa unità con la modalità a sinistra
+
+Checking a disk needs root. Restart RustCleanup as root first.
+Il controllo di un disco richiede root. Riavvia prima RustCleanup come root.
+
+Checking for root...
+Verifica di root...
+
+Checks the file system on the drive you pick and shows the output live.
+Controlla il file system dell'unità scelta e mostra l'output in tempo reale.
+
+Committed {0} of {1} (RAM plus swap)
+{0} di {1} impegnati (RAM più swap)
+
+Could not stop the disk check: {0}
+Impossibile fermare il controllo del disco: {0}
+
+Desktop settings
+Impostazioni del desktop
+
+Disk Usage Analyzer
+Analizzatore di utilizzo del disco
+
+Disks
+Dischi
+
+Draws the interface with Vulkan instead of OpenGL. It can be smoother on some graphics drivers, but uses more memory.
+Disegna l'interfaccia con Vulkan invece di OpenGL. Può essere più fluida con alcuni driver grafici, ma usa più memoria.
+
+Drives, partitions and SMART health
+Unità, partizioni e stato SMART
+
+Dropping the file cache failed: {0}
+Svuotamento della cache dei file non riuscito: {0}
+
+Errors were found. Repair them from a live USB while the drive is not mounted.
+Sono stati trovati errori. Riparali da una chiavetta USB live mentre l'unità non è montata.
+
+File cache dropped.
+Cache dei file svuotata.
+
+Hardware Information
+Informazioni hardware
+
+Install updates and apps
+Installa aggiornamenti e app
+
+Light UI (light sans-serif)
+Interfaccia leggera (sans-serif sottile)
+
+Linux did not report how much space {0} has.
+Linux non ha indicato quanto spazio ha {0}.
+
+Linux did not report physical memory figures. They will appear here once it does.
+Linux non ha indicato i dati della memoria fisica. Appariranno qui non appena lo farà.
+
+Linux did not report swap figures.
+Linux non ha indicato i dati dello swap.
+
+Low Power Mode needs power-profiles-daemon, or RustCleanup running as root.
+La modalità basso consumo richiede power-profiles-daemon o RustCleanup avviato come root.
+
+Low Power Mode on: power saver profile.
+Modalità basso consumo attiva: profilo risparmio energetico.
+
+Low Power Mode on: power saver, CPU capped at 60%, turbo boost off.
+Modalità basso consumo attiva: risparmio energetico, CPU limitata al 60%, turbo boost disattivato.
+
+No swap is configured, so Linux is running on physical memory only. You can add a swap file or zram with your distribution's tools.
+Nessuno swap è configurato, quindi Linux usa solo la memoria fisica. Puoi aggiungere un file di swap o zram con gli strumenti della tua distribuzione.
+
+Not all features will work without root. Choose Restart as root, or start RustCleanup with pkexec or sudo.
+Non tutte le funzioni funzioneranno senza root. Scegli Riavvia come root, oppure avvia RustCleanup con pkexec o sudo.
+
+Not running as root
+Non in esecuzione come root
+
+Online scan (Btrfs and XFS only)
+Scansione online (solo Btrfs e XFS)
+
+Open RustCleanup when you sign in, as your own user.
+Apri RustCleanup all'accesso, con il tuo utente.
+
+Opened the disk usage viewer for {0}.
+Aperto il visualizzatore di utilizzo del disco per {0}.
+
+Opens the desktop app you pick.
+Apre l'app desktop che scegli.
+
+Part of the desktop: it can be ended and it starts again, but it cannot be suspended
+Parte del desktop: può essere terminato e si riavvia, ma non può essere sospeso
+
+Power
+Alimentazione
+
+Power Settings
+Impostazioni di alimentazione
+
+Power profiles, battery and sleep
+Profili energetici, batteria e sospensione
+
+Processes, performance and resources
+Processi, prestazioni e risorse
+
+Reading the current settings.
+Lettura delle impostazioni attuali.
+
+Reclaiming memory from your session failed: {0}
+Recupero della memoria dalla tua sessione non riuscito: {0}
+
+Restart as root
+Riavvia come root
+
+Restored power profile {0}.
+Profilo energetico {0} ripristinato.
+
+Root Privileges
+Privilegi di root
+
+Root access was not granted, so RustCleanup keeps running without it.
+L'accesso root non è stato concesso, quindi RustCleanup continua senza.
+
+Root terminal
+Terminale root
+
+Running as root
+In esecuzione come root
+
+RustCleanup can't check {0} drives.
+RustCleanup non può controllare le unità {0}.
+
+RustCleanup is not running as root, so dropping caches, CPU limits and changes to other users' processes will fail. Use Restart as root at the bottom.
+RustCleanup non è in esecuzione come root, quindi svuotare le cache, limitare la CPU e modificare i processi di altri utenti non riuscirà. Usa Riavvia come root in basso.
+
+RustCleanup is still running in the system tray. Click its icon to open it, or right-click it and choose Exit to quit.
+RustCleanup è ancora in esecuzione nell'area di notifica. Fai clic sulla sua icona per aprirlo, oppure clic destro e scegli Esci.
+
+RustCleanup will open when you sign in.
+RustCleanup si aprirà all'accesso.
+
+Same as system
+Come il sistema
+
+See what fills each drive
+Vedi cosa occupa ogni unità
+
+See what fills this drive in the disk usage viewer
+Vedi cosa occupa questa unità nel visualizzatore di utilizzo del disco
+
+Software Updates
+Aggiornamenti software
+
+Standard (non-root) terminal
+Terminale standard (senza root)
+
+Started the disk check on {0} ({1}).
+Avviato il controllo del disco su {0} ({1}).
+
+Switches to the power saver profile. As root it also caps the CPU at 60% and turns off turbo boost. Off restores your previous profile.
+Passa al profilo risparmio energetico. Come root limita anche la CPU al 60% e disattiva il turbo boost. Disattivata ripristina il profilo precedente.
+
+System (sans-serif)
+Sistema (sans-serif)
+
+System Logs
+Log di sistema
+
+System Monitor
+Monitor di sistema
+
+Terminal
+Terminale
+
+Terminal [Root]
+Terminale [Root]
+
+The CPU limits can only be restored as root.
+I limiti della CPU si possono ripristinare solo come root.
+
+The check could not run on this drive.
+Il controllo non è stato eseguito su questa unità.
+
+The check ended with an unexpected exit code.
+Il controllo è terminato con un codice di uscita imprevisto.
+
+The disk check could not run: {0}
+Il controllo del disco non è stato eseguito: {0}
+
+The download is not a valid RustCleanup for Linux, so nothing was changed.
+Il download non è un RustCleanup valido per Linux, quindi non è stato cambiato nulla.
+
+The file cache can only be dropped as root.
+La cache dei file si può svuotare solo come root.
+
+The filesystem is mounted, so the check is read-only and may report changes that are still being written.
+Il file system è montato, quindi il controllo è in sola lettura e può segnalare modifiche ancora in scrittura.
+
+The system journal
+Il journal di sistema
+
+The video needs FFmpeg. Install the ffmpeg package and try again.
+Il video richiede FFmpeg. Installa il pacchetto ffmpeg e riprova.
+
+This includes parts of the desktop. The screen, panel or sound may blank out for a moment while they start again.
+Include parti del desktop. Schermo, pannello o audio possono spegnersi per un attimo mentre si riavviano.
+
+Waiting for the disk check to start.
+In attesa che inizi il controllo del disco.
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a desktop notification.
+Mentre RustCleanup è ridotto a icona o nell'area di notifica, tutto ciò che registra appare anche come notifica del desktop.
+
+of {0} swap in use
+di {0} di swap in uso
+
+powerprofilesctl could not switch to {0}.
+powerprofilesctl non è riuscito a passare a {0}.

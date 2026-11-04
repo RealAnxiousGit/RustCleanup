@@ -266,6 +266,7 @@ pub fn semibold() -> FontFamily {
 /// Maps a font file into memory for the rest of the process. The CJK fonts
 /// are 13 to 19 MB each; mapped, only the pages for glyphs actually drawn
 /// are read, and they are shared with every other program using the font.
+#[cfg(windows)]
 fn map_font(path: &std::path::Path) -> Option<&'static [u8]> {
     use windows::Win32::Foundation::{CloseHandle, GENERIC_READ};
     use windows::Win32::Storage::FileSystem::{
@@ -305,13 +306,96 @@ fn map_font(path: &std::path::Path) -> Option<&'static [u8]> {
     }
 }
 
+/// Linux: maps a font file read-only for the life of the process, so the
+/// big CJK collections cost page cache rather than private memory.
+#[cfg(not(windows))]
+fn map_font(path: &std::path::Path) -> Option<&'static [u8]> {
+    use std::os::fd::AsRawFd;
+    let file = std::fs::File::open(path).ok()?;
+    let size = file.metadata().ok()?.len() as usize;
+    if size == 0 {
+        return None;
+    }
+    // SAFETY: a fresh read-only private mapping of a file we just opened;
+    // it is never unmapped, so the slice stays valid for 'static.
+    unsafe {
+        let ptr = libc::mmap(
+            std::ptr::null_mut(),
+            size,
+            libc::PROT_READ,
+            libc::MAP_PRIVATE,
+            file.as_raw_fd(),
+            0,
+        );
+        if ptr == libc::MAP_FAILED {
+            return None;
+        }
+        Some(std::slice::from_raw_parts(ptr as *const u8, size))
+    }
+}
+
+/// Linux: the file and face index fontconfig picks for `pattern`.
+#[cfg(not(windows))]
+fn fc_match(pattern: &str) -> Option<(std::path::PathBuf, u32)> {
+    let out = std::process::Command::new("fc-match")
+        .args(["-f", "%{file}\n%{index}", pattern])
+        .output()
+        .ok()?;
+    let text = String::from_utf8_lossy(&out.stdout);
+    let mut lines = text.lines();
+    let file = lines.next()?.trim();
+    if file.is_empty() {
+        return None;
+    }
+    let index = lines.next().and_then(|i| i.trim().parse().ok()).unwrap_or(0);
+    Some((file.into(), index))
+}
+
+/// Linux: the first installed face that covers `lang`, preferring a CJK
+/// collection such as Noto Sans CJK.
+#[cfg(not(windows))]
+fn fc_lang(lang: &str) -> Option<(std::path::PathBuf, u32)> {
+    let out = std::process::Command::new("fc-list")
+        .args([format!(":lang={lang}").as_str(), "-f", "%{file}|%{index}|%{family}\n"])
+        .output()
+        .ok()?;
+    let text = String::from_utf8_lossy(&out.stdout);
+    let mut faces: Vec<(String, u32, String)> = text
+        .lines()
+        .filter_map(|l| {
+            let mut parts = l.splitn(3, '|');
+            let file = parts.next()?.to_string();
+            let index = parts.next()?.parse().ok()?;
+            Some((file, index, parts.next().unwrap_or("").to_string()))
+        })
+        .collect();
+    let rank = |(file, _, family): &(String, u32, String)| {
+        let regular = !file.contains("Bold") && !file.contains("Light") && !file.contains("Thin");
+        let sans = family.contains("Sans");
+        let cjk = family.contains("CJK") || family.contains("Gothic") || family.contains("Hei");
+        (!(cjk && sans), !cjk, !regular, file.clone())
+    };
+    faces.sort_by_key(rank);
+    // In a CJK collection the face for this language is the one whose
+    // family names it (Noto Sans CJK JP, Noto Sans CJK SC).
+    let tag = if lang == "ja" { "JP" } else { "SC" };
+    let best = faces.first()?.0.clone();
+    let face = faces
+        .iter()
+        .filter(|f| f.0 == best)
+        .find(|f| f.2.contains(tag))
+        .or_else(|| faces.first())?;
+    Some((face.0.clone().into(), face.1))
+}
+
 /// How far CJK glyphs are moved down, as a fraction of the font size.
 const CJK_Y_OFFSET: f32 = 0.22;
 
 /// Japanese and Chinese fonts, mapped once. Each is (name, bytes, face index).
 fn cjk_fonts() -> &'static [(&'static str, &'static [u8], u32)] {
     static FONTS: OnceLock<Vec<(&'static str, &'static [u8], u32)>> = OnceLock::new();
-    FONTS.get_or_init(|| {
+    #[cfg(windows)]
+    let init = || {
         let dir = crate::sys::command::windows_dir().join("Fonts");
         [
             ("cjk_ja", ["YuGothM.ttc", "meiryo.ttc", "msgothic.ttc"]),
@@ -325,7 +409,18 @@ fn cjk_fonts() -> &'static [(&'static str, &'static [u8], u32)] {
                 .map(|bytes| (name, bytes, 0))
         })
         .collect()
-    })
+    };
+    #[cfg(not(windows))]
+    let init = || {
+        [("cjk_ja", "ja"), ("cjk_zh", "zh-cn")]
+            .into_iter()
+            .filter_map(|(name, lang)| {
+                let (file, index) = fc_lang(lang)?;
+                map_font(&file).map(|bytes| (name, bytes, index))
+            })
+            .collect()
+    };
+    FONTS.get_or_init(init)
 }
 
 /// Loads the Windows UI and console fonts, keeping egui's bundled fonts as
@@ -334,11 +429,26 @@ fn cjk_fonts() -> &'static [(&'static str, &'static [u8], u32)] {
 /// the two draw many shared characters differently. `font` is the face
 /// picked in Settings; Segoe UI stays behind it for any glyph it lacks.
 pub fn install_fonts(ctx: &egui::Context, lang: Lang, font: FontChoice) {
+    #[cfg(windows)]
     let fonts_dir = crate::sys::command::windows_dir().join("Fonts");
+    #[cfg(windows)]
     let read = |file: &str| {
         std::fs::read(fonts_dir.join(file))
             .ok()
             .map(|b| Arc::new(FontData::from_owned(b)))
+    };
+    // Linux: `file` is a fontconfig pattern.
+    #[cfg(not(windows))]
+    let read = |pattern: &str| {
+        let (path, index) = fc_match(pattern)?;
+        let mut data = FontData::from_owned(std::fs::read(path).ok()?);
+        data.index = index;
+        Some(Arc::new(data))
+    };
+    let (ui_face, ui_bold, mono_face) = if cfg!(windows) {
+        ("SegUIVar.ttf", "seguisb.ttf", "consola.ttf")
+    } else {
+        ("sans-serif", "sans-serif:weight=demibold", "monospace")
     };
 
     let mut defs = FontDefinitions::default();
@@ -352,7 +462,7 @@ pub fn install_fonts(ctx: &egui::Context, lang: Lang, font: FontChoice) {
     let mut prop_list = fallback_prop.clone();
     let mut semibold_list = fallback_prop.clone();
     // The picked face first, then Segoe UI, then egui's own fonts.
-    let mut faces = vec![("segoe", "SegUIVar.ttf", "segoe_semibold", "seguisb.ttf")];
+    let mut faces = vec![("segoe", ui_face, "segoe_semibold", ui_bold)];
     if font != FontChoice::System {
         faces.insert(0, ("chosen", regular, "chosen_bold", bold));
     }
@@ -376,7 +486,7 @@ pub fn install_fonts(ctx: &egui::Context, lang: Lang, font: FontChoice) {
     defs.families.insert(FontFamily::Proportional, prop_list);
     defs.families.insert(semibold(), semibold_list);
 
-    if let Some(data) = read("consola.ttf") {
+    if let Some(data) = read(mono_face) {
         defs.font_data.insert("consolas".into(), data);
         if let Some(list) = defs.families.get_mut(&FontFamily::Monospace) {
             list.insert(0, "consolas".into());

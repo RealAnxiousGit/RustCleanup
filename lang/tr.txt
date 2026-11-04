@@ -1105,3 +1105,236 @@ Standart Ayrıcalıklar
 
 Not all features will work without admin rights. Close RustCleanup, open it again and choose Yes on the UAC prompt.
 Yönetici hakları olmadan tüm özellikler çalışmaz. RustCleanup'ı kapatıp yeniden açın ve UAC isteminde Evet'i seçin.
+
+# Linux (4.0.0)
+
+Also drop the page cache (file cache, needs root)
+Sayfa önbelleğini de boşalt (dosya önbelleği, root gerekir)
+
+Asked the kernel to reclaim memory from your session.
+Çekirdekten oturumunuzdaki belleği geri alması istendi.
+
+Asking for your password to restart RustCleanup as root.
+RustCleanup'ı root olarak yeniden başlatmak için parolanız isteniyor.
+
+Asks for your password, then opens RustCleanup again as root
+Parolanızı ister, ardından RustCleanup'ı root olarak yeniden açar
+
+Check this drive with the mode on the left
+Bu sürücüyü soldaki modla denetle
+
+Checking a disk needs root. Restart RustCleanup as root first.
+Disk denetimi root gerektirir. Önce RustCleanup'ı root olarak yeniden başlatın.
+
+Checking for root...
+Root denetleniyor...
+
+Checks the file system on the drive you pick and shows the output live.
+Seçtiğiniz sürücüdeki dosya sistemini denetler ve çıktıyı canlı gösterir.
+
+Committed {0} of {1} (RAM plus swap)
+{1} içinden {0} ayrıldı (RAM artı swap)
+
+Could not stop the disk check: {0}
+Disk denetimi durdurulamadı: {0}
+
+Desktop settings
+Masaüstü ayarları
+
+Disk Usage Analyzer
+Disk Kullanım Çözümleyicisi
+
+Disks
+Diskler
+
+Draws the interface with Vulkan instead of OpenGL. It can be smoother on some graphics drivers, but uses more memory.
+Arayüzü OpenGL yerine Vulkan ile çizer. Bazı grafik sürücülerinde daha akıcı olabilir, ancak daha fazla bellek kullanır.
+
+Drives, partitions and SMART health
+Sürücüler, bölümler ve SMART durumu
+
+Dropping the file cache failed: {0}
+Dosya önbelleği boşaltılamadı: {0}
+
+Errors were found. Repair them from a live USB while the drive is not mounted.
+Hatalar bulundu. Sürücü bağlı değilken bunları canlı bir USB'den onarın.
+
+File cache dropped.
+Dosya önbelleği boşaltıldı.
+
+Hardware Information
+Donanım Bilgileri
+
+Install updates and apps
+Güncelleştirmeleri ve uygulamaları yükle
+
+Light UI (light sans-serif)
+Hafif arayüz (ince sans-serif)
+
+Linux did not report how much space {0} has.
+Linux, {0} için ne kadar alan olduğunu bildirmedi.
+
+Linux did not report physical memory figures. They will appear here once it does.
+Linux fiziksel bellek değerlerini bildirmedi. Bildirdiğinde burada görünecekler.
+
+Linux did not report swap figures.
+Linux swap değerlerini bildirmedi.
+
+Low Power Mode needs power-profiles-daemon, or RustCleanup running as root.
+Düşük Güç Modu için power-profiles-daemon ya da root olarak çalışan RustCleanup gerekir.
+
+Low Power Mode on: power saver profile.
+Düşük Güç Modu açık: güç tasarrufu profili.
+
+Low Power Mode on: power saver, CPU capped at 60%, turbo boost off.
+Düşük Güç Modu açık: güç tasarrufu, CPU %60 ile sınırlı, turbo boost kapalı.
+
+No swap is configured, so Linux is running on physical memory only. You can add a swap file or zram with your distribution's tools.
+Swap yapılandırılmamış, bu yüzden Linux yalnızca fiziksel bellekle çalışıyor. Dağıtımınızın araçlarıyla bir swap dosyası veya zram ekleyebilirsiniz.
+
+Not all features will work without root. Choose Restart as root, or start RustCleanup with pkexec or sudo.
+Root olmadan tüm özellikler çalışmaz. Root olarak yeniden başlat'ı seçin ya da RustCleanup'ı pkexec veya sudo ile başlatın.
+
+Not running as root
+Root olarak çalışmıyor
+
+Online scan (Btrfs and XFS only)
+Çevrimiçi tarama (yalnızca Btrfs ve XFS)
+
+Open RustCleanup when you sign in, as your own user.
+Oturum açtığınızda RustCleanup'ı kendi kullanıcınızla açın.
+
+Opened the disk usage viewer for {0}.
+{0} için disk kullanımı görüntüleyicisi açıldı.
+
+Opens the desktop app you pick.
+Seçtiğiniz masaüstü uygulamasını açar.
+
+Part of the desktop: it can be ended and it starts again, but it cannot be suspended
+Masaüstünün parçası: sonlandırılabilir ve yeniden başlar, ancak askıya alınamaz
+
+Power
+Güç
+
+Power Settings
+Güç Ayarları
+
+Power profiles, battery and sleep
+Güç profilleri, pil ve uyku
+
+Processes, performance and resources
+İşlemler, performans ve kaynaklar
+
+Reading the current settings.
+Geçerli ayarlar okunuyor.
+
+Reclaiming memory from your session failed: {0}
+Oturumunuzdan bellek geri alınamadı: {0}
+
+Restart as root
+Root olarak yeniden başlat
+
+Restored power profile {0}.
+{0} güç profili geri yüklendi.
+
+Root Privileges
+Root Ayrıcalıkları
+
+Root access was not granted, so RustCleanup keeps running without it.
+Root erişimi verilmedi, bu yüzden RustCleanup onsuz çalışmaya devam ediyor.
+
+Root terminal
+Root terminali
+
+Running as root
+Root olarak çalışıyor
+
+RustCleanup can't check {0} drives.
+RustCleanup {0} sürücülerini denetleyemez.
+
+RustCleanup is not running as root, so dropping caches, CPU limits and changes to other users' processes will fail. Use Restart as root at the bottom.
+RustCleanup root olarak çalışmıyor, bu yüzden önbellekleri boşaltma, CPU sınırları ve diğer kullanıcıların işlemlerindeki değişiklikler başarısız olur. Alttaki Root olarak yeniden başlat'ı kullanın.
+
+RustCleanup is still running in the system tray. Click its icon to open it, or right-click it and choose Exit to quit.
+RustCleanup sistem tepsisinde çalışmaya devam ediyor. Açmak için simgesine tıklayın ya da sağ tıklayıp Çıkış'ı seçin.
+
+RustCleanup will open when you sign in.
+RustCleanup oturum açtığınızda açılacak.
+
+Same as system
+Sistemle aynı
+
+See what fills each drive
+Her sürücüyü neyin doldurduğunu görün
+
+See what fills this drive in the disk usage viewer
+Bu sürücüyü neyin doldurduğunu disk kullanımı görüntüleyicisinde görün
+
+Software Updates
+Yazılım Güncelleştirmeleri
+
+Standard (non-root) terminal
+Standart (root olmayan) terminal
+
+Started the disk check on {0} ({1}).
+{0} üzerinde disk denetimi başlatıldı ({1}).
+
+Switches to the power saver profile. As root it also caps the CPU at 60% and turns off turbo boost. Off restores your previous profile.
+Güç tasarrufu profiline geçer. Root olarak CPU'yu %60 ile sınırlar ve turbo boost'u kapatır. Kapatınca önceki profiliniz geri gelir.
+
+System (sans-serif)
+Sistem (sans-serif)
+
+System Logs
+Sistem Günlükleri
+
+System Monitor
+Sistem İzleyicisi
+
+Terminal
+Terminal
+
+Terminal [Root]
+Terminal [Root]
+
+The CPU limits can only be restored as root.
+CPU sınırları yalnızca root olarak geri yüklenebilir.
+
+The check could not run on this drive.
+Denetim bu sürücüde çalıştırılamadı.
+
+The check ended with an unexpected exit code.
+Denetim beklenmeyen bir çıkış koduyla sona erdi.
+
+The disk check could not run: {0}
+Disk denetimi çalıştırılamadı: {0}
+
+The download is not a valid RustCleanup for Linux, so nothing was changed.
+İndirilen dosya geçerli bir Linux RustCleanup'ı değil, bu yüzden hiçbir şey değiştirilmedi.
+
+The file cache can only be dropped as root.
+Dosya önbelleği yalnızca root olarak boşaltılabilir.
+
+The filesystem is mounted, so the check is read-only and may report changes that are still being written.
+Dosya sistemi bağlı, bu yüzden denetim salt okunurdur ve hâlâ yazılmakta olan değişiklikleri bildirebilir.
+
+The system journal
+Sistem günlüğü
+
+The video needs FFmpeg. Install the ffmpeg package and try again.
+Video için FFmpeg gerekir. ffmpeg paketini yükleyip yeniden deneyin.
+
+This includes parts of the desktop. The screen, panel or sound may blank out for a moment while they start again.
+Buna masaüstünün parçaları da dahil. Yeniden başlarken ekran, panel veya ses bir an kesilebilir.
+
+Waiting for the disk check to start.
+Disk denetiminin başlaması bekleniyor.
+
+While RustCleanup is minimized or in the notification area, everything it logs also appears as a desktop notification.
+RustCleanup simge durumundayken veya bildirim alanındayken, günlüğe yazdığı her şey masaüstü bildirimi olarak da görünür.
+
+of {0} swap in use
+{0} swap alanının kullanımda olanı
+
+powerprofilesctl could not switch to {0}.
+powerprofilesctl {0} profiline geçemedi.
