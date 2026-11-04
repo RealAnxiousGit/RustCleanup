@@ -1,9 +1,10 @@
 //! The What's New video player, on FFmpeg: `ffprobe` reads the size and
 //! length, `ffmpeg` decodes frames to RGBA through a pipe, and `ffplay`
-//! (without a window) plays the sound. Pausing, seeking and muting restart
-//! the helpers at the right position.
+//! (without a window) plays the sound. Pausing and seeking restart the
+//! helpers at the right position; volume and mute change the sound as it
+//! plays (see [`Sound`]).
 
-use std::io::Read;
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::os::unix::process::CommandExt;
 use std::process::{Child, Command, Stdio};
@@ -53,8 +54,6 @@ enum PlayerCommand {
     Play,
     Pause,
     Seek(f64),
-    Mute(bool),
-    Volume,
 }
 
 struct Shared {
@@ -124,16 +123,14 @@ impl Player {
         let _ = self.commands.send(PlayerCommand::Seek(seconds));
     }
 
+    /// The sound thread reads mute and volume from the status as it plays.
     pub fn set_muted(&self, muted: bool) {
         lock(&self.shared.status).muted = muted;
-        let _ = self.commands.send(PlayerCommand::Mute(muted));
     }
 
     /// `volume` from 0.0 (silent) to 1.0 (full).
     pub fn set_volume(&self, volume: f32) {
-        let volume = volume.clamp(0.0, 1.0);
-        lock(&self.shared.status).volume = volume;
-        let _ = self.commands.send(PlayerCommand::Volume);
+        lock(&self.shared.status).volume = volume.clamp(0.0, 1.0);
     }
 }
 
@@ -228,7 +225,7 @@ fn probe(path: &Path) -> Result<Info, String> {
 /// The running decoder (and sound) from one position.
 struct Helpers {
     video: Child,
-    audio: Option<Child>,
+    audio: Option<Sound>,
     /// When `start_pos` was on screen.
     started: Instant,
     start_pos: f64,
@@ -236,7 +233,9 @@ struct Helpers {
 }
 
 impl Helpers {
-    fn start(path: &Path, info: &Info, pos: f64, muted: bool, volume: f32) -> Result<Self, String> {
+    /// `shared` is `None` for a silent decoder, such as the still frame
+    /// shown after seeking while paused.
+    fn start(path: &Path, info: &Info, pos: f64, shared: Option<&Arc<Shared>>) -> Result<Self, String> {
         let video = Command::new("ffmpeg")
             .args(["-v", "error", "-nostdin", "-ss", &format!("{pos:.3}"), "-i"])
             .arg(path)
@@ -248,33 +247,142 @@ impl Helpers {
             .with_parent_death()
             .spawn()
             .map_err(|e| trf("Could not play the video: {0}", &[&e]))?;
-        let audio = if muted || volume <= 0.0 || which("ffplay").is_none() {
-            None
-        } else {
-            Command::new("ffplay")
-                .args(["-v", "quiet", "-nodisp", "-autoexit", "-vn", "-ss", &format!("{pos:.3}")])
-                .args(["-volume", &format!("{}", (volume * 100.0).round() as u32)])
-                .arg(path)
-                .stdin(Stdio::null())
-                .stdout(Stdio::null())
-                .stderr(Stdio::null())
-                .with_parent_death()
-                .spawn()
-                .ok()
-        };
+        let started = Instant::now();
+        let audio = shared.and_then(|s| Sound::start(path, pos, started, s.clone()));
         Ok(Self {
             video,
             audio,
-            started: Instant::now(),
+            started,
             start_pos: pos,
             frames: 0,
         })
     }
+}
 
-    fn stop_audio(&mut self) {
-        if let Some(mut a) = self.audio.take() {
-            let _ = a.kill();
-            let _ = a.wait();
+/// The sound: `ffmpeg` decodes it to WAV, a thread scales each sample by
+/// the volume (zero when muted) and `ffplay` plays the result from its
+/// input. Changing the volume changes the samples on the way, so the sound
+/// keeps playing instead of starting again. ffplay itself only takes a
+/// volume when it starts.
+struct Sound {
+    decoder: Child,
+    output: Child,
+}
+
+impl Sound {
+    fn start(path: &Path, pos: f64, started: Instant, shared: Arc<Shared>) -> Option<Self> {
+        which("ffplay")?;
+        let mut decoder = Command::new("ffmpeg")
+            .args(["-v", "error", "-nostdin", "-ss", &format!("{pos:.3}"), "-i"])
+            .arg(path)
+            .args(["-vn", "-ac", "2", "-ar", "48000", "-c:a", "pcm_s16le", "-f", "wav", "-"])
+            .stdin(Stdio::null())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::null())
+            .with_parent_death()
+            .spawn()
+            .ok()?;
+        // Without the probe limits ffplay waits for about 4 seconds of
+        // sound before it starts playing.
+        let output = Command::new("ffplay")
+            .args(["-v", "quiet", "-nodisp", "-autoexit", "-probesize", "32", "-analyzeduration", "0", "-i", "-"])
+            .stdin(Stdio::piped())
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .with_parent_death()
+            .spawn();
+        let mut output = match output {
+            Ok(o) => o,
+            Err(_) => {
+                let _ = decoder.kill();
+                let _ = decoder.wait();
+                return None;
+            }
+        };
+        let (input, sink) = (decoder.stdout.take()?, output.stdin.take()?);
+        std::thread::spawn(move || pump(input, sink, started, &shared));
+        Some(Self { decoder, output })
+    }
+}
+
+impl Drop for Sound {
+    fn drop(&mut self) {
+        // The pump thread then sees its pipes close and ends.
+        for child in [&mut self.decoder, &mut self.output] {
+            let _ = child.kill();
+            let _ = child.wait();
+        }
+    }
+}
+
+/// Copies the WAV from the decoder to ffplay, scaling the samples by the
+/// volume. It stays only a little ahead of the video's clock, so a change
+/// is heard within a fraction of a second, and it ramps between two levels
+/// so a change does not click.
+fn pump(mut input: impl Read, mut output: impl Write, started: Instant, shared: &Shared) {
+    /// Bytes per second: 48 kHz, two channels, 16 bits.
+    const RATE: f64 = 48_000.0 * 4.0;
+    /// How far ahead of the clock the sound is written.
+    const LEAD: f64 = 0.1;
+
+    // The header goes through as it is: "RIFF", then chunks up to "data".
+    let mut riff = [0u8; 12];
+    if input.read_exact(&mut riff).is_err() || output.write_all(&riff).is_err() {
+        return;
+    }
+    loop {
+        let mut head = [0u8; 8];
+        if input.read_exact(&mut head).is_err() || output.write_all(&head).is_err() {
+            return;
+        }
+        if &head[..4] == b"data" {
+            break;
+        }
+        let size = u64::from(u32::from_le_bytes([head[4], head[5], head[6], head[7]]));
+        let size = size + (size & 1);
+        if std::io::copy(&mut (&mut input).take(size), &mut output).is_err() {
+            return;
+        }
+    }
+
+    let gain = || {
+        let s = lock(&shared.status);
+        if s.muted { 0.0 } else { s.volume }
+    };
+    let mut last = gain();
+    let mut buf = [0u8; 4096];
+    let mut written = 0u64;
+    while !shared.stop.load(Ordering::Relaxed) {
+        let mut n = 0;
+        while n < buf.len() {
+            match input.read(&mut buf[n..]) {
+                Ok(0) => break,
+                Ok(k) => n += k,
+                Err(e) if e.kind() == std::io::ErrorKind::Interrupted => {}
+                Err(_) => break,
+            }
+        }
+        let n = n - n % 4;
+        if n == 0 {
+            return;
+        }
+        let next = gain();
+        let frames = (n / 4) as f32;
+        for (i, frame) in buf[..n].as_chunks_mut::<4>().0.iter_mut().enumerate() {
+            let g = last + (next - last) * (i + 1) as f32 / frames;
+            for s in frame.as_chunks_mut::<2>().0 {
+                let v = f32::from(i16::from_le_bytes(*s)) * g;
+                *s = (v.round() as i16).to_le_bytes();
+            }
+        }
+        last = next;
+        if output.write_all(&buf[..n]).is_err() {
+            return;
+        }
+        written += n as u64;
+        let ahead = written as f64 / RATE - started.elapsed().as_secs_f64();
+        if ahead > LEAD {
+            std::thread::sleep(Duration::from_secs_f64(ahead - LEAD));
         }
     }
 }
@@ -306,7 +414,7 @@ impl ParentDeath for Command {
 
 impl Drop for Helpers {
     fn drop(&mut self) {
-        self.stop_audio();
+        self.audio = None;
         let _ = self.video.kill();
         let _ = self.video.wait();
     }
@@ -315,7 +423,7 @@ impl Drop for Helpers {
 /// Plays `path` until the player is dropped.
 fn play(
     path: &Path,
-    shared: &Shared,
+    shared: &Arc<Shared>,
     inbox: &Receiver<PlayerCommand>,
     repaint: &dyn Fn(),
 ) -> Result<(), String> {
@@ -329,12 +437,7 @@ fn play(
     let frame_len = info.width * info.height * 4;
     let frame_time = 1.0 / info.fps;
 
-    let sound = || {
-        let s = lock(&shared.status);
-        (s.muted, s.volume)
-    };
-    let (muted, volume) = sound();
-    let mut helpers = Some(Helpers::start(path, &info, 0.0, muted, volume)?);
+    let mut helpers = Some(Helpers::start(path, &info, 0.0, Some(shared))?);
     lock(&shared.status).phase = Phase::Playing;
     let mut playing = true;
     let mut position = 0.0f64;
@@ -365,7 +468,7 @@ fn play(
                     } else {
                         // Show the frame at the new spot while paused.
                         helpers = None;
-                        if let Ok(mut h) = Helpers::start(path, &info, position, true, 0.0)
+                        if let Ok(mut h) = Helpers::start(path, &info, position, None)
                             && let Some(rgba) = read_frame(&mut h.video, frame_len)
                         {
                             *lock(&shared.frame) = Some(Frame {
@@ -379,30 +482,12 @@ fn play(
                         lock(&shared.status).phase = Phase::Paused;
                     }
                 }
-                PlayerCommand::Mute(m) => {
-                    if playing {
-                        if m {
-                            if let Some(h) = helpers.as_mut() {
-                                h.stop_audio();
-                            }
-                        } else {
-                            restart_at = Some(position);
-                        }
-                    }
-                }
-                // ffplay takes its volume at start, so the sound restarts.
-                PlayerCommand::Volume => {
-                    if playing && !lock(&shared.status).muted {
-                        restart_at = Some(position);
-                    }
-                }
             }
         }
         if let Some(pos) = restart_at {
             // Stop the old helpers before starting new ones.
             drop(helpers.take());
-            let (muted, volume) = sound();
-            helpers = Some(Helpers::start(path, &info, pos, muted, volume)?);
+            helpers = Some(Helpers::start(path, &info, pos, Some(shared))?);
             position = pos;
             lock(&shared.status).phase = Phase::Playing;
         }

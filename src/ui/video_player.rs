@@ -17,6 +17,8 @@ use crate::sys::video::{self, Phase, Player, Status};
 const IDLE: f64 = 2.5;
 const SEEK_STEP: f64 = 10.0;
 const VOLUME_STEP: f32 = 0.05;
+/// Seconds for each 1% step while the volume slides to a new level.
+const VOLUME_TICK: f64 = 0.012;
 const WHITE: Color32 = Color32::WHITE;
 
 #[derive(Default)]
@@ -48,6 +50,11 @@ pub struct View {
     volume_until: f64,
     /// Wheel movement over the speaker not yet turned into volume steps.
     wheel: f32,
+    /// The level in percent the volume slides to after Up, Down or the
+    /// wheel, 1% at a time.
+    volume_goal: Option<i32>,
+    /// When the volume last moved a step toward `volume_goal`.
+    volume_tick: f64,
     /// Where each video was drawn last frame, for the keys.
     zones: Vec<(String, Rect)>,
     /// The window's outer rectangle, inner size and maximized state from
@@ -171,22 +178,61 @@ impl View {
         }
     }
 
+    /// Sets where the volume slides to; `glide_volume` moves it there.
     fn volume_by(&mut self, step: f32, now: f64) {
         let Some((player, status)) = self.ready() else {
             return;
         };
-        let mut volume = if status.muted && step > 0.0 { 0.0 } else { status.volume };
-        // Whole steps, so 5% at a time stays on round numbers.
-        volume = ((volume + step) / VOLUME_STEP).round() * VOLUME_STEP;
-        let volume = volume.clamp(0.0, 1.0);
+        // From where the last change is heading, so quick notches add up.
+        let mut from = self.volume_goal.map_or(status.volume, |g| g as f32 / 100.0);
         if status.muted && step > 0.0 {
+            // Unmuting slides up from silence.
+            player.set_volume(0.0);
             player.set_muted(false);
+            from = 0.0;
         }
-        player.set_volume(volume);
-        let percent = (volume * 100.0).round() as u32;
+        // Whole steps, so 5% at a time stays on round numbers.
+        let goal = (((from + step) / VOLUME_STEP).round() * VOLUME_STEP).clamp(0.0, 1.0);
+        if self.volume_goal.is_none() {
+            // The first 1% step comes at once.
+            self.volume_tick = now - VOLUME_TICK;
+        }
+        self.volume_goal = Some((goal * 100.0).round() as i32);
+        let percent = (from * 100.0).round() as u32;
         self.toast = Some((trf("Volume {0}%", &[&percent]), now + 1.5));
         self.volume_until = now + 1.5;
         self.active_at = now;
+    }
+
+    /// Moves the volume 1% every `VOLUME_TICK` toward `volume_goal`, so a
+    /// key or a notch of the wheel slides instead of jumping 5%.
+    fn glide_volume(&mut self, ctx: &egui::Context, now: f64) {
+        let Some(goal) = self.volume_goal else {
+            return;
+        };
+        let Some((_, status)) = self.ready() else {
+            self.volume_goal = None;
+            return;
+        };
+        let mut level = (status.volume * 100.0).round() as i32;
+        let start = level;
+        while level != goal && now - self.volume_tick >= VOLUME_TICK {
+            self.volume_tick += VOLUME_TICK;
+            level += (goal - level).signum();
+        }
+        if level != start
+            && let Some(player) = &self.player
+        {
+            player.set_volume(level as f32 / 100.0);
+        }
+        let percent = level.max(0) as u32;
+        self.toast = Some((trf("Volume {0}%", &[&percent]), now + 1.5));
+        self.volume_until = now + 1.5;
+        if level == goal {
+            self.volume_goal = None;
+        } else {
+            ctx.request_repaint();
+        }
     }
 
     /// Takes the player's keys before the window's own widgets see them.
@@ -194,6 +240,7 @@ impl View {
     /// used to leave full screen, so the window does not close.
     pub fn keys(&mut self, ctx: &egui::Context) -> bool {
         let now = ctx.input(|i| i.time);
+        self.glide_volume(ctx, now);
         // Follow the system leaving full screen (such as Win+Down).
         let reported = ctx.input(|i| i.viewport().fullscreen);
         if self.fullscreen {
@@ -257,21 +304,22 @@ impl View {
                 self.toggle_mute();
                 used = true;
             }
-            if press(Key::ArrowRight) {
-                self.seek_by(SEEK_STEP);
-                used = true;
-            }
-            if press(Key::ArrowLeft) {
-                self.seek_by(-SEEK_STEP);
-                used = true;
-            }
-            if press(Key::ArrowUp) {
-                self.volume_by(VOLUME_STEP, now);
-                used = true;
-            }
-            if press(Key::ArrowDown) {
-                self.volume_by(-VOLUME_STEP, now);
-                used = true;
+            // Every press counts, even several in one frame, so quick taps add up.
+            let count = |key: Key| ctx.input_mut(|i| i.count_and_consume_key(egui::Modifiers::NONE, key));
+            for (key, seek, volume) in [
+                (Key::ArrowRight, SEEK_STEP, 0.0),
+                (Key::ArrowLeft, -SEEK_STEP, 0.0),
+                (Key::ArrowUp, 0.0, VOLUME_STEP),
+                (Key::ArrowDown, 0.0, -VOLUME_STEP),
+            ] {
+                for _ in 0..count(key) {
+                    if seek != 0.0 {
+                        self.seek_by(seek);
+                    } else {
+                        self.volume_by(volume, now);
+                    }
+                    used = true;
+                }
             }
         }
         if used {
@@ -552,6 +600,7 @@ impl View {
         self.volume_slider(ui, pal, &painter, rect, c, size, status, &sound, id, now);
         if sound.clicked() {
             self.focused = true;
+            self.volume_goal = None;
             if let Some(player) = &self.player {
                 if status.volume <= 0.0 {
                     player.set_muted(false);
@@ -587,7 +636,8 @@ impl View {
     /// The volume slider that opens above the speaker button: it shows while
     /// the pointer is on the button or the slider, while dragging, and for a
     /// moment after Up, Down or the wheel. Click or drag it to set the volume;
-    /// the wheel over the button or the slider moves it 5% a notch.
+    /// the wheel over the button or the slider moves it 5% a notch, sliding
+    /// there 1% at a time.
     #[allow(clippy::too_many_arguments)]
     fn volume_slider(
         &mut self,
@@ -658,9 +708,8 @@ impl View {
         if response.is_pointer_button_down_on() || response.dragged() {
             if let Some(p) = response.interact_pointer_pos() {
                 let v = (level_at(p.y) * 100.0).round() / 100.0;
-                // Windows changes the volume as it goes. ffplay on Linux has to
-                // restart for each change, so there it is set on release.
-                if cfg!(windows) && self.volume_drag != Some(v) {
+                // The volume changes as the slider moves.
+                if self.volume_drag != Some(v) {
                     self.apply_volume(v);
                 }
                 self.volume_drag = Some(v);
@@ -697,7 +746,8 @@ impl View {
     }
 
     /// Sets the volume from the slider; above zero also unmutes.
-    fn apply_volume(&self, volume: f32) {
+    fn apply_volume(&mut self, volume: f32) {
+        self.volume_goal = None;
         if let Some((player, status)) = self.ready() {
             if status.muted && volume > 0.0 {
                 player.set_muted(false);
