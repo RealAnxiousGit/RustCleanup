@@ -1494,3 +1494,5 @@ Salir de pantalla completa
 
 Volume {0}%
 Volumen {0}%
+Volume
+Volumen

@@ -1494,3 +1494,5 @@ Exit full screen
 
 Volume {0}%
 Громкость {0}%
+Volume
+Громкость

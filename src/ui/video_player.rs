@@ -40,6 +40,14 @@ pub struct View {
     scrub: Option<f32>,
     /// A short note over the picture, such as the volume, until a time.
     toast: Option<(String, f64)>,
+    /// The volume slider over the speaker button is being dragged, at this level.
+    volume_drag: Option<f32>,
+    /// The volume slider was open last frame.
+    volume_open: bool,
+    /// The volume slider stays open until this time after a key or the wheel.
+    volume_until: f64,
+    /// Wheel movement over the speaker not yet turned into volume steps.
+    wheel: f32,
     /// Where each video was drawn last frame, for the keys.
     zones: Vec<(String, Rect)>,
     /// The window's outer rectangle, inner size and maximized state from
@@ -177,6 +185,8 @@ impl View {
         player.set_volume(volume);
         let percent = (volume * 100.0).round() as u32;
         self.toast = Some((trf("Volume {0}%", &[&percent]), now + 1.5));
+        self.volume_until = now + 1.5;
+        self.active_at = now;
     }
 
     /// Takes the player's keys before the window's own widgets see them.
@@ -336,6 +346,8 @@ impl View {
         let shown_controls = ready
             && (!playing
                 || self.scrub.is_some()
+                || self.volume_drag.is_some()
+                || self.volume_open
                 || now - self.active_at < IDLE
                 || (response.hovered() && !self.fullscreen && near_bottom(ui, rect)));
         if response.clicked() {
@@ -537,7 +549,8 @@ impl View {
         let name = if silent { tr("Unmute") } else { tr("Mute") };
         let (c, sound) = button(ui, x, "sound", name);
         speaker_icon(&painter, c, if silent { None } else { Some(status.volume) }, WHITE);
-        if sound.on_hover_text(format!("{name} (M)")).clicked() {
+        self.volume_slider(ui, pal, &painter, rect, c, size, status, &sound, id, now);
+        if sound.clicked() {
             self.focused = true;
             if let Some(player) = &self.player {
                 if status.volume <= 0.0 {
@@ -566,6 +579,130 @@ impl View {
             self.focused = true;
             let on = !self.fullscreen;
             self.set_fullscreen(&ctx, on);
+        }
+    }
+}
+
+impl View {
+    /// The volume slider that opens above the speaker button: it shows while
+    /// the pointer is on the button or the slider, while dragging, and for a
+    /// moment after Up, Down or the wheel. Click or drag it to set the volume;
+    /// the wheel over the button or the slider moves it 5% a notch.
+    #[allow(clippy::too_many_arguments)]
+    fn volume_slider(
+        &mut self,
+        ui: &mut Ui,
+        pal: &Palette,
+        painter: &egui::Painter,
+        rect: Rect,
+        button: Pos2,
+        size: f32,
+        status: &Status,
+        sound: &egui::Response,
+        id: egui::Id,
+        now: f64,
+    ) {
+        let width = 30.0;
+        // Above the seek bar, so the two never overlap.
+        let bottom = (rect.bottom() - 46.0 - 12.0).min(button.y - size / 2.0 - 6.0);
+        let top = (bottom - 120.0).max(rect.top() + 4.0);
+        let pop = Rect::from_min_max(pos2(button.x - width / 2.0, top), pos2(button.x + width / 2.0, bottom));
+        // Covers the gap down to the button, so moving up to the slider keeps it open.
+        let reach = pop.union(Rect::from_center_size(button, Vec2::splat(size)));
+        let pointer = ui.input(|i| i.pointer.hover_pos());
+        let over = pointer.is_some_and(|p| reach.contains(p)) && ui.rect_contains_pointer(rect);
+        let open = sound.hovered()
+            || (self.volume_open && over)
+            || self.volume_drag.is_some()
+            || now < self.volume_until;
+        self.volume_open = open;
+        if now < self.volume_until {
+            ui.ctx().request_repaint_after(std::time::Duration::from_secs_f64(self.volume_until - now + 0.05));
+        }
+
+        // The wheel over the speaker or the open slider, instead of scrolling the window.
+        if sound.hovered() || (open && over) {
+            let delta = ui.input_mut(|i| {
+                let mut lines = 0.0;
+                for e in &i.events {
+                    if let egui::Event::MouseWheel { unit, delta, .. } = e {
+                        lines += match unit {
+                            egui::MouseWheelUnit::Line => delta.y,
+                            egui::MouseWheelUnit::Point => delta.y / 50.0,
+                            egui::MouseWheelUnit::Page => delta.y * 3.0,
+                        };
+                    }
+                }
+                i.smooth_scroll_delta = Vec2::ZERO;
+                lines
+            });
+            self.wheel += delta;
+            while self.wheel >= 1.0 {
+                self.wheel -= 1.0;
+                self.volume_by(VOLUME_STEP, now);
+            }
+            while self.wheel <= -1.0 {
+                self.wheel += 1.0;
+                self.volume_by(-VOLUME_STEP, now);
+            }
+        } else {
+            self.wheel = 0.0;
+        }
+        if !open {
+            return;
+        }
+
+        let track = Rect::from_min_max(pos2(pop.center().x - 2.0, pop.top() + 30.0), pos2(pop.center().x + 2.0, pop.bottom() - 14.0));
+        let response = ui.interact(pop, id.with("volume"), Sense::click_and_drag());
+        let level_at = |y: f32| ((track.bottom() - y) / track.height()).clamp(0.0, 1.0);
+        if response.is_pointer_button_down_on() || response.dragged() {
+            if let Some(p) = response.interact_pointer_pos() {
+                let v = (level_at(p.y) * 100.0).round() / 100.0;
+                // Windows changes the volume as it goes. ffplay on Linux has to
+                // restart for each change, so there it is set on release.
+                if cfg!(windows) && self.volume_drag != Some(v) {
+                    self.apply_volume(v);
+                }
+                self.volume_drag = Some(v);
+            }
+            self.focused = true;
+            self.active_at = now;
+        } else if let Some(v) = self.volume_drag.take() {
+            self.apply_volume(v);
+        }
+        let level = self.volume_drag.unwrap_or(if status.muted { 0.0 } else { status.volume });
+        let lit = response.hovered() || self.volume_drag.is_some();
+
+        // A grey pill with a thin edge, so it reads over dark frames too.
+        painter.rect_filled(pop, CornerRadius::same(15), Color32::from_rgba_unmultiplied(38, 38, 42, 235));
+        painter.rect_stroke(pop, CornerRadius::same(15), Stroke::new(1.0, Color32::from_white_alpha(45)), egui::StrokeKind::Inside);
+        let percent = format!("{}", (level * 100.0).round() as u32);
+        painter.text(
+            pos2(pop.center().x, pop.top() + 14.0),
+            egui::Align2::CENTER_CENTER,
+            percent,
+            egui::FontId::proportional(12.0),
+            WHITE,
+        );
+        painter.rect_filled(track, CornerRadius::same(2), Color32::from_white_alpha(70));
+        let y = track.bottom() - track.height() * level;
+        let fill = Rect::from_min_max(pos2(track.left(), y), track.max);
+        painter.rect_filled(fill, CornerRadius::same(2), pal.accent);
+        let r = if lit { 7.5 } else { 6.0 };
+        painter.circle_filled(pos2(track.center().x, y), r, pal.accent);
+        painter.circle_stroke(pos2(track.center().x, y), r, Stroke::new(1.5, WHITE));
+        response
+            .on_hover_cursor(egui::CursorIcon::PointingHand)
+            .widget_info(|| egui::WidgetInfo::slider(true, f64::from(level) * 100.0, tr("Volume")));
+    }
+
+    /// Sets the volume from the slider; above zero also unmutes.
+    fn apply_volume(&self, volume: f32) {
+        if let Some((player, status)) = self.ready() {
+            if status.muted && volume > 0.0 {
+                player.set_muted(false);
+            }
+            player.set_volume(volume);
         }
     }
 }

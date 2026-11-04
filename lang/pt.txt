@@ -1494,3 +1494,5 @@ Sair da tela cheia
 
 Volume {0}%
 Volume {0}%
+Volume
+Volume

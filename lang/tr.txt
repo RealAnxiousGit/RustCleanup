@@ -1494,3 +1494,5 @@ Tam ekrandan çık
 
 Volume {0}%
 Ses %{0}
+Volume
+Ses düzeyi

@@ -1494,3 +1494,5 @@ Zamknij pełny ekran
 
 Volume {0}%
 Głośność {0}%
+Volume
+Głośność

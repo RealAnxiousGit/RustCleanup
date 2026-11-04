@@ -1494,3 +1494,5 @@ Quitter le plein écran
 
 Volume {0}%
 Volume {0} %
+Volume
+Volume

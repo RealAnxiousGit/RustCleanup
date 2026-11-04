@@ -1494,3 +1494,5 @@ Exit full screen
 
 Volume {0}%
 音量 {0}%
+Volume
+音量
